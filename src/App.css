@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Muli|Nunito|Solway&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Muli|Nunito|Inria+Serif|Solway&display=swap');
 
 * {
 box-sizing: border-box;
@@ -11,11 +11,11 @@ box-sizing: border-box;
 /* } */
 
 body{
-  font-family: 'Muli', sans-serif;
+  font-family: 'Inria Serif', serif;
 }
 
 a, a:visited {
-  color: #2689f1;
+  color: #000000;
 }
 
 .App {
