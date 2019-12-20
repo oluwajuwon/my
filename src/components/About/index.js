@@ -17,7 +17,7 @@ const About = () => {
 
         <section className='about-intro'>
           <h1>
-            AboutMe
+            <span role='img'>🙅🏿‍♂️</span> AboutMe
           </h1>
           <p>
             As you saw on the first page and probably have realised by now, my name is Oluwajuwon.
