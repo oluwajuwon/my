@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Muli|Nunito|Solway&display=swap');
+
+* {
+box-sizing: border-box;
+}
+
+/* @font-face {
+  font-family: 'Solway';
+  font-family: 'Nunito';
+  src: url('https://fonts.googleapis.com/css?family=Nunito|Solway&display=swap'); /* IE9 Compat Modes */
+/* } */
+
+body{
+  font-family: 'Muli', sans-serif;
+}
+
+a, a:visited {
+  color: #2689f1;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-link {
+  color: #09d3ac;
+}
