@@ -18,3 +18,11 @@
   font-size: large;
   color: #5b5959;
 }
+
+
+@media (max-width: 768px) {
+  .contact-section  {
+    width: 80%;
+    margin-top: 25%
+  }
+}
