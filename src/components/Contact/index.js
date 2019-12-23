@@ -12,12 +12,13 @@ const Contact = () => {
               <span role='img'>☎️</span> HitMeUp
             </h1>
             <p>
-              Want to work with me?
-              Got a project for me?
-              You just want to say hi?
+              Want to work with me,
+              Got a project for me,
+              Or you just want to say hi?
             </p>
-            <p>
-            </p>
+          </section>
+
+          <section className='main-contact'>
           </section>
         </section>
       </div>
