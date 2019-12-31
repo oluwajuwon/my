@@ -9,7 +9,9 @@ import redux from '../../assets/redux.png';
 import git from '../../assets/git.png';
 import graphql from '../../assets/graphql.png';
 import PT from '../../assets/p-t.png';
-
+import Heroku from '../../assets/heroku.png';
+import Netlify from '../../assets/netlify.png';
+import GitHub from '../../assets/gitHub.png';
 const About = () => {
   return (
     <div>
@@ -20,8 +22,7 @@ const About = () => {
             <span role='img'>🙅🏿‍♂️</span> AboutMe
           </h1>
           <p>
-            As you saw on the first page and probably have realised by now, my name is Oluwajuwon.
-            I'm a full stack software engineer who has a knack for solving problems, learning and building usable and user-friendly products.
+            I'm a full stack software engineer who has a knack for solving problems, learning and building usable / user-friendly products.
         </p>
         <p>
             As a Budding Developer, my main goal is to solve problems, create solutions and learn new methods of solving different kinds of problems,
@@ -46,16 +47,18 @@ const About = () => {
             Languages, Tools and Technologies I've worked with in the past 6 months
           </h1>
           <div className='tools-and-tech'>
-            <img src={git} alt='React-Js' />
             <img src={javascript} alt='JavaScript' />
             <img src={typescript} alt='TypeScript' />
+            <img src={git} alt='Git' />
+            <img src={GitHub} alt='GitHub' />
             <img src={node} alt='Node-Js' />
             <img src={react} alt='React-Js' />
             <img src={gatsby} alt='Gatsby-Js' />
-            <img src={redux} alt='React-Js' />
-            <img src={graphql} alt='React-Js' />
-            <img src={PT} alt='React-Js' />
-
+            <img src={redux} alt='Redux' />
+            <img src={graphql} alt='GraphQL' />
+            <img src={PT} alt='Pivotal' />
+            <img src={Heroku} alt='Heroku' />
+            <img src={Netlify} alt='Netlify' />
           </div>
         </section>
       </section>

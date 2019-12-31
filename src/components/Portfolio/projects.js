@@ -1,6 +1,7 @@
 import fff from './images/fff.jpg';
 import activo from './images/activo.png';
 import kotigo from './images/kotigo.jpg';
+import Secp from './images/secp.jpg';
 
 export const projects = [
   {
@@ -28,6 +29,15 @@ export const projects = [
     technologies: ['javascript', 'react','react-native' ,'redux', 'react-nagivation'],
     role: 'Mobile',
     image: kotigo,
+    url: '',
+  },
+  {
+    id: 3,
+    name: 'SECP',
+    description: 'A web application for finding student debtors in various schools',
+    technologies: ['javascript', 'nodeJS', 'expressJS', 'postgreSQL' ,'sequelize'],
+    role: 'back-end',
+    image: Secp,
     url: '',
   }
 ]

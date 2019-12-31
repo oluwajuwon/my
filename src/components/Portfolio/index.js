@@ -8,10 +8,10 @@ const Portfolio = () => {
       <section className='portfolio-section'>
         <section className='portfolio-intro'>
           <h1>
-            <span role='img'>💼</span>MyPortfolio
+            <span role='img'>💼</span> MyPortfolio
           </h1>
           <p>
-            Below are some of the projects I've worked on and their stacks
+            Below are some of the projects I've worked on recently and the technologies I used
           </p>
         </section>
 
