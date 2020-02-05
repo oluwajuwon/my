@@ -4,11 +4,18 @@
   bottom: 0;
   border-top: 1px solid #efefef;
   position: fixed;
-  width: 100%;
+  width: 60%;
   padding: 20px;
   color: black;
   background-color: #fff;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  /* margin-left: 60px; */
-  /* margin-right: 60px; */
+@media (max-width: 768px) {
+  .footer {
+    width: 100%;
+  }
 }
