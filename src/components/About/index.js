@@ -19,7 +19,7 @@ const About = () => {
 
         <section className='about-intro'>
           <h1>
-            <span role='img'>🙅🏿‍♂️</span> AboutMe
+            <span role='img' aria-label="cancel">🙅🏿‍♂️</span> AboutMe
           </h1>
           <p>
             I'm a full stack software engineer who has a knack for solving problems, learning and building usable / user-friendly products.
