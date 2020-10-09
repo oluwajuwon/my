@@ -13,7 +13,7 @@ const Contact = () => {
 
           <section className='contact-intro'>
             <h1>
-              <span role='img'>☎️</span> HitMeUp
+              <span role='img' aria-label="email">☎️</span> HitMeUp
             </h1>
             <p>
               Want to work with me
@@ -22,7 +22,7 @@ const Contact = () => {
           </section>
 
           <section className='main-contact'>
-            <p>📧 <a href="mailto:jfagbohungbe@gmail?Subject=Hi%20Juwonlo" target="_top">Send me an Email </a></p>
+            <p><span aria-label="email" role="img">📧</span> <a href="mailto:jfagbohungbe@gmail?Subject=Hi%20Juwonlo" target="_top">Send me an Email </a></p>
 
             <p>| | you just want to say hi?</p>
 
