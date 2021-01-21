@@ -5,7 +5,7 @@ import './style.css';
 const Header = ({toggleColorMode}) => {
   return (
     <div className='header'>
-      <Link to='/'><h1>Oluwajuwon<span className='header-dot'>.</span></h1></Link>
+      <Link to='/'><h1>Juwonlo<span className='header-dot'>.</span></h1></Link>
       { // <a href='/' onClick={toggleColorMode}>toggle Color</a> 
       }
     </div>

@@ -1,19 +1,42 @@
 .home-intro-section {
-  width: 60%;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   line-height: 35px;
   margin-bottom: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 14%;
+}
+
+.home-profile-photo img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  margin-right: 50px;
+  border: 2px solid #000000;
+  z-index: 2;
+  position: relative;
+}
+
+.home-profile-photo::before {
+  content: "";
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  border: 1px solid #000000;
+  margin-left: 10px;
+  margin-top: 10px;
 }
 
 .home-brief-intro {
-  margin-top: 20%
+  text-align: left;
 }
 
 .home-brief-intro h1 {
   font-weight: 100;
   font-size: xx-large;
-  line-height: 50px;
 }
 
 .intro-name {
@@ -40,5 +63,11 @@
 
   .home-brief-intro p {
     line-height: 27px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-intro-section {
+    flex-wrap: wrap;
   }
 }
