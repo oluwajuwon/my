@@ -4,12 +4,15 @@
   padding: 15px;
   margin-top: 35px;
   text-align: left;
-  /* z-index: 2; */
   position: relative;
 }
 
 .story-item img {
   width: fit-content;
+}
+
+.story-item h2 {
+  cursor: pointer;
 }
 
 .story-date {

@@ -11,15 +11,17 @@ class Storyitem extends React.Component {
     }
   }
 
+  handleOpenLink = () => {
+    window.open(this.props.story?.link, '_blank');
+  }
+
   render() {
     const { story } = this.props;
 
     return(
       <div className="story-item">
         <p className="story-date"><span role="img" aria-label="calendar">&#128197;</span> {story && new Date(story?.pubDate).toDateString()}</p>
-        <a href={story?.link} target="_blank" rel="noopener noreferrer">
-          <h2>{story?.title}</h2>
-        </a>
+        <h2 onClick={this.handleOpenLink}>{story?.title}</h2>
         <div ref={this.itemRef} className="story-description"></div>
         <div className='story-categories'>
           {story.categories.map((tech, i) => (
