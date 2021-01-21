@@ -17,20 +17,20 @@ const Contact = () => {
             </h1>
             <p>
               Want to work with me
-              | | Got a project for me ?
+              or Got a project for me ?
             </p>
           </section>
 
           <section className='main-contact'>
             <p><span aria-label="email" role="img">📧</span> <a href="mailto:jfagbohungbe@gmail?Subject=Hi%20Juwonlo" target="_top">Send me an Email </a></p>
 
-            <p>| | you just want to say hi?</p>
+            <p>Do you just want to say hi?</p>
 
             <div className='contact-social-icons'>
               <a href='https://twitter.com/The_Oluwajuwon' target='_blank' rel='noopener noreferrer'><img src={twitter} alt='Twitter link' /></a>
             </div>
 
-            <p>| | you just want to see what I've been up to?</p>
+            <p>Want to see what I've been up to?</p>
             <div className='contact-social-icons'>
             <a href='https://github.com/oluwajuwon' target='_blank' rel='noopener noreferrer'><img src={gitHub} alt='gitHub link' /></a>
             <a href='https://medium.com/@jfagbohungbe' target='_blank' rel='noopener noreferrer'><img src={medium} alt='Medium link' /></a>

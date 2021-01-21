@@ -5,11 +5,11 @@ import './style.css';
 const Footer = () => {
   return (
     <div className='footer'>
-      <Link to='/'>Welcome</Link>
-      <Link to='/about-me'>AboutMe</Link>
-      <Link to='/portfolio'>MyPortfolio</Link>
-      <Link to='/contact'>HitMeUp</Link>
-      
+      {/* <Link to='/'>Welcome</Link> */}
+      <Link to='/about-me'>About</Link>
+      <Link to='/portfolio'>Portfolio</Link>
+      <Link to='/stories'>Stories</Link>
+      <Link to='/contact'>Contact</Link>
     </div>
   )
 }

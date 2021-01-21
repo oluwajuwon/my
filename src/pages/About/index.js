@@ -12,6 +12,7 @@ import PT from '../../assets/p-t.png';
 import Heroku from '../../assets/heroku.png';
 import Netlify from '../../assets/netlify.png';
 import GitHub from '../../assets/gitHub.png';
+
 const About = () => {
   return (
     <div>
@@ -22,10 +23,10 @@ const About = () => {
             <span role='img' aria-label="cancel">🙅🏿‍♂️</span> AboutMe
           </h1>
           <p>
-            I'm a full stack software engineer who has a knack for solving problems, learning and building usable / user-friendly products.
+            I'm a Frontend Engineer who has a knack for solving problems, learning, building usable / user-friendly products with amazing user interfaces and experiences.
         </p>
         <p>
-            As a Budding Developer, my main goal is to solve problems, create solutions and learn new methods of solving different kinds of problems,
+            As a budding engineer, my main goal is to solve problems, create solutions and learn new methods of solving different kinds of problems,
             regardless of technology or programming language used. 
 
             <br/><span className='goal'><b>The main goal is to SOLVE PROBLEMS.</b></span><br/>
@@ -38,7 +39,7 @@ const About = () => {
           <p>
             To see a more structured document containing my work experiences, educational background and a lot more... 
             <br />
-            <a href='http://bit.ly/oluwajuwons-portfolio'>Please download my CV</a>
+            <a target="_blank" rel="noopener noreferrer" href='http://bit.ly/juwon-resume'>Have a look at my resume</a>
           </p>
         </section>
 

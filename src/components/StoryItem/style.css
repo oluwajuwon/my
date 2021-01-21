@@ -1,0 +1,40 @@
+.story-item {
+  border: 1px solid #686868;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 35px;
+  text-align: left;
+  position: relative;
+}
+
+.story-item img {
+  width: fit-content;
+}
+
+.story-item h2 {
+  cursor: pointer;
+}
+
+.story-date {
+  font-size: small;
+  color: #4d4d4d;
+}
+
+.story-description {
+  color: #4d4d4d;
+  line-height: 25px;
+}
+
+.story-categories {
+display: flex;
+flex-wrap: wrap;
+}
+
+.story-categories .item {
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: #f3f3f3;
+  color: #858484;
+  font-size: small;
+}
