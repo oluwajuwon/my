@@ -33,7 +33,7 @@ function App() {
         <Route component={Portfolio} path='/portfolio' />
         <Route component={Contact} path='/contact' />
         <Route component={Stories} path='/stories' />
-        <Route component={NotFound} path='/*' />
+        <Route component={NotFound} path='*' />
       </Switch>
       <Footer />
     </div>
