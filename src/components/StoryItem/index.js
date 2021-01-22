@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { findText } from '../../utils';
 import './style.css';
 
@@ -20,7 +21,7 @@ class Storyitem extends React.Component {
 
     return(
       <div className="story-item">
-        <p className="story-date"><span role="img" aria-label="calendar">&#128197;</span> {story && new Date(story?.pubDate).toDateString()}</p>
+        {story && <p className="story-date"><span role="img" aria-label="calendar">&#128197;</span> {dayjs(story.pubDate).format('ddd D MMM, YYYY')}</p>}
         <h2 onClick={this.handleOpenLink}>{story?.title}</h2>
         <div ref={this.itemRef} className="story-description"></div>
         <div className='story-categories'>
