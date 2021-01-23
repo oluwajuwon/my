@@ -18,11 +18,11 @@ const Stories = () => {
 
   return (
     <div className="stories-page">
-      {loading &&
-        <h1>loading...</h1>
-      }
       <div className="stories-section">
       <h1><span role="img" aria-label="story">📜 </span>My Stories</h1>
+      {loading &&
+        <h3>loading...</h3>
+      }
       {stories?.map(story => {
         return (
           <Storyitem story={story} key={Math.random()} />
