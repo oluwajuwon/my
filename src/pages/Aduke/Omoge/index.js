@@ -100,7 +100,7 @@ class Omoge extends React.Component {
         <div className="bottom-section mt-4">
 
           <div className="form">
-            <p>What is that one part of your body that I love so much, and I always say it more than any other one 👀</p>
+            <p>What is that one part of your body that I love so much, and I always say it more than any other one <span role="img" aria-label="eyes">👀</span></p>
             <input type="text" className="unlock-input" value={unlock} name="unlock" onChange={this.handleChange} />
           </div>
 

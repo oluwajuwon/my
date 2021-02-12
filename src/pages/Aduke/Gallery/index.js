@@ -33,7 +33,7 @@ const Gallery = (props) => {
           ))}
         </div>
         <p className="mt-5 text-left">
-          Do you also remember this? -> <a href="https://drive.google.com/file/d/1o16ArXj6f7NIPK_hYH39NNBnAsfauBb-/view?usp=sharing" target="_blank" className="text-white text-decoration">click me!</a>
+          Do you also remember this? -> <a href="https://drive.google.com/file/d/1o16ArXj6f7NIPK_hYH39NNBnAsfauBb-/view?usp=sharing" target="_blank" className="text-white text-decoration" rel="noopener noreferrer" >click me!</a>
         </p>
         <p className="mt-5 text-left">
           I cherish every single moment we spend together, and I'm looking forward to making way more memories with you, I also understand the process is just as important as the destination, and I'll never take that for granted

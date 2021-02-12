@@ -40,7 +40,7 @@ const Music = (props) => {
             <p>I recorded this one as a voice clip, when you get here, just ask me for it and I'll send it to you</p>
             </div>
         </div>
-        <p className="mt-5">I hope you enjoy this as much as I enjoyed building it, and I hope it warms your heart my love. I love you ❤️</p>
+        <p className="mt-5">I hope you enjoy this as much as I enjoyed building it, and I hope it warms your heart my love. I love you<span role="img" aria-label="heart"> ❤️</span></p>
         <div className="mt-4">
           <button className="btn btn-next" onClick={moveToGallery}>
             Move to the previous stage
