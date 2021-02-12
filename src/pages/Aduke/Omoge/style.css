@@ -1,0 +1,39 @@
+.omoge-page {
+  background-color: black;
+  color: white;
+  padding-top: 50px;
+  padding-bottom: 80px;
+}
+
+.omoge-page > h1 {
+  padding-top: 20px;
+}
+
+.omoge-page .note {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 30px;
+  text-align: justify;
+}
+
+.omoge-page .bottom-section {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 30px;
+  text-align: justify;
+}
+
+.bottom-section input {
+  background-color: transparent;
+  border: 1px solid #efefef;
+  color: #efefef
+}
+
+.omoge-page .note-from {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: right;
+}

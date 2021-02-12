@@ -1,0 +1,36 @@
+.omoge-gallery {
+  background-color: black;
+  padding-top: 50px;
+  padding-bottom: 80px;
+  color: #efefef;
+}
+
+.omoge-gallery .heading {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.omoge-gallery .image-section {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gallery-image img {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-right: 10px;
+  filter: grayscale();
+  background-color: #efefef;
+}
+
+.gallery-description {
+  text-align: left;
+  font-size: small;
+  line-height: 20px;
+}
