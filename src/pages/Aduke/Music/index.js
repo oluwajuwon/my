@@ -38,6 +38,7 @@ const Music = (props) => {
               <p>Your song</p>
             </div>
             <p>I recorded this one as a voice clip, when you get here, just ask me for it and I'll send it to you</p>
+            <p>Also I used this image cos I'm sure this is how your face is right now even if you want to smile so much, but you're still doing hard guy lol</p>
             </div>
         </div>
         <p className="mt-5">I hope you enjoy this as much as I enjoyed building it, and I hope it warms your heart my love. I love you<span role="img" aria-label="heart"> ❤️</span></p>

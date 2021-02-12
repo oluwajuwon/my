@@ -22,7 +22,7 @@ export const imageDetails = [
   },
   {
     image: three,
-    description: 'This was the day we went to stories for the first time, after checking that place for the buffet and the patio and we were not satisfied'
+    description: 'This was the day we went to stories for the first time, after checking that place for the buffet and the patio and we were not satisfied, especially that hot sun at the patio'
   },
   {
     image: four,
@@ -34,7 +34,7 @@ export const imageDetails = [
   },
   {
     image: seven,
-    description: 'This was the day I asked you to be mine at SPAR supermarket, we were already late to the birthday party and still fooling around in the bolt.'
+    description: 'This was the day I asked you to be mine at SPAR supermarket. We were already late to the birthday party, and still fooling around in the bolt.'
   },
   {
     image: eight,
