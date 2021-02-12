@@ -100,12 +100,12 @@ class Omoge extends React.Component {
         <div className="bottom-section mt-4">
 
           <div className="form">
-            <p>What is that one part of your body that I love so much, and I always say it more than any other one <span role="img" aria-label="eyes">👀</span></p>
+            <p>What is that one part of your body that I love so much, and I always say it more than any other one? Enter the answer below <span role="img" aria-label="eyes">👀</span></p>
             <input type="text" className="unlock-input" value={unlock} name="unlock" onChange={this.handleChange} />
           </div>
 
           <div className="text-right mt-5">
-            {['eyes', 'my eyes', 'eye', 'your eyes'].includes(unlock) &&
+            {['eyes', 'my eyes', 'eye', 'your eyes', 'Eyes', 'My eyes', 'Eye', 'Your eyes'].includes(unlock) &&
               <button className="btn btn-next" onClick={this.moveToGallery}>
                 Move to the next stage
               </button>
