@@ -34,3 +34,13 @@
   font-size: small;
   line-height: 20px;
 }
+
+@media screen and (max-width: 768px) {
+  .omoge-gallery .heading {
+    width: 85%;
+  }
+  
+  .omoge-gallery .image-section {
+    width: 85%;
+  }
+}

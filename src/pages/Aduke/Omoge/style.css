@@ -37,3 +37,13 @@
   margin-right: auto;
   text-align: right;
 }
+
+@media screen and (max-width: 768px) {
+  .omoge-page .note {
+    width: 85%;
+  }
+  
+  .omoge-page .bottom-section {
+    width: 85%;
+  }
+}
