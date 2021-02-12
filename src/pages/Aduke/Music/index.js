@@ -22,7 +22,7 @@ const Music = (props) => {
         </div>
       <div className="omoge-playlist">
         <div className="row">
-          <div className="col-md-4 cursor-pointer" onClick={gotoAppleMusic}>
+          <div className="col-md-4 cursor-pointer mt-4" onClick={gotoAppleMusic}>
 
             <img src={three} alt="music" />
             <div className="d-flex justify-content-between w-100">
@@ -30,9 +30,10 @@ const Music = (props) => {
               <p>20 songs</p>
             </div>
             <p>These songs get me excited, the way you get me jiggy</p>
+            <p>Click on the image above</p>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-md-4 mt-4">
             <img src={six} alt="music" className="her-song" />
             <div className="d-flex justify-content-between w-100">
               <p>Your song</p>
