@@ -3,6 +3,7 @@ import { withRouter, Route, Switch } from "react-router-dom";
 import Omoge from './Omoge';
 import Gallery from './Gallery';
 import Music from './Music';
+import Birthday from './Birthday';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './style.css'
 
@@ -14,6 +15,9 @@ class Aduke extends React.Component {
     return (
       <div className="aduke-page">
         <Switch>
+        <Route exact path={`${path}/`}>
+            <Birthday />
+          </Route>
           <Route exact path={`${path}/`}>
             <Omoge />
           </Route>

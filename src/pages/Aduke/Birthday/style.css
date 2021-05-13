@@ -1,0 +1,24 @@
+.omoge-birthday {
+  color: #ffffff;
+  min-height: 100vh;
+  padding: 50px
+}
+
+.omoge-birthday .card-container {
+  width: 50%;
+  margin: 0 auto;
+  border: 5px solid #ffffff;
+  cursor: pointer;
+}
+.omoge-birthday .card-container img {
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .omoge-music .heading {
+    width: 85%;
+  }
+  .omoge-playlist {
+    width: 85%;
+  }
+}
