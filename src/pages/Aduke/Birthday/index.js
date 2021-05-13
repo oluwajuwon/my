@@ -13,7 +13,7 @@ const Birthday = (props) => {
   return (
     <div className="omoge-birthday">
       <div className="heading">
-        <h1>Happy Birthday My Baby <span role="img">🎉🥳</span></h1>
+        <h1>Happy Birthday My Baby <span role="img" aria-label="confetti">🎉🥳</span></h1>
         <p>So this is what I did with the virtual card Idea lol. Click on the image below</p>
       </div>
       <div className="card-container" onClick={gotoCard}>
