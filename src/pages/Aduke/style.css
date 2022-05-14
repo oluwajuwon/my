@@ -9,7 +9,7 @@
 } */
 
 .omoge-birthday {
-  height: 100%;
+  /* height: 100%; */
   /* padding-bottom: 60px; */
 }
 
@@ -21,6 +21,12 @@
   width: 60%;
   margin: 0 auto;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+@media screen and (max-width: 768px) {
+  .omoge-birthday .heading{
+    width: 90%;
+  }
 }
 
 .omoge-birthday .heading h1 {
@@ -167,31 +173,31 @@
   animation-duration: 5s;
 } 
 .balloon:nth-child(20) {
-  left: 83%;
+  left: 82%;
   top: 40%;
   background-color: lightskyblue;
   animation-duration: 3s;
 } 
 .balloon:nth-child(21) {
-  left: 87%;
+  left: 84%;
   top: 40%;
   background-color: lightcoral;
   animation-duration: 9s;
 } 
 .balloon:nth-child(22) {
-  left: 93%;
+  left: 90%;
   top: 40%;
   background-color: lightgreen;
   animation-duration: 7s;
 } 
 .balloon:nth-child(23) {
-  left: 97%;
+  left: 93%;
   top: 40%;
   background-color: azure;
   animation-duration: 4s;
 } 
 .balloon:nth-child(24) {
-  left: 100%;
+  left: 95%;
   top: 40%;
   background-color: aqua;
   animation-duration: 2s;
