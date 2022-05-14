@@ -2,8 +2,197 @@
   background-color: black;
 }
 
-.btn-next {
+/* .btn-next {
   background-color: transparent;
   border: 1px solid #efefef;
   color: #efefef
+} */
+
+.omoge-birthday {
+  height: 100%;
+  /* padding-bottom: 60px; */
 }
+
+.omoge-birthday .heading {
+  /* position: absolute; */
+  /* top: 30%; */
+  /* left: 50%; */
+  /* transform: translate(-50%, 50%); */
+  width: 60%;
+  margin: 0 auto;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.omoge-birthday .heading h1 {
+  font-size: 50px;
+}
+
+.balloon {
+  height: 60px;
+  width: 55px;
+  background-color: crimson;
+  position: absolute;
+  top: 40%;
+  left: 10%;
+  border-radius: 50%;
+  animation: move 2s ease-in infinite;
+}
+
+.balloon::before {
+  content: "";
+  height: 60px;
+  width: 4px;
+  position: absolute;
+  background-color: white;
+  top: 93%;
+  left: 45%;
+}
+
+@keyframes move {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+  
+}
+
+.balloon:nth-child(2) {
+  left: 15%;
+  top: 40%;
+  background-color: green;
+  animation-duration: 3s;
+}
+.balloon:nth-child(3) {
+  left: 30%;
+  top: 40%;
+  background-color: lightpink;
+  animation-duration: 4s;
+}
+.balloon:nth-child(4) {
+  left: 40%;
+  top: 40%;
+  background-color: gray;
+  animation-duration: 5s;
+}
+.balloon:nth-child(5) {
+  left: 5%;
+  top: 40%;
+  background-color: orange;
+  animation-duration: 6s;
+}
+.balloon:nth-child(6) {
+  left: 10%;
+  top: 40%;
+  background-color: crimson;
+  animation-duration: 4s;
+}
+.balloon:nth-child(7) {
+  left: 15%;
+  top: 40%;
+  background-color: yellow;
+  animation-duration: 8s;
+}
+.balloon:nth-child(8) {
+  left: 20%;
+  top: 40%;
+  background-color: blue;
+  animation-duration: 6s;
+}
+.balloon:nth-child(9) {
+  left: 25%;
+  top: 40%;
+  background-color: aquamarine;
+  animation-duration: 4s;
+} 
+.balloon:nth-child(10) {
+  left: 30%;
+  top: 40%;
+  background-color: aquamarine;
+  animation-duration: 8s;
+} 
+.balloon:nth-child(11) {
+  left: 35%;
+  top: 40%;
+  background-color: palegoldenrod;
+  animation-duration: 9s;
+} 
+.balloon:nth-child(12) {
+  left: 40%;
+  top: 40%;
+  background-color: oldlace;
+  animation-duration: 4s;
+} 
+.balloon:nth-child(13) {
+  left: 45%;
+  top: 40%;
+  background-color: ivory;
+  animation-duration: 10s;
+} 
+.balloon:nth-child(14) {
+  left: 53%;
+  top: 40%;
+  background-color: yellow;
+  animation-duration: 5s;
+} 
+.balloon:nth-child(15) {
+  left: 57%;
+  top: 40%;
+  background-color: thistle;
+  animation-duration: 9s;
+} 
+.balloon:nth-child(16) {
+  left: 63%;
+  top: 40%;
+  background-color: tan;
+  animation-duration: 5s;
+} 
+.balloon:nth-child(17) {
+  left: 67%;
+  top: 40%;
+  background-color: rosybrown;
+  animation-duration: 6s;
+} 
+.balloon:nth-child(18) {
+  left: 73%;
+  top: 40%;
+  background-color: wheat;
+  animation-duration: 8s;
+} 
+.balloon:nth-child(19) {
+  left: 77%;
+  top: 40%;
+  background-color: aquamarine;
+  animation-duration: 5s;
+} 
+.balloon:nth-child(20) {
+  left: 83%;
+  top: 40%;
+  background-color: lightskyblue;
+  animation-duration: 3s;
+} 
+.balloon:nth-child(21) {
+  left: 87%;
+  top: 40%;
+  background-color: lightcoral;
+  animation-duration: 9s;
+} 
+.balloon:nth-child(22) {
+  left: 93%;
+  top: 40%;
+  background-color: lightgreen;
+  animation-duration: 7s;
+} 
+.balloon:nth-child(23) {
+  left: 97%;
+  top: 40%;
+  background-color: azure;
+  animation-duration: 4s;
+} 
+.balloon:nth-child(24) {
+  left: 100%;
+  top: 40%;
+  background-color: aqua;
+  animation-duration: 2s;
+} 
