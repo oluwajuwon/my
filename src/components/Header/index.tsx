@@ -73,12 +73,19 @@ const Header: React.FC<HeaderProps> = ({ colorMode, handleColorToggle }) => {
 
       {/* Mobile Navigation */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50">
+        <div
+          className={`absolute inset-0 blur-[120px] opacity-30 transition-all duration-500 ${
+            isDark
+              ? "bg-gradient-to-r from-cyan-400/10 via-sky-400/10 to-blue-400/10"
+              : "bg-gradient-to-r from-cyan-400/5 via-sky-400/5 to-blue-400/5"
+          }`}
+        />
         {/* Mobile Header Bar */}
         <div
-          className={`flex items-center justify-between px-4 py-3 backdrop-blur-xl ${
+          className={`relative flex items-center justify-between px-4 py-3 backdrop-blur-xl ${
             isDark
-              ? "bg-[#0a0a0a]/90 border-b border-white/10"
-              : "bg-white/90 border-b border-gray-200"
+              ? "bg-[#0a0a0a]/70 border-b border-white/10"
+              : "bg-white/70 border-b border-gray-200/50"
           }`}
         >
           <Link
