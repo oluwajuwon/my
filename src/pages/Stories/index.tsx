@@ -1,12 +1,17 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { getMediumPosts } from "../../api";
+import { MediumStory } from "../../types/medium";
 
-const Stories = () => {
-  const { isDark } = useOutletContext();
-  const [stories, setStories] = useState([]);
-  const [loading, setLoading] = useState(false);
+interface ThemeContext {
+  isDark: boolean;
+}
+
+const Stories: React.FC = () => {
+  const { isDark } = useOutletContext<ThemeContext>();
+  const [stories, setStories] = useState<MediumStory[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
@@ -21,7 +26,7 @@ const Stories = () => {
       });
   }, []);
 
-  const getDescription = (description) => {
+  const getDescription = (description: string): string => {
     const match = description.match(/<p>(.*?)<\/p>/);
     if (match && match[1]) {
       const div = document.createElement("div");
@@ -31,7 +36,7 @@ const Stories = () => {
     return "";
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       weekday: "short",
@@ -42,18 +47,24 @@ const Stories = () => {
   };
 
   return (
-    <div className={`min-h-screen px-6 lg:px-20 py-24 ${isDark ? "bg-[#0a0a0a]" : "bg-gray-50"}`}>
+    <div
+      className={`min-h-screen px-6 lg:px-20 py-24 ${isDark ? "bg-[#0a0a0a]" : "bg-gray-50"}`}
+    >
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className={`text-4xl lg:text-5xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
+          <h1
+            className={`text-4xl lg:text-5xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
+          >
             My Stories
           </h1>
           <div className="w-20 h-1 bg-[#4ad8fc] mb-8"></div>
-          <p className={`text-lg mb-12 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+          <p
+            className={`text-lg mb-12 ${isDark ? "text-gray-400" : "text-gray-600"}`}
+          >
             Articles and thoughts I've shared on Medium
           </p>
         </motion.div>
@@ -79,16 +90,20 @@ const Stories = () => {
                 <span>{formatDate(story.pubDate)}</span>
               </div>
 
-              <h2 className={`text-xl font-bold group-hover:text-[#4ad8fc] transition-colors duration-300 mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
+              <h2
+                className={`text-xl font-bold group-hover:text-[#4ad8fc] transition-colors duration-300 mb-3 ${isDark ? "text-white" : "text-gray-900"}`}
+              >
                 {story.title}
               </h2>
 
-              <p className={`text-sm line-clamp-3 mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+              <p
+                className={`text-sm line-clamp-3 mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}
+              >
                 {getDescription(story.description)}
               </p>
 
               <div className="flex flex-wrap gap-2">
-                {story.categories?.map((category, i) => (
+                {story.categories?.map((category: string, i: number) => (
                   <span
                     key={i}
                     className="text-xs px-3 py-1 bg-[#4ad8fc]/10 text-[#4ad8fc] rounded-full"
