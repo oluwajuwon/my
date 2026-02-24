@@ -1,11 +1,12 @@
+import { Project } from './types';
 import fff from './images/fff.jpg';
 import activo from './images/activo.png';
 import kotigo from './images/kotigo.jpg';
 import Secp from './images/secp.jpg';
-import maka from './images/makaranta.png'
-import pace from './images/pace.png'
+import maka from './images/makaranta.png';
+import pace from './images/pace.png';
 
-export const projects = [
+export const projects: Project[] = [
   {
     id: 1,
     name: 'Pace Africa',
@@ -29,35 +30,35 @@ export const projects = [
     name: 'Fast Food Fast',
     description: 'A Food ordering platform for restaurants',
     technologies: ['javascript', 'react', 'redux', 'postgres'],
-    role: 'full-stack',
+    role: 'Full Stack',
     image: fff,
     url: '',
   },
   {
     id: 4,
     name: 'Activo',
-    description: 'An asset management platform built to manage all assets of all staff members',
-    technologies: ['typescript', 'javascript', 'react', 'redux', 'postgres'],
-    role: 'front-end',
+    description: 'An asset management platform for companies',
+    technologies: ['javascript', 'react', 'redux', 'postgres'],
+    role: 'Frontend',
     image: activo,
     url: '',
   },
   {
     id: 5,
     name: 'Kotigo',
-    description: 'A mobile application for listening to e-books',
-    technologies: ['javascript', 'react','react-native' ,'redux', 'react-nagivation'],
-    role: 'Mobile',
+    description: 'A platform for connecting teachers and students',
+    technologies: ['javascript', 'react', 'redux', 'postgres'],
+    role: 'Frontend',
     image: kotigo,
     url: '',
   },
   {
     id: 6,
     name: 'SECP',
-    description: 'A web application for finding student debtors in various schools',
-    technologies: ['javascript', 'nodeJS', 'expressJS', 'postgreSQL' ,'sequelize'],
-    role: 'back-end',
+    description: 'A platform for managing student enrollment and course registration',
+    technologies: ['javascript', 'react', 'redux', 'postgres'],
+    role: 'Frontend',
     image: Secp,
     url: '',
   }
-]
+];
