@@ -1,14 +1,13 @@
 import Header from "components/Header";
 import React, { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import "./App.css";
 import NavigationListener from "./components/NavigationListener";
 
 export type ColorMode = "Light" | "Dark";
 
-function App(): JSX.Element {
+const App: React.FC = () => {
   const [colorMode, setColorMode] = useState<ColorMode>("Dark");
-  const location = useLocation();
 
   const handleColorToggle = (e: React.MouseEvent<HTMLElement>): void => {
     e.preventDefault();
@@ -30,6 +29,6 @@ function App(): JSX.Element {
       </div>
     </div>
   );
-}
+};
 
 export default App;
