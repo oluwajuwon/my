@@ -8,22 +8,64 @@ interface ThemeContext {
 }
 
 const skills = [
-  "HTML",
-  "CSS",
+  "React Native",
+  "TypeScript",
   "JavaScript",
   "React",
-  "Firebase",
-  "RESTful API",
-  "Redux / Redux Toolkit",
-  "TypeScript",
-  "React Native",
   "Node.js",
-  "Azure DevOps",
-  "Linear",
-  "iOS",
-  "Android",
+  "Express.js",
+  "GraphQL",
+  "REST APIs",
+  "Git",
+  "GitHub",
+  "CI/CD",
+  "HTML5",
+  "CSS3",
+  "Tailwind CSS",
+  "Redux",
+  "Redux Toolkit",
+  "React Query",
+  "Zustand",
+  "Next.js",
+  "Gatsby",
   "Expo",
+  "Firebase",
+  "Supabase",
+  "MongoDB",
+  "PostgreSQL",
+  "MySQL",
+  "Prisma",
+  "Docker",
+  "AWS",
+  "Vercel",
+  "Netlify",
+  "Heroku",
+  "Jest",
+  "React Testing Library",
+  "Playwright",
+  "Cypress",
+  "Webpack",
+  "Vite",
+  "ESLint",
+  "Prettier",
+  "Figma",
+  "Framer Motion",
+  "GSAP",
+  "Socket.io",
+  "WebSockets",
+  "OAuth",
+  "JWT",
   "Sentry",
+  "Analytics",
+  "SEO",
+  "Accessibility",
+  "Performance Optimization",
+  "Responsive Design",
+  "Mobile-First Design",
+  "Agile/Scrum",
+  "Jira",
+  "Notion",
+  "Slack",
 ];
 
 const NewHome: React.FC = () => {
@@ -37,179 +79,467 @@ const NewHome: React.FC = () => {
   return (
     <div className={`min-h-screen ${isDark ? "bg-[#0a0a0a]" : "bg-gray-50"}`}>
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center px-6 lg:px-20 pt-20 relative overflow-hidden">
-        <div className="flex items-center justify-center w-full">
+      <section className="min-h-screen flex items-center justify-center px-6 lg:px-20 pt-20 relative overflow-hidden">
+        {/* Floating Particles/Stars */}
+        {[...Array(30)].map((_, i) => (
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-            <h1
-              className={`text-5xl lg:text-7xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
-            >
-              Juwonlo
-            </h1>
-            <h2 className="text-4xl lg:text-6xl font-bold text-[#4ad8fc] mb-8">
-              Software Engineer
-            </h2>
-            <p
-              className={`text-lg lg:text-xl mb-10 max-w-xl ${isDark ? "text-gray-400" : "text-gray-600"}`}
-            >
-              Making complex systems feel simple — one mobile app at a time.
-            </p>
-            <Link
-              to="/portfolio"
-              className="inline-block px-6 py-3 border border-[#4ad8fc] text-[#4ad8fc] text-sm font-medium rounded-lg hover:bg-[#4ad8fc] hover:text-black transition-all duration-300"
-            >
-              View my projects
-            </Link>
-          </motion.div>
-
-          {/* Floating Code Snippet */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: [0, -15, 0] }}
-            transition={{
-              opacity: { duration: 1, delay: 0.5 },
-              y: { duration: 7, ease: "easeInOut", repeat: Infinity },
+            key={i}
+            className="absolute w-1 h-1 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              background: [
+                "#4ad8fc",
+                "#60a5fa",
+                "#a78bfa",
+                "#f472b6",
+                "#fbbf24",
+                "#34d399",
+              ][Math.floor(Math.random() * 6)],
+              boxShadow: `0 0 ${4 + Math.random() * 8}px currentColor`,
             }}
-            className="hidden md:flex md:flex-1 md:justify-center pointer-events-none select-none"
+            animate={{
+              y: [0, -20 - Math.random() * 30, 0],
+              opacity: [0.3, 0.8, 0.3],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+        {/* Centered Hero Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center z-10"
+        >
+          <h1
+            className={`text-5xl lg:text-7xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
           >
-            <pre
-              className={`font-heading text-xs lg:text-sm leading-loose p-6 lg:p-8 rounded-xl backdrop-blur-sm min-w-[480px] lg:min-w-[600px] ${
-                isDark
-                  ? "bg-white/[0.03] border border-white/[0.08]"
-                  : "bg-gray-900/[0.03] border border-gray-900/[0.08]"
-              }`}
-            >
-              <code className="block opacity-60">
-                <span
-                  className={isDark ? "text-purple-400" : "text-purple-600"}
-                >
-                  const
-                </span>{" "}
-                <span className={isDark ? "text-blue-300" : "text-blue-600"}>
-                  engineer
-                </span>{" "}
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  =
-                </span>{" "}
-                <span
-                  className={isDark ? "text-yellow-300" : "text-yellow-600"}
-                >
-                  {"{"}
-                </span>
-                {"\n"}
-                {"  "}
-                <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
-                  name
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  :
-                </span>{" "}
-                <span className={isDark ? "text-green-400" : "text-green-600"}>
-                  "Juwonlo"
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  ,
-                </span>
-                {"\n"}
-                {"  "}
-                <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
-                  role
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  :
-                </span>{" "}
-                <span className={isDark ? "text-green-400" : "text-green-600"}>
-                  "Software Engineer"
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  ,
-                </span>
-                {"\n"}
-                {"  "}
-                <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
-                  focus
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  :
-                </span>{" "}
-                <span className={isDark ? "text-green-400" : "text-green-600"}>
-                  "Mobile"
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  ,
-                </span>
-                {"\n"}
-                {"  "}
-                <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
-                  stack
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  :
-                </span>{" "}
-                <span
-                  className={isDark ? "text-yellow-300" : "text-yellow-600"}
-                >
-                  {"["}
-                </span>
-                {"\n"}
-                {"    "}
-                <span className={isDark ? "text-green-400" : "text-green-600"}>
-                  "React Native"
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  ,
-                </span>
-                {"\n"}
-                {"    "}
-                <span className={isDark ? "text-green-400" : "text-green-600"}>
-                  "TypeScript"
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  ,
-                </span>
-                {"\n"}
-                {"    "}
-                <span className={isDark ? "text-green-400" : "text-green-600"}>
-                  "Node.js"
-                </span>
-                {"\n"}
-                {"  "}
-                <span
-                  className={isDark ? "text-yellow-300" : "text-yellow-600"}
-                >
-                  {"]"}
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  ,
-                </span>
-                {"\n"}
-                {"  "}
-                <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
-                  passion
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  :
-                </span>{" "}
-                <span className={isDark ? "text-green-400" : "text-green-600"}>
-                  "Clean code"
-                </span>
-                {"\n"}
-                <span
-                  className={isDark ? "text-yellow-300" : "text-yellow-600"}
-                >
-                  {"}"}
-                </span>
-                <span className={isDark ? "text-white" : "text-gray-800"}>
-                  ;
-                </span>
-              </code>
-            </pre>
-          </motion.div>
-        </div>
+            Juwonlo
+          </h1>
+          <h2 className="text-4xl lg:text-6xl font-bold text-[#4ad8fc] mb-8">
+            Software Engineer
+          </h2>
+          <p
+            className={`text-lg lg:text-xl mb-10 max-w-xl mx-auto ${isDark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            Making complex systems feel simple — one mobile app at a time.
+          </p>
+          <Link
+            to="/portfolio"
+            className="inline-block px-6 py-3 border border-[#4ad8fc] text-[#4ad8fc] text-sm font-medium rounded-lg hover:bg-[#4ad8fc] hover:text-black transition-all duration-300"
+          >
+            View my projects
+          </Link>
+        </motion.div>
+
+        {/* Floating Code Snippet 1 - Top Right */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -12, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 0.5 },
+            y: { duration: 6, ease: "easeInOut", repeat: Infinity },
+          }}
+          className="hidden lg:block absolute top-20 right-10 xl:right-20 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-purple-400" : "text-purple-600"}>
+                const
+              </span>{" "}
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                skills
+              </span>{" "}
+              <span className={isDark ? "text-white" : "text-gray-800"}>=</span>{" "}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"["}
+              </span>
+              {"\n  "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "React Native"
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>,</span>
+              {"\n  "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "TypeScript"
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>,</span>
+              {"\n  "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "Node.js"
+              </span>
+              {"\n"}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"]"}
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>;</span>
+            </code>
+          </pre>
+        </motion.div>
+
+        {/* Floating Code Snippet 2 - Top Left */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -10, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 0.7 },
+            y: { duration: 7, ease: "easeInOut", repeat: Infinity, delay: 1 },
+          }}
+          className="hidden lg:block absolute top-32 left-10 xl:left-20 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-purple-400" : "text-purple-600"}>
+                function
+              </span>{" "}
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                buildApp
+              </span>
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"()"}
+              </span>{" "}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"{"}
+              </span>
+              {"\n  "}
+              <span className={isDark ? "text-purple-400" : "text-purple-600"}>
+                return
+              </span>{" "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "magic"
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>;</span>
+              {"\n"}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"}"}
+              </span>
+            </code>
+          </pre>
+        </motion.div>
+
+        {/* Floating Code Snippet 3 - Bottom Right */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -15, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 0.9 },
+            y: { duration: 8, ease: "easeInOut", repeat: Infinity, delay: 0.5 },
+          }}
+          className="hidden lg:block absolute bottom-32 right-16 xl:right-32 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
+                focus
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>:</span>{" "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "Mobile"
+              </span>
+              {"\n"}
+              <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
+                passion
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>:</span>{" "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "Clean code"
+              </span>
+            </code>
+          </pre>
+        </motion.div>
+
+        {/* Floating Code Snippet 4 - Bottom Left */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -8, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 1.1 },
+            y: {
+              duration: 5.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 1.5,
+            },
+          }}
+          className="hidden lg:block absolute bottom-40 left-16 xl:left-28 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-purple-400" : "text-purple-600"}>
+                const
+              </span>{" "}
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                experience
+              </span>{" "}
+              <span className={isDark ? "text-white" : "text-gray-800"}>=</span>{" "}
+              <span className={isDark ? "text-orange-400" : "text-orange-600"}>
+                6
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>;</span>
+              {"\n"}
+              <span className={isDark ? "text-gray-500" : "text-gray-400"}>
+                {"// years"}
+              </span>
+            </code>
+          </pre>
+        </motion.div>
+
+        {/* Floating Code Snippet 5 - Middle Right */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -11, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 0.6 },
+            y: {
+              duration: 6.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 0.8,
+            },
+          }}
+          className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-4 xl:right-8 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-purple-400" : "text-purple-600"}>
+                if
+              </span>{" "}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"("}
+              </span>
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                mobile
+              </span>
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {")"}
+              </span>{" "}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"{"}
+              </span>
+              {"\n  "}
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                ship
+              </span>
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"()"}
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>;</span>
+              {"\n"}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"}"}
+              </span>
+            </code>
+          </pre>
+        </motion.div>
+
+        {/* Floating Code Snippet 6 - Middle Left */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -9, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 0.8 },
+            y: { duration: 7.5, ease: "easeInOut", repeat: Infinity, delay: 2 },
+          }}
+          className="hidden lg:block absolute top-1/2 -translate-y-1/2 left-4 xl:left-8 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
+                platform
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>:</span>{" "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "iOS"
+              </span>
+              {"\n"}
+              <span className={isDark ? "text-cyan-300" : "text-cyan-600"}>
+                android
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>:</span>{" "}
+              <span className={isDark ? "text-orange-400" : "text-orange-600"}>
+                true
+              </span>
+            </code>
+          </pre>
+        </motion.div>
+
+        {/* Floating Code Snippet 7 - Top Center Right */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -13, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 1.3 },
+            y: {
+              duration: 6.8,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 0.3,
+            },
+          }}
+          className="hidden xl:block absolute top-24 right-1/4 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                deploy
+              </span>
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"()"}
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>.</span>
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                then
+              </span>
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"("}
+              </span>
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "🚀"
+              </span>
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {")"}
+              </span>
+            </code>
+          </pre>
+        </motion.div>
+
+        {/* Floating Code Snippet 8 - Bottom Center Left */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -10, 0] }}
+          transition={{
+            opacity: { duration: 1, delay: 1.5 },
+            y: {
+              duration: 7.2,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 1.2,
+            },
+          }}
+          className="hidden xl:block absolute bottom-36 left-1/4 pointer-events-none select-none"
+        >
+          <pre
+            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
+              isDark
+                ? "bg-white/[0.02] border border-white/[0.08]"
+                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
+            }`}
+            style={{
+              boxShadow: isDark
+                ? "0 0 20px rgba(74, 216, 252, 0.1)"
+                : "0 0 20px rgba(74, 216, 252, 0.05)",
+            }}
+          >
+            <code className="block opacity-70">
+              <span className={isDark ? "text-purple-400" : "text-purple-600"}>
+                const
+              </span>{" "}
+              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
+                tools
+              </span>{" "}
+              <span className={isDark ? "text-white" : "text-gray-800"}>=</span>{" "}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"["}
+              </span>
+              {"\n  "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "Expo"
+              </span>
+              <span className={isDark ? "text-white" : "text-gray-800"}>,</span>{" "}
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                "Sentry"
+              </span>
+              {"\n"}
+              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
+                {"]"}
+              </span>
+            </code>
+          </pre>
+        </motion.div>
 
         {/* Scroll Indicator */}
         <motion.div
@@ -238,7 +568,7 @@ const NewHome: React.FC = () => {
       {/* About & Skills Section */}
       <section
         id="about-section"
-        className="min-h-screen px-6 lg:px-20 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16"
+        className="min-h-screen px-6 lg:px-20 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:items-center"
       >
         {/* About Me */}
         <motion.div
@@ -248,57 +578,47 @@ const NewHome: React.FC = () => {
           transition={{ duration: 0.8 }}
         >
           <h3
-            className={`text-3xl lg:text-4xl font-bold mb-8 ${isDark ? "text-white" : "text-gray-900"}`}
+            className={`text-3xl lg:text-4xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
           >
-            About me
+            About Me
           </h3>
+          <div className="w-20 h-1 bg-[#4ad8fc] mb-8"></div>
           <div
-            className={`space-y-6 leading-relaxed ${isDark ? "text-gray-400" : "text-gray-600"}`}
+            className={`space-y-6 text-lg leading-relaxed ${isDark ? "text-gray-400" : "text-gray-600"}`}
           >
             <p>
-              I'm{" "}
+              I'm a{" "}
               <span
                 className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}
               >
-                Juwonlo
+                mobile-focused Software Engineer
+              </span>{" "}
+              who believes great software should feel effortless — even if
+              what's happening underneath is anything but.
+            </p>
+            <p>
+              I started in frontend, but these days I think in systems:
+              architecture, performance, state management, CI/CD, developer
+              experience, and how all of it translates into real user value. I
+              work primarily with{" "}
+              <span
+                className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}
+              >
+                React Native and TypeScript
               </span>
-              , a passionate and dedicated{" "}
-              <span
-                className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}
-              >
-                software engineer.
-              </span>{" "}
+              , building scalable applications where reliability, speed, and
+              usability actually matter.
             </p>
             <p>
-              Welcome to my little portfolio where I talk about myself and some
-              of the projects I've participated in or currently participating
-              in, tools I've used and some other cool things. If you're
-              wondering why this portfolio is so plain and too simple, well it's
-              because I got bored on a faithful day and decided to do a little
-              something to kill time. I'll be updating it as time goes on. I'm
-              guessing you're not here to read my rants, so you can checkout the
-              other pages via the links at the bottom of the page.
+              I enjoy untangling complex problems, simplifying messy flows, and
+              shipping features that don't just "work" — they feel intentional.
+              I'm big on clean architecture, thoughtful abstractions, and
+              performance that holds up in production (not just in demos).
             </p>
             <p>
-              I have{" "}
-              <span
-                className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}
-              >
-                6+ years of experience
-              </span>{" "}
-              working with various programming languages and frameworks such as
-              HTML, CSS, JavaScript, React, React Native and Node.js. I thrive
-              on solving complex problems and continuously learning new
-              technologies to stay at the forefront of this ever-evolving field.
-            </p>
-            <p>
-              <span
-                className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}
-              >
-                My goal is
-              </span>{" "}
-              to create applications that not only look great but also provide
-              an intuitive and seamless experience for users.
+              Curious by default, detail-oriented by habit, and always learning
+              — I build software that's practical, scalable, and designed to
+              last.
             </p>
           </div>
         </motion.div>

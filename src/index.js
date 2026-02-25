@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import './index.css';
-import About from './pages/About';
 import Aduke from './pages/Aduke';
 import Contact from './pages/Contact';
 import NewHome from './pages/NewHome';
@@ -18,7 +17,6 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <NewHome /> },
-      { path: 'about', element: <About /> },
       { path: 'portfolio', element: <Portfolio /> },
       { path: 'contact', element: <Contact /> },
       { path: 'stories', element: <Stories /> },

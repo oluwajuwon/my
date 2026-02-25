@@ -10,7 +10,6 @@ interface HeaderProps {
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
   { to: "/portfolio", label: "Portfolio" },
   { to: "/stories", label: "Stories" },
   { to: "/contact", label: "Contact" },
@@ -56,17 +55,6 @@ const Header: React.FC<HeaderProps> = ({ colorMode, handleColorToggle }) => {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/10 to-sky-400/10 opacity-0 group-hover/link:opacity-100 transition-all duration-300 blur-sm" />
               </Link>
             ))}
-            <button
-              onClick={handleColorToggle}
-              className={`ml-2 p-1.5 rounded-full transition-all duration-300 relative group/theme text-sm backdrop-blur-md ${
-                isDark ? "hover:bg-white/[0.07]" : "hover:bg-gray-100"
-              }`}
-            >
-              <span className="relative z-10">
-                {colorMode === "Dark" ? "☀️" : "🌙"}
-              </span>
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/10 to-sky-400/10 opacity-0 group-hover/theme:opacity-100 transition-all duration-300 blur-sm" />
-            </button>
           </nav>
         </div>
       </div>
@@ -96,14 +84,6 @@ const Header: React.FC<HeaderProps> = ({ colorMode, handleColorToggle }) => {
           </Link>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={handleColorToggle}
-              className={`p-2 rounded-full transition-all duration-300 ${
-                isDark ? "hover:bg-white/10" : "hover:bg-gray-100"
-              }`}
-            >
-              {colorMode === "Dark" ? "☀️" : "🌙"}
-            </button>
             <button
               onClick={toggleMenu}
               className={`p-2 rounded-lg transition-all duration-300 ${
