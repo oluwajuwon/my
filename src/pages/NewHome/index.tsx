@@ -25,7 +25,6 @@ const skills = [
   "Redux",
   "Redux Toolkit",
   "React Query",
-  "Zustand",
   "Next.js",
   "Gatsby",
   "Expo",
@@ -51,10 +50,8 @@ const skills = [
   "Figma",
   "Framer Motion",
   "GSAP",
-  "Socket.io",
   "WebSockets",
   "OAuth",
-  "JWT",
   "Sentry",
   "Analytics",
   "SEO",
@@ -70,47 +67,123 @@ const skills = [
 
 const NewHome: React.FC = () => {
   const { isDark } = useOutletContext<ThemeContext>();
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const particlesRef = React.useRef<
+    Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      color: string;
+    }>
+  >([]);
 
   const scrollToAbout = useCallback(() => {
     const aboutSection = document.getElementById("about-section");
     aboutSection?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    const colors = [
+      "#4ad8fc",
+      "#60a5fa",
+      "#a78bfa",
+      "#f472b6",
+      "#fbbf24",
+      "#34d399",
+    ];
+
+    // Initialize particles
+    if (particlesRef.current.length === 0) {
+      for (let i = 0; i < 30; i++) {
+        particlesRef.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+        });
+      }
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update and draw particles
+      particlesRef.current.forEach((particle, i) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // Bounce off edges
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = particle.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Draw connections to nearby particles
+        particlesRef.current.slice(i + 1).forEach((otherParticle) => {
+          const dx = particle.x - otherParticle.x;
+          const dy = particle.y - otherParticle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(otherParticle.x, otherParticle.y);
+            ctx.strokeStyle = `${particle.color}${Math.floor(
+              (1 - distance / 150) * 80,
+            )
+              .toString(16)
+              .padStart(2, "0")}`;
+            ctx.lineWidth = 1.5;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.stroke();
+          }
+        });
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+    };
+  }, [isDark]);
+
   return (
     <div className={`min-h-screen ${isDark ? "bg-[#0a0a0a]" : "bg-gray-50"}`}>
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-6 lg:px-20 pt-20 relative overflow-hidden">
-        {/* Floating Particles/Stars */}
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              background: [
-                "#4ad8fc",
-                "#60a5fa",
-                "#a78bfa",
-                "#f472b6",
-                "#fbbf24",
-                "#34d399",
-              ][Math.floor(Math.random() * 6)],
-              boxShadow: `0 0 ${4 + Math.random() * 8}px currentColor`,
-            }}
-            animate={{
-              y: [0, -20 - Math.random() * 30, 0],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        {/* Particle Network Canvas */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ opacity: 0.8 }}
+        />
         {/* Centered Hero Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -142,12 +215,17 @@ const NewHome: React.FC = () => {
         {/* Floating Code Snippet 1 - Top Right */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, -12, 0] }}
+          animate={{ opacity: 1, y: [0, -13, 0] }}
           transition={{
-            opacity: { duration: 1, delay: 0.5 },
-            y: { duration: 6, ease: "easeInOut", repeat: Infinity },
+            opacity: { duration: 1, delay: 1.3 },
+            y: {
+              duration: 6.8,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 0.3,
+            },
           }}
-          className="hidden lg:block absolute top-20 right-10 xl:right-20 pointer-events-none select-none"
+          className="hidden xl:block absolute top-24 right-1/4 pointer-events-none select-none"
         >
           <pre
             className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
@@ -288,53 +366,6 @@ const NewHome: React.FC = () => {
           </pre>
         </motion.div>
 
-        {/* Floating Code Snippet 4 - Bottom Left */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, -8, 0] }}
-          transition={{
-            opacity: { duration: 1, delay: 1.1 },
-            y: {
-              duration: 5.5,
-              ease: "easeInOut",
-              repeat: Infinity,
-              delay: 1.5,
-            },
-          }}
-          className="hidden lg:block absolute bottom-40 left-16 xl:left-28 pointer-events-none select-none"
-        >
-          <pre
-            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
-              isDark
-                ? "bg-white/[0.02] border border-white/[0.08]"
-                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
-            }`}
-            style={{
-              boxShadow: isDark
-                ? "0 0 20px rgba(74, 216, 252, 0.1)"
-                : "0 0 20px rgba(74, 216, 252, 0.05)",
-            }}
-          >
-            <code className="block opacity-70">
-              <span className={isDark ? "text-purple-400" : "text-purple-600"}>
-                const
-              </span>{" "}
-              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
-                experience
-              </span>{" "}
-              <span className={isDark ? "text-white" : "text-gray-800"}>=</span>{" "}
-              <span className={isDark ? "text-orange-400" : "text-orange-600"}>
-                6
-              </span>
-              <span className={isDark ? "text-white" : "text-gray-800"}>;</span>
-              {"\n"}
-              <span className={isDark ? "text-gray-500" : "text-gray-400"}>
-                {"// years"}
-              </span>
-            </code>
-          </pre>
-        </motion.div>
-
         {/* Floating Code Snippet 5 - Middle Right */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -348,7 +379,7 @@ const NewHome: React.FC = () => {
               delay: 0.8,
             },
           }}
-          className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-4 xl:right-8 pointer-events-none select-none"
+          className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-64 xl:right-64 pointer-events-none select-none"
         >
           <pre
             className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
@@ -431,57 +462,6 @@ const NewHome: React.FC = () => {
               <span className={isDark ? "text-white" : "text-gray-800"}>:</span>{" "}
               <span className={isDark ? "text-orange-400" : "text-orange-600"}>
                 true
-              </span>
-            </code>
-          </pre>
-        </motion.div>
-
-        {/* Floating Code Snippet 7 - Top Center Right */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, -13, 0] }}
-          transition={{
-            opacity: { duration: 1, delay: 1.3 },
-            y: {
-              duration: 6.8,
-              ease: "easeInOut",
-              repeat: Infinity,
-              delay: 0.3,
-            },
-          }}
-          className="hidden xl:block absolute top-24 right-1/4 pointer-events-none select-none"
-        >
-          <pre
-            className={`font-heading text-xs leading-relaxed p-5 rounded-lg backdrop-blur-xl shadow-2xl ${
-              isDark
-                ? "bg-white/[0.02] border border-white/[0.08]"
-                : "bg-gray-900/[0.02] border border-gray-900/[0.08]"
-            }`}
-            style={{
-              boxShadow: isDark
-                ? "0 0 20px rgba(74, 216, 252, 0.1)"
-                : "0 0 20px rgba(74, 216, 252, 0.05)",
-            }}
-          >
-            <code className="block opacity-70">
-              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
-                deploy
-              </span>
-              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
-                {"()"}
-              </span>
-              <span className={isDark ? "text-white" : "text-gray-800"}>.</span>
-              <span className={isDark ? "text-blue-300" : "text-blue-600"}>
-                then
-              </span>
-              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
-                {"("}
-              </span>
-              <span className={isDark ? "text-green-400" : "text-green-600"}>
-                "🚀"
-              </span>
-              <span className={isDark ? "text-yellow-300" : "text-yellow-600"}>
-                {")"}
               </span>
             </code>
           </pre>
