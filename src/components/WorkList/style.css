@@ -1,0 +1,33 @@
+.work-list { border-top: 1px solid var(--border); }
+.work-row { display: grid; grid-template-columns: 3rem minmax(220px, 0.8fr) minmax(300px, 1.2fr); gap: clamp(1.5rem, 4vw, 4rem); padding: clamp(2.5rem, 5vw, 4.5rem) 0; border-bottom: 1px solid var(--border); }
+.work-number { margin: 0; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.08em; }
+.work-image-link { align-self: start; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface); }
+.work-image-link img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.65); transition: transform 240ms ease, filter 240ms ease; }
+.work-row:hover .work-image-link img { transform: scale(1.02); filter: saturate(0.9); }
+.work-copy { align-self: center; }
+.work-category, .work-tech { margin: 0; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.work-copy h3 { margin: 0.7rem 0 1rem; font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 450; letter-spacing: -0.045em; line-height: 1.05; }
+.work-copy h3 a { color: var(--text); text-decoration: none; }
+.work-copy > p:not(.work-category):not(.work-tech) { max-width: 570px; margin: 0 0 1.5rem; color: var(--text-secondary); }
+.work-tech { margin-bottom: 1.5rem; line-height: 1.7; }
+.work-list--compact .work-row { grid-template-columns: 3rem 1fr; }
+.work-list--compact .work-copy { display: grid; grid-template-columns: 1fr 1.5fr auto; gap: 2rem; align-items: baseline; }
+.work-list--compact .work-copy h3 { grid-column: 1; grid-row: 1; margin: 0; font-size: clamp(1.35rem, 2.5vw, 2rem); }
+.work-list--compact .work-category { grid-column: 2; }
+.work-list--compact .work-copy > p:not(.work-category):not(.work-tech), .work-list--compact .work-tech { display: none; }
+.work-list--compact .text-link { grid-column: 3; grid-row: 1; }
+@media (max-width: 800px) {
+  .work-row { grid-template-columns: 2rem 1fr; }
+  .work-image-link { grid-column: 2; }
+  .work-copy { grid-column: 2; }
+  .work-number { grid-row: 1 / span 2; }
+  .work-list--compact .work-copy { grid-template-columns: 1fr auto; gap: 1rem; }
+  .work-list--compact .work-category { display: none; }
+  .work-list--compact .text-link { grid-column: 2; }
+}
+@media (max-width: 520px) {
+  .work-row { grid-template-columns: 1.5rem minmax(0, 1fr); gap: 1rem; }
+  .work-image-link { aspect-ratio: 16 / 10; }
+  .work-list--compact .work-copy { display: block; }
+  .work-list--compact .text-link { margin-top: 0.75rem; }
+}

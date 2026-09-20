@@ -1,0 +1,8 @@
+.article-list { border-top: 1px solid var(--border); }
+.article-row { display: grid; grid-template-columns: minmax(160px, 0.45fr) minmax(0, 1.55fr); gap: clamp(2rem, 6vw, 7rem); padding: clamp(2.25rem, 5vw, 4rem) 0; border-bottom: 1px solid var(--border); }
+.article-meta { display: flex; flex-direction: column; gap: 0.45rem; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.article-row h3 { max-width: 760px; margin: 0 0 1rem; font-size: clamp(1.45rem, 3vw, 2.4rem); font-weight: 450; letter-spacing: -0.035em; line-height: 1.18; }
+.article-row h3 a { color: var(--text); text-decoration: none; transition: color 180ms ease; }
+.article-row h3 a:hover { color: #c8c8c3; }
+.article-row p { max-width: 700px; margin: 0 0 1.35rem; color: var(--text-secondary); }
+@media (max-width: 650px) { .article-row { grid-template-columns: 1fr; gap: 1.25rem; } .article-meta { flex-direction: row; justify-content: space-between; } }

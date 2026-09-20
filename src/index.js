@@ -7,6 +7,8 @@ import Contact from './pages/Contact';
 import NewHome from './pages/NewHome';
 import NotFound from './pages/NotFound';
 import Portfolio from './pages/Portfolio';
+import CaseStudy from './pages/Portfolio/CaseStudy';
+import About from './pages/About';
 import Stories from './pages/Stories';
 import * as serviceWorker from './serviceWorker';
 
@@ -17,9 +19,13 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <NewHome /> },
+      { path: 'work', element: <Portfolio /> },
+      { path: 'work/:slug', element: <CaseStudy /> },
       { path: 'portfolio', element: <Portfolio /> },
+      { path: 'writing', element: <Stories /> },
       { path: 'contact', element: <Contact /> },
       { path: 'stories', element: <Stories /> },
+      { path: 'about', element: <About /> },
       { path: 'aduke/*', element: <Aduke /> },
     ],
   },

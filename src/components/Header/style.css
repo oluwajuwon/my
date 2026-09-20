@@ -1,18 +1,20 @@
-.header {
-  display: flex;
-  justify-content: flex-start;
-  font-size: small;
-  /* color: #000000; */
-  padding: 0 20px;
-  border-bottom: 1px solid #efefef;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #fff;
-  z-index: 10;
-}
-
-.header-dot {
-  color: #2689f1;
-  font-size: xx-large;
+.site-header { position: sticky; top: 0; z-index: 50; height: var(--header-height); border-bottom: 1px solid transparent; background: rgba(10, 10, 10, 0.86); transition: background-color 180ms ease, border-color 180ms ease; }
+.site-header--scrolled { border-color: var(--border); background: rgba(10, 10, 10, 0.94); backdrop-filter: blur(12px); }
+.header-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+.wordmark { color: var(--text); font-size: 1rem; font-weight: 600; letter-spacing: -0.035em; text-decoration: none; }
+.brand-dot { color: var(--accent); }
+.desktop-nav { display: flex; align-items: center; gap: clamp(1.5rem, 3vw, 2.5rem); }
+.nav-link { position: relative; color: var(--text-secondary); font-size: 0.875rem; text-decoration: none; transition: color 180ms ease; }
+.nav-link:hover, .nav-link.is-active { color: var(--text); }
+.nav-link.is-active::after { content: ""; position: absolute; left: 50%; bottom: -0.65rem; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); transform: translateX(-50%); }
+.menu-button { display: none; padding: 0; border: 0; background: transparent; color: var(--text); font: inherit; font-size: 0.875rem; cursor: pointer; }
+.mobile-nav { display: none; }
+@media (max-width: 700px) {
+  .desktop-nav { display: none; }
+  .menu-button { display: block; }
+  .mobile-nav { display: grid; position: fixed; inset: var(--header-height) 0 auto; max-height: 0; overflow: hidden; border-bottom: 1px solid transparent; background: var(--background); visibility: hidden; transition: max-height 200ms ease, visibility 200ms ease, border-color 200ms ease; }
+  .mobile-nav.is-open { max-height: 420px; visibility: visible; border-color: var(--border); }
+  .mobile-nav-inner { display: flex; flex-direction: column; padding-top: 1rem; padding-bottom: 1.5rem; }
+  .mobile-nav-link { padding: 0.8rem 0; color: var(--text-secondary); font-size: 1.15rem; text-decoration: none; }
+  .mobile-nav-link:hover, .mobile-nav-link.active { color: var(--text); }
 }

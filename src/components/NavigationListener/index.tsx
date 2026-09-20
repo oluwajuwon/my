@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const NavigationListener: React.FC = () => {
-  const location = useLocation();
-  const [currentLocation, setCurrentLocation] = useState<string>(location.pathname);
+const NavigationListener = () => {
+  const { pathname } = useLocation();
 
-  if (currentLocation !== location.pathname) {
-    window.scrollTo(0, 0);
-    setCurrentLocation(location.pathname);
-  }
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [pathname]);
 
   return null;
 };

@@ -1,64 +1,80 @@
-import { Project } from './types';
-import fff from './images/fff.jpg';
-import activo from './images/activo.png';
-import kotigo from './images/kotigo.jpg';
-import Secp from './images/secp.jpg';
-import maka from './images/makaranta.png';
-import pace from './images/pace.png';
+import activo from "./images/activo-optimized.jpg";
+import fff from "./images/fff.jpg";
+import kotigo from "./images/kotigo.jpg";
+import maka from "./images/makaranta-optimized.jpg";
+import pace from "./images/pace-optimized.jpg";
+import Secp from "./images/secp.jpg";
+import { Project } from "./types";
 
 export const projects: Project[] = [
   {
     id: 1,
-    name: 'Pace Africa',
-    description: 'A recruitment platform for job seekers and employers in Africa',
-    technologies: ['javascript', 'react', 'redux', 'amazon chime'],
-    role: 'Frontend',
+    slug: "pace-africa",
+    name: "Pace Africa",
+    category: "Recruitment platform",
+    description: "A recruitment platform connecting job seekers and employers across Africa.",
+    technologies: ["JavaScript", "React", "Redux", "Amazon Chime"],
+    role: "Frontend engineering",
     image: pace,
-    url: '',
+    featured: true,
   },
   {
     id: 2,
-    name: 'Makaranta',
-    description: 'A student management platform for teachers and also learning management system for teachers',
-    technologies: ['javascript', 'react', 'ant design', 'GraphQL'],
-    role: 'Frontend',
+    slug: "makaranta",
+    name: "Makaranta",
+    category: "Education platform",
+    description: "A student management and learning platform for teachers.",
+    technologies: ["JavaScript", "React", "Ant Design", "GraphQL"],
+    role: "Frontend engineering",
     image: maka,
-    url: '',
+    featured: true,
   },
   {
     id: 3,
-    name: 'Fast Food Fast',
-    description: 'A Food ordering platform for restaurants',
-    technologies: ['javascript', 'react', 'redux', 'postgres'],
-    role: 'Full Stack',
-    image: fff,
-    url: '',
+    slug: "activo",
+    name: "Activo",
+    category: "Asset management",
+    description: "An asset management platform built for companies.",
+    technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
+    role: "Frontend engineering",
+    image: activo,
+    featured: true,
   },
   {
     id: 4,
-    name: 'Activo',
-    description: 'An asset management platform for companies',
-    technologies: ['javascript', 'react', 'redux', 'postgres'],
-    role: 'Frontend',
-    image: activo,
-    url: '',
+    slug: "fast-food-fast",
+    name: "Fast Food Fast",
+    category: "Food ordering",
+    description: "A food ordering platform for restaurants.",
+    technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
+    role: "Full-stack engineering",
+    image: fff,
+    featured: false,
   },
   {
     id: 5,
-    name: 'Kotigo',
-    description: 'A platform for connecting teachers and students',
-    technologies: ['javascript', 'react', 'redux', 'postgres'],
-    role: 'Frontend',
+    slug: "kotigo",
+    name: "Kotigo",
+    category: "Education platform",
+    description: "A platform for connecting teachers and students.",
+    technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
+    role: "Frontend engineering",
     image: kotigo,
-    url: '',
+    featured: false,
   },
   {
     id: 6,
-    name: 'SECP',
-    description: 'A platform for managing student enrollment and course registration',
-    technologies: ['javascript', 'react', 'redux', 'postgres'],
-    role: 'Frontend',
+    slug: "secp",
+    name: "SECP",
+    category: "Student administration",
+    description: "A platform for managing student enrolment and course registration.",
+    technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
+    role: "Frontend engineering",
     image: Secp,
-    url: '',
-  }
+    featured: false,
+  },
 ];
+
+export const featuredProjects = projects.filter((project) => project.featured);
+export const archivedProjects = projects.filter((project) => !project.featured);
+export const getProjectBySlug = (slug?: string) => projects.find((project) => project.slug === slug);

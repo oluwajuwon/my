@@ -1,57 +1,12 @@
-
-.about-section {
-  width: 60%;
-  margin-top: 10%;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 35px;
-  margin-bottom: 70px;
-  text-align: left;
-}
-
-.about-section h1 {
-  font-weight: 100;
-  font-size: xx-large;
-}
-
-.about-section  p {
-  font-weight: 100;
-  font-size: large;
-  color: #5b5959;
-}
-
-.about-section .goal {
-  color: #4ad8fc;
-}
-
-.tools-and-tech {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  flex-direction: row;
-}
-
-
-.tools-and-tech img {
-  width: 100px;
-  height: 100px;
-  margin-top:10px;
-  padding: 5px;
-  opacity: 0.4;
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-}
-
-.tools-and-tech img:hover {
-  opacity: 1;
-  filter: none;
-  transition: ease-in-out 300ms;
-}
-
-
-@media (max-width: 768px) {
-  .about-section  {
-    width: 80%;
-    margin-top: 25%
-  }
-}
+.about-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr); gap: clamp(3rem, 9vw, 9rem); align-items: end; }
+.about-prose p { margin: 0 0 1.25rem; color: var(--text-secondary); font-size: clamp(1.05rem, 1.8vw, 1.2rem); }
+.about-grid { display: grid; grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr); gap: clamp(3rem, 8vw, 8rem); }
+.about-focus { border-top: 1px solid var(--border); }
+.about-focus article { display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; padding: 1.75rem 0; border-bottom: 1px solid var(--border); }
+.about-focus span { color: var(--text-muted); font-size: 0.75rem; }
+.about-focus h3 { margin: 0 0 0.4rem; font-size: 1.2rem; font-weight: 450; }
+.about-focus p { margin: 0; color: var(--text-secondary); }
+.technology-list { display: grid; grid-template-columns: repeat(2, 1fr); margin: 0; padding: 0; border-top: 1px solid var(--border); list-style: none; }
+.technology-list li { padding: 1.25rem 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+@media (max-width: 760px) { .about-intro, .about-grid { grid-template-columns: 1fr; } }
+@media (max-width: 450px) { .technology-list { grid-template-columns: 1fr; } }

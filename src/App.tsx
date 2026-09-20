@@ -1,32 +1,36 @@
-import Header from "components/Header";
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import "./App.css";
+import React, { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 import NavigationListener from "./components/NavigationListener";
+import "./App.css";
 
-export type ColorMode = "Light" | "Dark";
+const pageMeta: Record<string, { title: string; description: string }> = {
+  "/": { title: "Juwonlo. — Juwon Fagbohungbe, Software Engineer", description: "Juwon Fagbohungbe is a software engineer focused on mobile products, application architecture, performance and reliable product engineering." },
+  "/work": { title: "Work — Juwonlo.", description: "Selected products and engineering projects by Juwon Fagbohungbe." },
+  "/portfolio": { title: "Work — Juwonlo.", description: "Selected products and engineering projects by Juwon Fagbohungbe." },
+  "/writing": { title: "Writing — Juwonlo.", description: "Engineering writing by Juwon Fagbohungbe on software, mobile development and lessons learned." },
+  "/stories": { title: "Writing — Juwonlo.", description: "Engineering writing by Juwon Fagbohungbe on software, mobile development and lessons learned." },
+  "/about": { title: "About — Juwonlo.", description: "About Juwon Fagbohungbe, a mobile-focused software engineer." },
+  "/contact": { title: "Contact — Juwonlo.", description: "Get in touch with Juwon Fagbohungbe." },
+};
 
 const App: React.FC = () => {
-  const [colorMode, setColorMode] = useState<ColorMode>("Dark");
+  const location = useLocation();
+  const isAdukeRoute = location.pathname.startsWith("/aduke");
 
-  const handleColorToggle = (e: React.MouseEvent<HTMLElement>): void => {
-    e.preventDefault();
-    setColorMode((prev) => (prev === "Light" ? "Dark" : "Light"));
-  };
-
-  const isDark = colorMode === "Dark";
+  useEffect(() => {
+    const meta = location.pathname.startsWith("/work/") ? pageMeta["/work"] : pageMeta[location.pathname] ?? pageMeta["/"];
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
+  }, [location.pathname]);
 
   return (
-    <div
-      className={`App min-h-screen transition-colors duration-300 ${
-        isDark ? "bg-[#0a0a0a] text-white" : "bg-white text-gray-900"
-      }`}
-    >
+    <div className="site-shell">
       <NavigationListener />
-      <Header colorMode={colorMode} handleColorToggle={handleColorToggle} />
-      <div className={isDark ? "theme-dark" : "theme-light"}>
-        <Outlet context={{ colorMode, isDark }} />
-      </div>
+      <Header />
+      <Outlet />
+      {!isAdukeRoute && <Footer />}
     </div>
   );
 };
