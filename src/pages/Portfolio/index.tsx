@@ -1,26 +1,35 @@
 import React from "react";
+import ProfessionalWorkList from "../../components/ProfessionalWorkList";
 import WorkList from "../../components/WorkList";
-import { archivedProjects, featuredProjects } from "./projects";
+import { professionalWork } from "./professionalWork";
+import { projects } from "./projects";
 
 const Portfolio: React.FC = () => (
   <main className="page">
     <header className="page-intro">
       <div className="site-container">
-        <p className="page-kicker">Selected projects</p>
+        <p className="page-kicker">Professional experience</p>
         <h1 className="page-title">Work</h1>
-        <p className="page-lede">Products and engineering projects I’ve worked on, with an emphasis on the problem and the work behind it.</p>
+        <p className="page-lede">A selection of products and systems I’ve worked on professionally.</p>
       </div>
     </header>
     <section className="section">
       <div className="site-container">
-        <div className="section-header"><h2 className="section-title">Selected work</h2></div>
-        <WorkList projects={featuredProjects} />
+        <div className="section-header">
+          <div>
+            <p className="page-kicker">Current to oldest</p>
+            <h2 className="section-title">Professional work</h2>
+          </div>
+        </div>
+        <ProfessionalWorkList work={professionalWork} />
       </div>
     </section>
     <section className="section">
       <div className="site-container">
-        <div className="section-header"><div><p className="page-kicker">Archive</p><h2 className="section-title">Earlier work</h2></div></div>
-        <WorkList projects={archivedProjects} compact />
+        <div className="section-header">
+          <div><p className="page-kicker">Archive</p><h2 className="section-title">Earlier work</h2></div>
+        </div>
+        <WorkList projects={projects} compact />
       </div>
     </section>
   </main>

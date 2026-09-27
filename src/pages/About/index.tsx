@@ -1,4 +1,5 @@
 import React from "react";
+import { professionalWork } from "../Portfolio/professionalWork";
 import "./style.css";
 
 const focus = [
@@ -21,6 +22,26 @@ const About: React.FC = () => (
         </div>
       </div>
     </header>
+    <section className="section">
+      <div className="site-container about-grid">
+        <div><p className="page-kicker">Experience</p><h2 className="section-title">Professional work.</h2></div>
+        <div className="experience-list">
+          {professionalWork.map((work) => (
+            <article key={work.slug}>
+              <div>
+                <h3>{work.company}</h3>
+                {work.role && <p>{work.role}</p>}
+              </div>
+              <div className="experience-meta">
+                {work.current && <span className="current-marker">Current</span>}
+                {work.period && <span>{work.period}</span>}
+                {work.location && <span>{work.location}</span>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
     <section className="section">
       <div className="site-container about-grid">
         <div><p className="page-kicker">Engineering focus</p><h2 className="section-title">The work around the work.</h2></div>

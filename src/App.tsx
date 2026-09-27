@@ -7,8 +7,8 @@ import "./App.css";
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   "/": { title: "Juwonlo. — Juwon Fagbohungbe, Software Engineer", description: "Juwon Fagbohungbe is a software engineer focused on mobile products, application architecture, performance and reliable product engineering." },
-  "/work": { title: "Work — Juwonlo.", description: "Selected products and engineering projects by Juwon Fagbohungbe." },
-  "/portfolio": { title: "Work — Juwonlo.", description: "Selected products and engineering projects by Juwon Fagbohungbe." },
+  "/work": { title: "Work — Juwonlo.", description: "Professional product engineering experience and selected earlier work by Juwon Fagbohungbe." },
+  "/portfolio": { title: "Work — Juwonlo.", description: "Professional product engineering experience and selected earlier work by Juwon Fagbohungbe." },
   "/writing": { title: "Writing — Juwonlo.", description: "Engineering writing by Juwon Fagbohungbe on software, mobile development and lessons learned." },
   "/stories": { title: "Writing — Juwonlo.", description: "Engineering writing by Juwon Fagbohungbe on software, mobile development and lessons learned." },
   "/about": { title: "About — Juwonlo.", description: "About Juwon Fagbohungbe, a mobile-focused software engineer." },

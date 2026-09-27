@@ -16,7 +16,6 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "React", "Redux", "Amazon Chime"],
     role: "Frontend engineering",
     image: pace,
-    featured: true,
   },
   {
     id: 2,
@@ -27,7 +26,6 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "React", "Ant Design", "GraphQL"],
     role: "Frontend engineering",
     image: maka,
-    featured: true,
   },
   {
     id: 3,
@@ -38,7 +36,6 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
     role: "Frontend engineering",
     image: activo,
-    featured: true,
   },
   {
     id: 4,
@@ -49,7 +46,6 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
     role: "Full-stack engineering",
     image: fff,
-    featured: false,
   },
   {
     id: 5,
@@ -60,7 +56,6 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
     role: "Frontend engineering",
     image: kotigo,
-    featured: false,
   },
   {
     id: 6,
@@ -71,10 +66,7 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "React", "Redux", "PostgreSQL"],
     role: "Frontend engineering",
     image: Secp,
-    featured: false,
   },
 ];
 
-export const featuredProjects = projects.filter((project) => project.featured);
-export const archivedProjects = projects.filter((project) => !project.featured);
 export const getProjectBySlug = (slug?: string) => projects.find((project) => project.slug === slug);

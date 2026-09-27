@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ArticleList from "../../components/ArticleList";
-import WorkList from "../../components/WorkList";
+import ProfessionalWorkList from "../../components/ProfessionalWorkList";
 import { useMediumPosts } from "../../hooks/useMediumPosts";
-import { featuredProjects } from "../Portfolio/projects";
+import { professionalWork } from "../Portfolio/professionalWork";
 import "./style.css";
 
 const focusAreas = [
@@ -35,10 +35,10 @@ const NewHome: React.FC = () => {
       <section className="section">
         <div className="site-container">
           <div className="section-header">
-            <div><p className="page-kicker">Selected work</p><h2 className="section-title">Products and platforms</h2></div>
+            <div><p className="page-kicker">Selected work</p><h2 className="section-title">Professional work</h2></div>
             <Link className="text-link" to="/work">All work <span aria-hidden="true">→</span></Link>
           </div>
-          <WorkList projects={featuredProjects} />
+          <ProfessionalWorkList work={professionalWork} preview />
         </div>
       </section>
 

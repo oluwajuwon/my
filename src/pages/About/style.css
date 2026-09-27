@@ -6,7 +6,14 @@
 .about-focus span { color: var(--text-muted); font-size: 0.75rem; }
 .about-focus h3 { margin: 0 0 0.4rem; font-size: 1.2rem; font-weight: 450; }
 .about-focus p { margin: 0; color: var(--text-secondary); }
+.experience-list { border-top: 1px solid var(--border); }
+.experience-list article { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; padding: 1.75rem 0; border-bottom: 1px solid var(--border); }
+.experience-list h3 { margin: 0; font-size: clamp(1.2rem, 2.5vw, 1.65rem); font-weight: 450; letter-spacing: -0.025em; }
+.experience-list p { margin: 0.35rem 0 0; color: var(--text-secondary); }
+.experience-meta { display: flex; gap: 1rem; align-items: baseline; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.experience-meta .current-marker { color: var(--accent); }
 .technology-list { display: grid; grid-template-columns: repeat(2, 1fr); margin: 0; padding: 0; border-top: 1px solid var(--border); list-style: none; }
 .technology-list li { padding: 1.25rem 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
 @media (max-width: 760px) { .about-intro, .about-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .experience-list article { grid-template-columns: 1fr; gap: 0.6rem; } }
 @media (max-width: 450px) { .technology-list { grid-template-columns: 1fr; } }
