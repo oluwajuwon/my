@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
-import { formatMoney, penceToInput, poundsToPence } from "../domain/money";
+import { formatMoney, formatMoneyInput, parseMoneyInput, penceToInput, sanitizeMoneyEditingInput } from "../domain/money";
 import { Owner, Pence } from "../domain/types";
 import { ownerOptions } from "../domain/ownership";
 import { useBudgyStore } from "../store/BudgyStore";
@@ -26,12 +26,12 @@ export const MonthPicker: React.FC<{ month: string; onChange: (month: string) =>
 
 export const MoneyInput: React.FC<{
   value: Pence; onChange: (value: Pence) => void; label?: string; id?: string; required?: boolean;
-}> = ({ value, onChange, label, id, required }) => (
-  <label className="budgy-field" htmlFor={id}>
-    {label && <span>{label}</span>}
-    <div className="budgy-money-input"><span>£</span><input id={id} inputMode="decimal" type="number" min="0" step="0.01" value={penceToInput(value)} required={required} onChange={(event) => onChange(poundsToPence(event.target.value))} /></div>
-  </label>
-);
+}> = ({ value, onChange, label, id, required }) => {
+  const[editing,setEditing]=useState(formatMoneyInput(value));const[focused,setFocused]=useState(false);const inputRef=useRef<HTMLInputElement>(null);
+  useEffect(()=>{if(!focused)setEditing(formatMoneyInput(value));},[value,focused]);
+  const commit=()=>{const next=parseMoneyInput(editing);onChange(next);setFocused(false);setEditing(formatMoneyInput(next));};
+  return <label className="budgy-field" htmlFor={id}>{label&&<span>{label}</span>}<div className="budgy-money-input"><span>£</span><input ref={inputRef} id={id} inputMode="decimal" type="text" pattern="[0-9]*[.]?[0-9]*" value={focused?editing:formatMoneyInput(value)} required={required} onFocus={(event)=>{const input=event.currentTarget;setFocused(true);setEditing(value===0?"":penceToInput(value));requestAnimationFrame(()=>input.select());}} onChange={(event)=>setEditing(sanitizeMoneyEditingInput(event.target.value))} onBlur={commit} onKeyDown={(event)=>{if(event.key==="Enter")event.currentTarget.blur();}} /></div></label>;
+};
 
 export const OwnerSelector: React.FC<{ value: Owner; onChange: (value: Owner) => void; label?: string }> = ({ value, onChange, label = "Owner" }) => {
   const { data } = useBudgyStore();

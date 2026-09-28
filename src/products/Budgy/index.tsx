@@ -4,6 +4,7 @@ import Shell from "./components/Shell";
 import Overview from "./pages/Overview";
 import Budget from "./pages/Budget";
 import Money from "./pages/Money";
+import Reports from "./pages/Reports";
 import Transactions from "./pages/Transactions";
 import Goals from "./pages/Goals";
 import Projections from "./pages/Projections";
@@ -41,6 +42,7 @@ const BudgyApp: React.FC = () => {
         <Route index element={<Overview />} />
         <Route path="budget" element={<Budget />} />
         <Route path="money" element={<Money />} />
+        <Route path="reports" element={<Reports />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="goals" element={<Goals />} />
         <Route path="projections" element={<Projections />} />

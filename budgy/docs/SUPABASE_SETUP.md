@@ -25,6 +25,8 @@ Phase 3.5 additionally requires `202609280003_money_accounts.sql`. It adds house
 
 If local Phase 2 data was imported before member-name cleanup was added, apply `202609280004_legacy_member_labels.sql`. It replaces legacy relationship words in allowance/income names with the display name of the already-mapped owner. It does not infer identities or change ownership.
 
+Phase 3.6 requires `202609280005_refunds.sql`. It adds refunds as a first-class transaction movement and permits an explicitly allocated refund to reduce the matching monthly allowance actual. Monthly reports are derived in the application from the existing household rows, so they do not require a separate reports table or migration.
+
 The migration creates profiles, households, memberships, budget months, income, categories, budget items, transactions, savings goals, scenarios and changes, structured activity events, secure invitation records, and idempotent import markers.
 
 ## 4. Authentication and redirect URLs
@@ -60,10 +62,12 @@ Every household-owned table has RLS enabled. `is_household_member(uuid)` and `is
 
 ## Accounting rules
 
-- Only `expense` transactions consume a monthly allowance.
+- `expense` transactions consume a monthly allowance; allocated `refund` transactions reduce that allowance's actual spending.
 - A credit-card purchase is one expense: it increases card debt and consumes its explicitly allocated budget once.
+- A refund returns money to its selected account and reduces card debt when the selected account is a credit card.
 - `credit_card_payment` reduces the source bank balance and card debt without creating monthly spending.
 - `transfer` moves money between accounts and is neither income nor spending.
+- Monthly reports are deterministic views over stored plans, transactions and accounts. Card payments and transfers are excluded from income and spending, while transfers into savings accounts contribute to actual savings.
 - Remaining allowance and available credit are always calculated, never stored.
 - Pacing is deterministic: over 100% is **Over budget**; spending more than 15 percentage points ahead of elapsed month is **Watch spending**; otherwise it is **On track**. These are factual classifications, not financial advice.
 

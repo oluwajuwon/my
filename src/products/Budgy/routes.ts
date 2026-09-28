@@ -11,6 +11,7 @@ export const budgyNavigation: Array<{
   { label: "Overview", path: BUDGY_BASE_PATH, icon: "overview", end: true },
   { label: "Budget", path: BUDGY_BASE_PATH + "/budget", icon: "budget" },
   { label: "Money", path: BUDGY_BASE_PATH + "/money", icon: "money" },
+  { label: "Reports", path: BUDGY_BASE_PATH + "/reports", icon: "reports" },
   { label: "Transactions", path: BUDGY_BASE_PATH + "/transactions", icon: "transactions" },
   { label: "Goals", path: BUDGY_BASE_PATH + "/goals", icon: "goals" },
   { label: "Projections", path: BUDGY_BASE_PATH + "/projections", icon: "projections" },

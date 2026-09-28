@@ -4,6 +4,7 @@ import path from "path";
 const migration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202609280001_budgy_schema.sql"), "utf8");
 const memberMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202609280002_household_members.sql"), "utf8");
 const moneyMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202609280003_money_accounts.sql"), "utf8");
+const refundMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202609280005_refunds.sql"), "utf8");
 
 it("enables RLS and bases household access on authenticated membership", () => {
   ["households", "household_members", "budget_months", "income_sources", "categories", "budget_items", "transactions", "savings_goals", "scenarios", "scenario_changes", "activity_events", "household_invites", "household_imports"].forEach((table) => {
@@ -20,6 +21,8 @@ it("secures accounts, transaction actors and cross-household allocations",()=>{
   expect(moneyMigration).toContain("Payment account must belong to the same household");
   expect(moneyMigration).toContain("Budget allocation must belong to the same household and month");
   expect(moneyMigration).toContain("if new.type::text<>'expense' then new.budget_item_id:=null");
+  expect(refundMigration).toContain("add value if not exists 'refund'");
+  expect(refundMigration).toContain("if new.type::text not in ('expense','refund') then new.budget_item_id:=null");
 });
 
 it("keeps profile and membership management scoped to the current user or an owner RPC", () => {

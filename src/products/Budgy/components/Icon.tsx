@@ -4,6 +4,7 @@ export type IconName =
   | "overview"
   | "budget"
   | "money"
+  | "reports"
   | "transactions"
   | "goals"
   | "projections"
@@ -12,7 +13,8 @@ export type IconName =
   | "arrow-left"
   | "arrow-right"
   | "trend"
-  | "wallet";
+  | "wallet"
+  | "more";
 
 interface IconProps {
   name: IconName;
@@ -36,6 +38,7 @@ const Icon: React.FC<IconProps> = ({ name, size = 20 }) => {
     overview: <><rect x="3" y="3" width="7" height="7" rx="2" /><rect x="14" y="3" width="7" height="7" rx="2" /><rect x="3" y="14" width="7" height="7" rx="2" /><rect x="14" y="14" width="7" height="7" rx="2" /></>,
     budget: <><path d="M4 7.5h16M7 4v3.5M17 4v3.5" /><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M7 12h3M7 16h6" /></>,
     money: <><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 9h10M7 15h3"/><circle cx="16.5" cy="15" r="1.5"/></>,
+    reports: <><path d="M5 20V10M12 20V4M19 20v-7"/><path d="M3 20h18"/></>,
     transactions: <><path d="M4 8h14M15 5l3 3-3 3M20 16H6M9 13l-3 3 3 3" /></>,
     goals: <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><path d="M12 2v3M22 12h-3" /></>,
     projections: <><path d="M4 19V9M10 19V5M16 19v-7M22 19V3" /><path d="m3 15 7-6 4 4 8-9" /></>,
@@ -45,6 +48,7 @@ const Icon: React.FC<IconProps> = ({ name, size = 20 }) => {
     "arrow-right": <path d="m9 18 6-6-6-6" />,
     trend: <><path d="m3 17 6-6 4 4 8-9" /><path d="M15 6h6v6" /></>,
     wallet: <><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H19a2 2 0 0 1 2 2v13H6a3 3 0 0 1-3-3V7" /><path d="M3 8h16M15 12h6v4h-6a2 2 0 0 1 0-4Z" /></>,
+    more: <><circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1" fill="currentColor" stroke="none"/></>,
   };
 
   return <svg {...common}>{paths[name]}</svg>;

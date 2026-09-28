@@ -3,11 +3,12 @@ import { BudgetItem, BudgetItemActual, FinancialAccount, Pence, Transaction } fr
 export interface AccountBalance extends FinancialAccount { balance: Pence; availableCredit?: Pence; }
 
 export const isMonthlyExpense = (transaction: Transaction) => transaction.type === "expense";
+export const spendingEffect = (transaction: Transaction) => transaction.type === "expense" ? transaction.amount : transaction.type === "refund" ? -transaction.amount : 0;
 
 export const budgetItemActual = (item: BudgetItem, transactions: Transaction[], month: string): BudgetItemActual => {
   const spent = transactions
-    .filter((transaction) => isMonthlyExpense(transaction) && transaction.date.startsWith(month) && transaction.budgetItemId === item.id)
-    .reduce((sum, transaction) => sum + transaction.amount, 0);
+    .filter((transaction) => (transaction.type === "expense"||transaction.type==="refund") && transaction.date.startsWith(month) && transaction.budgetItemId === item.id)
+    .reduce((sum, transaction) => sum + spendingEffect(transaction), 0);
   return { budgetItemId: item.id, planned: item.amount, spent, remaining: item.amount - spent, usedRate: item.amount === 0 ? (spent ? 1 : 0) : spent / item.amount };
 };
 
@@ -25,10 +26,12 @@ export const accountBalances = (accounts: FinancialAccount[], transactions: Tran
   transactions.forEach((transaction) => {
     if (account.type === "credit_card") {
       if (transaction.type === "expense" && transaction.accountId === account.id) balance += transaction.amount;
+      if (transaction.type === "refund" && transaction.accountId === account.id) balance -= transaction.amount;
       if (transaction.type === "credit_card_payment" && transaction.destinationAccountId === account.id) balance -= transaction.amount;
       return;
     }
     if (transaction.type === "income" && transaction.accountId === account.id) balance += transaction.amount;
+    if (transaction.type === "refund" && transaction.accountId === account.id) balance += transaction.amount;
     if ((transaction.type === "expense" || transaction.type === "transfer" || transaction.type === "credit_card_payment") && transaction.accountId === account.id) balance -= transaction.amount;
     if (transaction.type === "transfer" && transaction.destinationAccountId === account.id) balance += transaction.amount;
   });

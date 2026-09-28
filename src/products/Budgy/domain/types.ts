@@ -12,7 +12,7 @@ export interface HouseholdPlan { householdName: string; income: IncomeSource[]; 
 export interface MonthlyPlan extends HouseholdPlan { month: string; }
 
 export interface Transaction {
-  id: string; type: "expense" | "income" | "transfer" | "credit_card_payment"; amount: Pence; description: string;
+  id: string; type: "expense" | "income" | "refund" | "transfer" | "credit_card_payment"; amount: Pence; description: string;
   category: string; owner: Owner; date: string; note?: string; actorUserId?: string;
   accountId?: string; destinationAccountId?: string; budgetItemId?: string;
 }
