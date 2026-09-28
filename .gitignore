@@ -139,6 +139,8 @@ package-lock.json
 .env
 .env.staging
 .env.production
+.env.local
+.env.*.local
 
 gc_keys.json
 

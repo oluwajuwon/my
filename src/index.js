@@ -11,6 +11,7 @@ import CaseStudy from './pages/Portfolio/CaseStudy';
 import About from './pages/About';
 import Stories from './pages/Stories';
 import * as serviceWorker from './serviceWorker';
+import BudgyApp from './products/Budgy';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       { path: 'about', element: <About /> },
       { path: 'aduke/*', element: <Aduke /> },
     ],
+  },
+  {
+    path: '/budgy/*',
+    element: <BudgyApp />,
   },
 ]);
 
