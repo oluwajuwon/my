@@ -12,9 +12,10 @@ const isTransaction = (value: unknown): value is Transaction => {
     && typeof draft.type === "string"
     && Number.isInteger(draft.amount)
     && typeof draft.description === "string"
-    && typeof draft.category === "string"
+    && (draft.category === undefined || typeof draft.category === "string")
     && typeof draft.owner === "string"
-    && typeof draft.date === "string";
+    && typeof draft.date === "string"
+    && (draft.budgetMonth === undefined || /^\d{4}-\d{2}$/.test(draft.budgetMonth));
 };
 
 export const readTransactionDraft = (key: string): Transaction | null => {

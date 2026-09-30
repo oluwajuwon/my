@@ -54,6 +54,12 @@ it("does not include transactions outside the selected month",()=>{
   expect(budgetItemActual(personal,[expense({date:"2026-10-01"})],"2026-09").spent).toBe(0);
 });
 
+it("uses the explicit budget month instead of the payment date",()=>{
+  const early=expense({date:"2026-09-28",budgetMonth:"2026-10"});
+  expect(budgetItemActual(personal,[early],"2026-09").spent).toBe(0);
+  expect(budgetItemActual(personal,[early],"2026-10").spent).toBe(6740);
+});
+
 it("classifies factual monthly pace using a conservative 15-point tolerance",()=>{
   expect(spendingPace(30000,42000,new Date(2026,8,10)).status).toBe("Watch spending");
   expect(spendingPace(43000,42000,new Date(2026,8,10)).status).toBe("Over budget");

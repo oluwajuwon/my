@@ -4,18 +4,20 @@ import { requireSupabase } from "../infrastructure/supabase/client";
 import { HouseholdSession } from "../repositories/householdRepository";
 import { budgyRepository } from "../repositories/budgyRepository";
 import { createId } from "../domain/id";
+import { isBudgetPlanningType, monthFromDate } from "../domain/months";
 
 const STORAGE_KEY="budgy.household.v1";
-const EMPTY = (household: HouseholdSession): BudgyData => ({schemaVersion:1,householdName:household.household.name,members:household.members.map((member)=>({id:member.userId,displayName:member.displayName})),categories:[],months:{},transactions:[],accounts:[],goals:[],scenarios:[]});
+const EMPTY = (household: HouseholdSession): BudgyData => ({schemaVersion:1,householdName:household.household.name,members:household.members.map((member)=>({id:member.userId,displayName:member.displayName})),categories:[],incomeCategories:[],months:{},transactions:[],accounts:[],goals:[],scenarios:[]});
 const rawOwnerLabel=(owner:Owner)=>owner.startsWith("legacy:")?owner.slice(7):owner;
 const mapOwner=(owner:Owner,mapping:Record<string,string>)=>owner===HOUSEHOLD_OWNER||owner==="Household"?HOUSEHOLD_OWNER:mapping[rawOwnerLabel(owner)]??`legacy:${rawOwnerLabel(owner)}`;
 const mapLegacyName=(name:string,mapping:Record<string,string>,household:HouseholdSession)=>Object.entries(mapping).reduce((value,[oldLabel,userId])=>{const displayName=household.members.find((member)=>member.userId===userId)?.displayName;if(!displayName||displayName===oldLabel)return value;const escaped=oldLabel.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");return value.replace(new RegExp(`\\b${escaped}\\b`,"gi"),displayName);},name);
 export const normaliseLocalData=(source:BudgyData,household:HouseholdSession,mapping:Record<string,string>={}):BudgyData=>{
-  const budgetIds=new Map<string,string>();const accountIds=new Map<string,string>();
+  const budgetIds=new Map<string,string>();const accountIds=new Map<string,string>();const goalIds=new Map<string,string>();
   const accounts=(source.accounts??[]).map((row)=>{const id=createId();accountIds.set(row.id,id);return{...row,id,owner:mapOwner(row.owner,mapping)};});
+  const goals=source.goals.map((row)=>{const id=createId();goalIds.set(row.id,id);return{...row,id,fundingAccountId:row.fundingAccountId?accountIds.get(row.fundingAccountId):undefined};});
   const months=Object.fromEntries(Object.entries(source.months).map(([key,plan])=>[key,{...plan,householdName:household.household.name,income:plan.income.map((row)=>({...row,id:createId(),name:mapLegacyName(row.name,mapping,household),owner:mapOwner(row.owner,mapping)})),budget:plan.budget.map((row)=>{const id=createId();budgetIds.set(row.id,id);return{...row,id,name:mapLegacyName(row.name,mapping,household),owner:mapOwner(row.owner,mapping)};})}]));
-  return{...source,householdName:household.household.name,members:household.members.map((member)=>({id:member.userId,displayName:member.displayName})),accounts,months,
-    transactions:source.transactions.map((row)=>({...row,id:createId(),owner:mapOwner(row.owner,mapping),accountId:row.accountId?accountIds.get(row.accountId):undefined,destinationAccountId:row.destinationAccountId?accountIds.get(row.destinationAccountId):undefined,budgetItemId:row.budgetItemId?budgetIds.get(row.budgetItemId):undefined})),goals:source.goals.map((row)=>({...row,id:createId()})),
+  return{...source,incomeCategories:source.incomeCategories??[],householdName:household.household.name,members:household.members.map((member)=>({id:member.userId,displayName:member.displayName})),accounts,months,
+    transactions:source.transactions.map((row)=>({...row,id:createId(),owner:mapOwner(row.owner,mapping),budgetMonth:isBudgetPlanningType(row.type)?row.budgetMonth??monthFromDate(row.date):undefined,accountId:row.accountId?accountIds.get(row.accountId):undefined,destinationAccountId:row.destinationAccountId?accountIds.get(row.destinationAccountId):undefined,budgetItemId:row.budgetItemId?budgetIds.get(row.budgetItemId):undefined,savingsGoalId:row.savingsGoalId?goalIds.get(row.savingsGoalId):undefined})),goals,
     scenarios:source.scenarios.map((row)=>({...row,id:createId(),plan:{...row.plan,income:row.plan.income.map((entry)=>({...entry,id:createId(),name:mapLegacyName(entry.name,mapping,household),owner:mapOwner(entry.owner,mapping)})),budget:row.plan.budget.map((entry)=>({...entry,id:createId(),name:mapLegacyName(entry.name,mapping,household),owner:mapOwner(entry.owner,mapping)}))}})),
   };
 };

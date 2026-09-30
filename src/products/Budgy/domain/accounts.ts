@@ -1,4 +1,5 @@
 import { BudgetItem, BudgetItemActual, FinancialAccount, Pence, Transaction } from "./types";
+import { transactionBudgetMonth } from "./months";
 
 export interface AccountBalance extends FinancialAccount { balance: Pence; availableCredit?: Pence; }
 
@@ -7,7 +8,7 @@ export const spendingEffect = (transaction: Transaction) => transaction.type ===
 
 export const budgetItemActual = (item: BudgetItem, transactions: Transaction[], month: string): BudgetItemActual => {
   const spent = transactions
-    .filter((transaction) => (transaction.type === "expense"||transaction.type==="refund") && transaction.date.startsWith(month) && transaction.budgetItemId === item.id)
+    .filter((transaction) => (transaction.type === "expense"||transaction.type==="refund") && transactionBudgetMonth(transaction)===month && transaction.budgetItemId === item.id)
     .reduce((sum, transaction) => sum + spendingEffect(transaction), 0);
   return { budgetItemId: item.id, planned: item.amount, spent, remaining: item.amount - spent, usedRate: item.amount === 0 ? (spent ? 1 : 0) : spent / item.amount };
 };

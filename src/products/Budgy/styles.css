@@ -11,6 +11,15 @@
   --budgy-lime: #c9dc84;
   --budgy-gold: #d7a95f;
   --budgy-coral: #d98669;
+  --budgy-font-control: 0.75rem;
+  --budgy-font-control-small: 0.6875rem;
+  --budgy-font-supporting: 0.75rem;
+  --budgy-font-meta: 0.6875rem;
+  --budgy-control-height-lg: 2.75rem;
+  --budgy-control-height-md: 2.625rem;
+  --budgy-control-height-sm: 2.25rem;
+  --budgy-touch-target: 2.75rem;
+  --budgy-control-radius: 0.7rem;
   --budgy-mobile-nav-height: 4.5rem;
   --budgy-mobile-nav-action-overhang: 1.15rem;
   --budgy-mobile-nav-content-gap: 1.5rem;
@@ -33,7 +42,9 @@
 }
 
 .budgy-app button,
-.budgy-app input {
+.budgy-app input,
+.budgy-app select,
+.budgy-app textarea {
   font: inherit;
 }
 
@@ -578,9 +589,14 @@
 
 .budgy-text-link {
   flex: 0 0 auto;
+  min-height: 2.5rem;
   color: var(--budgy-green);
-  font-size: 0.72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--budgy-font-supporting);
   font-weight: 700;
+  line-height: 1.2;
   text-decoration: none;
 }
 
@@ -1058,7 +1074,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.25rem;
-    font-size: clamp(0.5rem, 1.8vw, 0.6rem);
+    font-size: var(--budgy-font-meta);
     font-weight: 650;
     line-height: 1;
     text-decoration: none;
@@ -1069,7 +1085,7 @@
   .budgy-mobile-navigation .budgy-mobile-nav-link > span {
     max-width: 100%;
     overflow: hidden;
-    font-size: .58rem;
+    font-size: var(--budgy-font-meta);
     font-weight: 650;
     line-height: 1;
     text-overflow: ellipsis;
@@ -1249,7 +1265,10 @@
 .budgy-skeleton-card span,.budgy-activity-skeleton span { height: .8rem; border-radius: 999px; background: linear-gradient(90deg,#e5eae4,#f5f7f4,#e5eae4); background-size: 200% 100%; animation: budgy-pulse 1.4s ease infinite; }
 .budgy-skeleton-card span:nth-child(2){width:75%}.budgy-skeleton-card span:nth-child(3){width:55%}
 @keyframes budgy-pulse { to { background-position: -200% 0; } }
-.budgy-sync-error { position: sticky; z-index: 25; top: 0; padding: .65rem 1rem; background: #8f4137; color: #fff; display: flex; align-items: center; justify-content: center; gap: 1rem; font-size: .68rem; }
+.budgy-sync-error { position: sticky; z-index: 25; top: 0; padding: .72rem 1rem; background: #8f4137; color: #fff; display: flex; align-items: center; justify-content: center; gap: 1.25rem; font-size: .68rem; }
+.budgy-sync-error > span { max-width: 52rem; display: flex; align-items: baseline; gap: .55rem; }
+.budgy-sync-error strong { white-space: nowrap; }
+.budgy-sync-error small { color: rgba(255,255,255,.82); font-size: inherit; line-height: 1.4; }
 .budgy-sync-error button { border: 0; background: transparent; color: #fff; font-weight: 750; text-decoration: underline; cursor: pointer; }
 .budgy-activity-skeleton { min-height: 12rem; padding: 1.5rem; display: grid; align-content: center; gap: 1rem; }
 .budgy-activity-skeleton span:nth-child(2){width:80%}.budgy-activity-skeleton span:nth-child(3){width:60%}
@@ -1295,21 +1314,22 @@
 .budgy-product-header > div > p:last-child { max-width: 40rem; margin: .6rem 0 0; color: var(--budgy-muted); font-size: .9rem; }
 .budgy-header-actions { display: flex; align-items: center; gap: .65rem; }
 .budgy-button {
-  min-height: 2.55rem; padding: 0 1rem; border: 1px solid var(--budgy-line); border-radius: .72rem;
+  min-height: var(--budgy-control-height-md,2.625rem); padding: .55rem clamp(.75rem,1.5vw,1rem); border: 1px solid var(--budgy-line); border-radius: var(--budgy-control-radius,.7rem);
   background: #fff; color: var(--budgy-ink); display: inline-flex; align-items: center; justify-content: center;
-  gap: .4rem; font-size: .73rem; font-weight: 680; text-decoration: none; cursor: pointer;
+  gap: .4rem; font-size: var(--budgy-font-control,.75rem); font-weight: 680; line-height: 1.2; text-align: center; text-decoration: none; cursor: pointer;
   transition: transform 140ms ease, background-color 140ms ease, border-color 140ms ease;
 }
 .budgy-button:hover { transform: translateY(-1px); border-color: #b9c7bd; }
+.budgy-button:active { transform: translateY(0); }
 .budgy-button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
-.budgy-app .budgy-button--primary { border-color: var(--budgy-green-deep); background: var(--budgy-green-deep); color: #fff; }
+.budgy-app .budgy-button--primary { min-height: var(--budgy-control-height-lg); border-color: var(--budgy-green-deep); background: var(--budgy-green-deep); color: #fff; }
 .budgy-button--primary:hover { background: #205348; }
 .budgy-button--quiet { background: rgba(255,255,255,.65); }
-.budgy-button--small { min-height: 2.15rem; padding-inline: .75rem; }
+.budgy-button--small { min-height: var(--budgy-control-height-sm,2.25rem); padding-inline: .75rem; font-size: var(--budgy-font-control-small,.6875rem); }
 .budgy-button--danger, .budgy-button--danger-quiet { color: #9c3e34; }
 .budgy-app .budgy-button--danger { border-color: #9c3e34; background: #9c3e34; color: #fff; }
 .budgy-button--danger-quiet { margin-right: auto; border-color: transparent; background: transparent; }
-.budgy-icon-button { width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: .55rem; background: transparent; display: grid; place-items: center; color: var(--budgy-muted); cursor: pointer; }
+.budgy-icon-button { width: 2.5rem; height: 2.5rem; padding: 0; border: 0; border-radius: .6rem; background: transparent; display: grid; place-items: center; color: var(--budgy-muted); font-size: .9rem; line-height: 1; cursor: pointer; }
 .budgy-icon-button:hover { background: #edf1ec; color: var(--budgy-ink); }
 .budgy-product-panel { min-width: 0; padding: 1.35rem; border: 1px solid rgba(25,53,47,.08); border-radius: 1.15rem; background: #fff; box-shadow: 0 .35rem 1.5rem rgba(31,61,53,.035); }
 .budgy-product-panel-heading { margin-bottom: 1.1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
@@ -1320,6 +1340,16 @@
 .budgy-financial-metric > span { color: var(--budgy-muted); font-size: .68rem; }
 .budgy-financial-metric strong { margin-top: .3rem; font-size: clamp(1.2rem,2vw,1.7rem); letter-spacing: -.045em; }
 .budgy-financial-metric small { margin-top: .2rem; color: var(--budgy-green); font-size: .62rem; font-weight: 650; }
+.budgy-savings-plan { margin-bottom: 1rem; }
+.budgy-savings-plan-layout { display: grid; grid-template-columns: minmax(14rem,.7fr) minmax(18rem,1.3fr); gap: 2rem; align-items: start; }
+.budgy-savings-plan-layout > div:first-child > p { margin: .6rem 0 0; color: var(--budgy-muted); font-size: .62rem; line-height: 1.55; }
+.budgy-savings-allocations { display: grid; gap: .55rem; }
+.budgy-savings-allocations > span { color: var(--budgy-muted); font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.budgy-savings-allocations > div { padding: .7rem .8rem; border-radius: .72rem; background: #f2f6f1; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.budgy-savings-allocations > div > span { min-width: 0; display: flex; flex-direction: column; }
+.budgy-savings-allocations b, .budgy-savings-allocations strong { font-size: .68rem; }
+.budgy-savings-allocations small { color: var(--budgy-muted); font-size: .56rem; }
+.budgy-savings-allocations .is-negative { background: #fff4ee; }
 .budgy-income-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .7rem; }
 .budgy-income-list > button { padding: 1rem; border: 1px solid var(--budgy-line); border-radius: .8rem; background: var(--budgy-surface-soft); color: inherit; display: flex; align-items: center; justify-content: space-between; gap: 1rem; text-align: left; cursor: pointer; }
 .budgy-income-list > button:hover { border-color: #b4c5b9; background: #f1f5f0; }
@@ -1328,22 +1358,29 @@
 .budgy-income-list small { color: var(--budgy-muted); font-size: .62rem; }
 .budgy-income-list strong { font-size: .9rem; }
 .budgy-budget-toolbar { margin: 2rem 0 1rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
-.budgy-budget-toolbar > div:last-child { display: flex; gap: .55rem; }
+.budgy-budget-toolbar > div:first-child { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .18rem; }
+.budgy-budget-toolbar > div:first-child .budgy-eyebrow { margin: 0; line-height: 1.2; }
+.budgy-budget-toolbar > div:first-child h2 { line-height: 1.2; }
+.budgy-budget-toolbar > div:not(:first-child):last-child { display: flex; gap: .55rem; }
 .budgy-budget-groups { display: grid; gap: .8rem; }
 .budgy-budget-group { border: 1px solid rgba(25,53,47,.08); border-radius: 1.05rem; background: #fff; overflow: hidden; }
 .budgy-budget-group > header { padding: 1rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.budgy-budget-group > header > div { display: flex; align-items: center; gap: .75rem; }
+.budgy-budget-group > header > div { min-width: 0; display: flex; align-items: center; gap: .75rem; }
 .budgy-budget-group h3 { margin: 0; font-size: .86rem; }
 .budgy-budget-group header p { margin: .12rem 0 0; color: var(--budgy-muted); font-size: .62rem; }
-.budgy-budget-group header > strong { font-size: .85rem; }
+.budgy-budget-group header > strong { flex: 0 0 auto; font-size: .85rem; white-space: nowrap; }
 .budgy-budget-group > .budgy-progress { margin: 0 1.2rem .8rem; }
-.budgy-budget-row { min-height: 3.8rem; padding: .45rem 1rem .45rem 1.2rem; border-top: 1px solid #e8ece7; display: grid; grid-template-columns: minmax(0,1fr) 8rem 2rem 2rem; align-items: center; gap: .75rem; }
-.budgy-row-main { padding: .35rem 0; border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+.budgy-budget-row { min-height: 3.8rem; padding: .45rem 1rem .45rem 1.2rem; border-top: 1px solid #e8ece7; display: grid; grid-template-columns: minmax(0,1fr) 8rem 2.5rem 2.5rem; align-items: center; gap: .55rem; }
+.budgy-row-main { min-width: 0; min-height: 2.75rem; padding: .35rem 0; border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer; }
 .budgy-row-main span { display: flex; flex-direction: column; }
 .budgy-row-main b { font-size: .74rem; }
 .budgy-row-main small { color: var(--budgy-muted); font-size: .6rem; }
 .budgy-budget-row .budgy-field { margin: 0; }
-.budgy-budget-row .budgy-money-input input { padding-block: .48rem; text-align: right; }
+.budgy-budget-row .budgy-money-input { min-width: 0; }
+.budgy-budget-row .budgy-money-input input { min-height: 2.25rem; padding: .38rem .55rem .38rem 1.35rem; border-color: #d6ded7; border-radius: .55rem; background: #fbfcfa; text-align: right; font-variant-numeric: tabular-nums; }
+.budgy-budget-row .budgy-money-input > span { left: .5rem; }
+.budgy-budget-row .budgy-money-input:focus-within input { border-color: var(--budgy-green); background: #fff; box-shadow: 0 0 0 3px rgba(34,94,80,.1); }
+.budgy-budget-row > .budgy-icon-button:last-child { grid-column: 4; }
 .budgy-sticky-summary { position: sticky; z-index: 8; bottom: 1rem; max-width: 48rem; margin: 1.5rem auto 0; padding: .85rem 1.1rem; border: 1px solid rgba(255,255,255,.14); border-radius: .9rem; background: rgba(22,61,53,.96); color: rgba(255,255,255,.65); display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; font-size: .62rem; box-shadow: 0 .8rem 2.5rem rgba(22,61,53,.2); backdrop-filter: blur(1rem); }
 .budgy-sticky-summary span { display: flex; flex-direction: column; }
 .budgy-sticky-summary b { color: #fff; font-size: .78rem; }
@@ -1360,14 +1397,14 @@
 .budgy-field { min-width: 0; display: flex; flex-direction: column; gap: .35rem; }
 .budgy-field > span { color: var(--budgy-muted); font-size: .66rem; font-weight: 630; }
 .budgy-field small { font-weight: 400; }
-.budgy-field input, .budgy-field select, .budgy-field textarea, .budgy-filter-bar select, .budgy-scenario-toolbar select, .budgy-scenario-name input { width: 100%; border: 1px solid var(--budgy-line); border-radius: .67rem; background: #fff; color: var(--budgy-ink); padding: .7rem .8rem; font-size: .75rem; }
+.budgy-field input, .budgy-field select, .budgy-field textarea, .budgy-filter-bar select, .budgy-scenario-toolbar select, .budgy-scenario-name input { width: 100%; min-height: var(--budgy-control-height-md,2.625rem); border: 1px solid var(--budgy-line); border-radius: var(--budgy-control-radius,.7rem); background: #fff; color: var(--budgy-ink); padding: .65rem .8rem; font-size: .75rem; }
 .budgy-field textarea { resize: vertical; }
 .budgy-money-input { position: relative; }
 .budgy-money-input > span { position: absolute; top: 50%; left: .75rem; color: var(--budgy-muted); font-size: .75rem; transform: translateY(-50%); pointer-events: none; }
 .budgy-money-input input { width: 100%; padding-left: 1.55rem; }
 .budgy-check { display: flex; align-items: center; gap: .55rem; color: var(--budgy-muted); font-size: .7rem; }
 .budgy-check input { accent-color: var(--budgy-green); }
-.budgy-dialog-actions { padding-top: .5rem; display: flex; justify-content: flex-end; gap: .6rem; }
+.budgy-dialog-actions { padding-top: .5rem; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .6rem; }
 .budgy-quick-actions { display: grid; gap: .5rem; }
 .budgy-quick-actions button { min-height: 3.45rem; padding: .75rem 1rem; border: 1px solid var(--budgy-line); border-radius: .8rem; background: #fff; display: flex; align-items: center; justify-content: space-between; font-size: .75rem; font-weight: 700; cursor: pointer; }
 .budgy-quick-actions button.is-primary { border-color: var(--budgy-green-deep); background: var(--budgy-green-deep); color: #fff; }
@@ -1376,7 +1413,7 @@
 .budgy-more-menu p { margin: 0 0 .35rem; color: var(--budgy-muted); font-size: .56rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
 .budgy-more-menu a,.budgy-more-menu button { min-height: 2.8rem; padding: .6rem 0; border: 0; border-top: 1px solid var(--budgy-line); background: transparent; color: var(--budgy-ink); display: flex; align-items: center; justify-content: space-between; font-size: .7rem; font-weight: 650; text-align: left; text-decoration: none; cursor: pointer; }
 .budgy-segmented { padding: .25rem; border-radius: .72rem; background: #eef1ec; display: grid; grid-template-columns: repeat(4,1fr); }
-.budgy-segmented button, .budgy-horizon-tabs button { border: 0; border-radius: .55rem; background: transparent; color: var(--budgy-muted); padding: .65rem; font-size: .7rem; font-weight: 650; cursor: pointer; }
+.budgy-segmented button, .budgy-horizon-tabs button { min-height: var(--budgy-control-height-md,2.625rem); border: 0; border-radius: .55rem; background: transparent; color: var(--budgy-muted); padding: .65rem; font-size: var(--budgy-font-control-small,.6875rem); font-weight: 650; cursor: pointer; }
 .budgy-segmented button.is-active, .budgy-horizon-tabs button.is-active { background: #fff; color: var(--budgy-ink); box-shadow: 0 .2rem .7rem rgba(31,61,53,.08); }
 .budgy-progress { height: .42rem; border-radius: 999px; background: #e7ece6; overflow: hidden; }
 .budgy-progress span { display: block; height: 100%; border-radius: inherit; background: var(--budgy-green); }
@@ -1401,13 +1438,14 @@
 .budgy-search { position: relative; }
 .budgy-search span { position: absolute; top: 50%; left: .75rem; color: var(--budgy-muted); transform: translateY(-50%); }
 .budgy-search input { width: 100%; height: 100%; padding: .7rem .8rem .7rem 2rem; border: 1px solid var(--budgy-line); border-radius: .67rem; background: #fff; color: var(--budgy-ink); font-size: .74rem; }
-.budgy-transaction-head, .budgy-transaction-row { display: grid; grid-template-columns: minmax(12rem,1.5fr) minmax(7rem,1fr) 7rem 6rem 8rem 2rem; align-items: center; gap: .75rem; }
+.budgy-transaction-head, .budgy-transaction-row { display: grid; grid-template-columns: minmax(12rem,1.5fr) minmax(7rem,1fr) 7rem 6rem 8rem 4.5rem; align-items: center; gap: .75rem; }
 .budgy-transaction-head { padding: .6rem .75rem; color: var(--budgy-muted); font-size: .59rem; text-transform: uppercase; letter-spacing: .08em; }
 .budgy-transaction-row { min-height: 4rem; padding: .6rem .75rem; border-top: 1px solid #e8ece7; font-size: .7rem; }
 .budgy-transaction-row > span:first-child { display: flex; flex-direction: column; }
 .budgy-transaction-row small { color: var(--budgy-muted); }
 .budgy-transaction-row > strong { text-align: right; }
 .budgy-transaction-row .is-income { color: var(--budgy-green); }
+.budgy-transaction-actions { display: flex; justify-content: flex-end; gap: .15rem; }
 .budgy-goal-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
 .budgy-goal-card { position: relative; padding: 1.4rem; border: 1px solid rgba(25,53,47,.08); border-radius: 1.2rem; background: #fff; box-shadow: 0 .35rem 1.5rem rgba(31,61,53,.035); }
 .budgy-goal-card header { display: grid; grid-template-columns: 2.5rem 1fr auto; align-items: center; gap: .75rem; }
@@ -1419,7 +1457,13 @@
 .budgy-goal-meta, .budgy-goal-card footer { display: flex; justify-content: space-between; gap: 1rem; color: var(--budgy-muted); font-size: .62rem; }
 .budgy-goal-meta { margin-top: .45rem; }
 .budgy-goal-card footer { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--budgy-line); }
-.budgy-delete-link { margin-top: 1rem; padding: 0; border: 0; background: transparent; color: #a24d42; font-size: .62rem; cursor: pointer; }
+.budgy-goal-account { margin-top: 1rem; padding: .75rem .85rem; border-radius: .75rem; background: var(--budgy-green-soft); display: flex; flex-direction: column; gap: .12rem; }
+.budgy-goal-account span, .budgy-goal-account small { color: var(--budgy-muted); font-size: .58rem; }
+.budgy-goal-account strong { font-size: .7rem; }
+.budgy-goal-account.is-missing { background: #fff4ee; }
+.budgy-goal-account.is-missing strong { color: #9c3e34; }
+.budgy-goal-actions { margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.budgy-delete-link { padding: 0; border: 0; background: transparent; color: #a24d42; font-size: .62rem; cursor: pointer; }
 .budgy-horizon-tabs { width: fit-content; margin: 0 0 1rem auto; padding: .25rem; border-radius: .75rem; background: #e7ebe6; display: flex; }
 .budgy-projection-hero { position: relative; overflow: hidden; min-height: 20rem; padding: 2rem; border-radius: 1.3rem; background: var(--budgy-green-deep); color: #fff; }
 .budgy-projection-hero > div { position: relative; z-index: 2; }
@@ -1469,6 +1513,50 @@
 .budgy-danger-zone p:last-child { margin: .3rem 0 0; color: var(--budgy-muted); font-size: .68rem; }
 .budgy-inline-notice { margin-bottom: 1rem; padding: .8rem 1rem; border-radius: .8rem; background: var(--budgy-green-soft); color: var(--budgy-green-deep); display: flex; align-items: center; justify-content: space-between; font-size: .7rem; }
 .budgy-inline-notice button { border: 0; background: transparent; cursor: pointer; }
+.budgy-first-use { margin-bottom: 1rem; padding: 1.3rem; border-radius: 1.1rem; background: var(--budgy-green-deep); color: #fff; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+.budgy-first-use h2 { margin: 0; font-size: 1.1rem; }.budgy-first-use p:last-child { margin: .35rem 0 0; color: rgba(255,255,255,.65); font-size: .68rem; }.budgy-first-use > div:last-child { display: flex; flex-wrap: wrap; gap: .45rem; }.budgy-first-use a { padding: .6rem .75rem; border: 1px solid rgba(255,255,255,.18); border-radius: .65rem; background: rgba(255,255,255,.08); color: #fff; font-size: .65rem; font-weight: 700; text-decoration: none; }
+.budgy-onboarding-layer { --budgy-ink:#19352f; --budgy-muted:#6d7974; --budgy-line:#dce3dc; --budgy-green:#225e50; --budgy-green-deep:#163d35; --budgy-green-soft:#dcece5; --budgy-lime:#c9dc84; position: fixed; z-index: 200; inset: 0; padding: 1rem; background: rgba(10,29,25,.72); color: var(--budgy-ink); display: grid; place-items: center; font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size: 16px; line-height: 1.5; backdrop-filter: blur(.65rem); }
+.budgy-onboarding-layer,.budgy-onboarding-layer *,.budgy-onboarding-layer *::before,.budgy-onboarding-layer *::after { box-sizing: border-box; }
+.budgy-onboarding-layer button { font: inherit; }
+.budgy-onboarding-layer .budgy-button--primary { border-color: var(--budgy-green-deep); background: var(--budgy-green-deep); color: #fff; }
+.budgy-onboarding-walkthrough { width: min(100%,48rem); max-height: calc(100dvh - 2rem); border-radius: 1.35rem; background: #f7f9f5; color: var(--budgy-ink); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 2rem 6rem rgba(0,0,0,.28); }
+.budgy-onboarding-walkthrough > header { padding: 1.1rem 1.35rem .8rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }.budgy-onboarding-walkthrough > header > span { color: var(--budgy-muted); font-size: .6rem; font-weight: 700; }
+.budgy-onboarding-progress { padding: 0 1.35rem; display: grid; grid-template-columns: repeat(5,1fr); gap: .35rem; }.budgy-onboarding-progress i { height: .2rem; border-radius: 99px; background: #dce3dc; }.budgy-onboarding-progress i.is-active { background: var(--budgy-green); }
+.budgy-onboarding-content { min-height: 0; padding: clamp(1.35rem,4vw,2.5rem); overflow-y: auto; outline: 0; }.budgy-onboarding-content h1 { max-width: 38rem; margin: 0; font-size: clamp(1.8rem,5vw,3.25rem); font-weight: 680; letter-spacing: -.055em; line-height: 1.02; }.budgy-onboarding-content > p:not(.budgy-eyebrow) { max-width: 38rem; margin: .8rem 0 0; color: var(--budgy-muted); font-size: .78rem; line-height: 1.6; }.budgy-onboarding-content .budgy-onboarding-lede { color: var(--budgy-ink) !important; font-size: .9rem !important; }
+.budgy-onboarding-walkthrough > footer { padding: .85rem 1.35rem calc(.85rem + env(safe-area-inset-bottom,0px)); border-top: 1px solid var(--budgy-line); background: #fff; display: flex; justify-content: space-between; gap: .7rem; }
+.budgy-onboarding-flow { margin: 1.5rem 0; padding: 1rem; border-radius: 1rem; background: #e7efe8; display: grid; grid-template-columns: repeat(7,auto); align-items: center; justify-content: center; gap: clamp(.35rem,2vw,1rem); }.budgy-onboarding-flow span { font-size: .67rem; font-weight: 750; }.budgy-onboarding-flow i { color: var(--budgy-green); font-style: normal; transform: rotate(-90deg); }
+.budgy-onboarding-budget-preview,.budgy-onboarding-transaction,.budgy-onboarding-report { margin-top: 1.4rem; padding: 1.1rem; border: 1px solid var(--budgy-line); border-radius: 1rem; background: #fff; box-shadow: 0 .7rem 2rem rgba(31,61,53,.05); }
+.budgy-onboarding-budget-preview header,.budgy-onboarding-budget-preview > div,.budgy-onboarding-transaction > div,.budgy-onboarding-report header,.budgy-onboarding-report footer span { display: flex; justify-content: space-between; gap: 1rem; font-size: .7rem; }.budgy-onboarding-budget-preview > div { margin-top: .8rem; color: var(--budgy-muted); }.budgy-onboarding-budget-preview i,.budgy-onboarding-report i { height: .35rem; margin-top: .75rem; border-radius: 99px; background: #e4eae3; display: block; overflow: hidden; }.budgy-onboarding-budget-preview i span,.budgy-onboarding-report i em { height: 100%; background: var(--budgy-green); display: block; }
+.budgy-onboarding-budget-preview i span { width: 23%; }.budgy-onboarding-mini-list { margin-top: .65rem; display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; }.budgy-onboarding-mini-list span { padding: .65rem; border-radius: .65rem; background: #edf2ec; display: flex; flex-direction: column; color: var(--budgy-muted); font-size: .58rem; }.budgy-onboarding-mini-list b { color: var(--budgy-ink); font-size: .7rem; }
+.budgy-onboarding-compare { margin-top: 1.4rem; display: grid; grid-template-columns: repeat(2,1fr); gap: .7rem; }.budgy-onboarding-compare article { padding: 1rem; border: 1px solid var(--budgy-line); border-radius: .9rem; background: #fff; }.budgy-onboarding-compare small { color: var(--budgy-green); font-size: .55rem; font-weight: 750; text-transform: uppercase; }.budgy-onboarding-compare h3 { margin: .45rem 0 .1rem; font-size: .75rem; }.budgy-onboarding-compare strong { font-size: .85rem; }.budgy-onboarding-compare hr { margin: .8rem 0; border: 0; border-top: 1px solid var(--budgy-line); }
+.budgy-onboarding-nav-demo { margin: 1.5rem 0 .8rem; padding: .75rem .5rem; border-radius: 1rem; background: #fff; display: grid; grid-template-columns: repeat(5,1fr); align-items: end; box-shadow: 0 .7rem 2rem rgba(31,61,53,.07); }.budgy-onboarding-nav-demo span { color: var(--budgy-muted); display: flex; flex-direction: column; align-items: center; gap: .25rem; font-size: .8rem; }.budgy-onboarding-nav-demo small { font-size: .5rem; }.budgy-onboarding-nav-demo .is-add { width: 2.7rem; height: 2.7rem; margin: -1.35rem auto .05rem; border-radius: 50%; background: var(--budgy-green-deep); color: #fff; display: grid; place-items: center; font-size: 1.5rem; box-shadow: 0 .35rem 1rem rgba(22,61,53,.2); }
+.budgy-onboarding-transaction small { display: block; margin-top: .25rem; color: var(--budgy-muted); font-size: .58rem; }.budgy-onboarding-transaction footer { margin-top: .9rem; padding-top: .7rem; border-top: 1px solid var(--budgy-line); display: flex; justify-content: space-between; font-size: .62rem; }.budgy-onboarding-action-key { margin-top: .65rem; display: grid; grid-template-columns: repeat(2,1fr); gap: .4rem; }.budgy-onboarding-action-key span { padding: .55rem; border-radius: .55rem; background: #e9f0ea; display: flex; flex-direction: column; color: var(--budgy-muted); font-size: .55rem; }.budgy-onboarding-action-key b { color: var(--budgy-ink); font-size: .62rem; }
+.budgy-onboarding-report header small { color: var(--budgy-muted); }.budgy-onboarding-report > div { margin: .9rem 0; display: grid; grid-template-columns: repeat(4,1fr); gap: .5rem; }.budgy-onboarding-report > div span { display: flex; flex-direction: column; color: var(--budgy-muted); font-size: .55rem; }.budgy-onboarding-report > div b { color: var(--budgy-ink); font-size: .72rem; }.budgy-onboarding-report footer { display: grid; gap: .2rem; }.budgy-onboarding-report footer i { margin: 0 0 .45rem; }.budgy-onboarding-report i em { font-style: normal; }
+.budgy-home-v2 { display: grid; gap: 1rem; }.budgy-home-v2 > .budgy-page-header { margin-bottom: .5rem; }
+.budgy-month-hero { position: relative; isolation: isolate; overflow: hidden; padding: clamp(1.35rem,3vw,2.5rem); border-radius: 1.4rem; background: var(--budgy-green-deep); color: #fff; box-shadow: 0 1rem 3rem rgba(22,61,53,.13); }.budgy-month-hero::after { position:absolute;z-index:-1;right:-8rem;top:-11rem;width:30rem;height:30rem;border:6rem solid rgba(201,220,132,.07);border-radius:50%;content:""; }.budgy-month-hero > header { display:flex;align-items:flex-start;justify-content:space-between;gap:2rem; }.budgy-month-hero .budgy-eyebrow { color:#b8d0c6; }.budgy-month-hero h2 { margin:0;font-size:clamp(1.5rem,3vw,2.6rem);font-weight:650;letter-spacing:-.045em;line-height:1.05; }.budgy-month-hero header p:last-child { margin:.55rem 0 0;color:#b8c9c3;font-size:.72rem; }.budgy-button--hero { border-color:#fff;background:#fff;color:var(--budgy-green-deep);text-decoration:none; }
+.budgy-month-hero-metrics { margin-top:clamp(1.5rem,3vw,2.5rem);display:grid;grid-template-columns:1.15fr 1.15fr .7fr;gap:1rem; }.budgy-month-hero-metrics > div { padding-left:1.15rem;border-left:1px solid rgba(255,255,255,.17);display:flex;flex-direction:column; }.budgy-month-hero-metrics > div:first-child { padding-left:0;border-left:0; }.budgy-month-hero-metrics span { color:#afc5bc;font-size:.68rem; }.budgy-month-hero-metrics strong { margin-top:.25rem;font-size:clamp(1.5rem,3.5vw,3.15rem);font-weight:690;letter-spacing:-.055em;line-height:1;white-space:nowrap; }.budgy-month-hero-metrics > div:last-child strong { font-size:clamp(1rem,2vw,1.55rem);line-height:1.1;white-space:normal; }.budgy-month-hero-metrics .is-over strong { color:#ffc3b9; }
+.budgy-info-dot { width:1rem;height:1rem;margin-left:.25rem;border:1px solid currentColor;border-radius:50%;display:inline-grid;place-items:center;font-size:.55rem;font-style:normal;cursor:help;vertical-align:middle; }.budgy-info-dot:focus-visible { outline:2px solid currentColor;outline-offset:2px; }
+.budgy-month-progress { margin-top:1.5rem; }.budgy-month-progress > div { height:.65rem;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden; }.budgy-month-progress > div span { height:100%;border-radius:inherit;background:var(--budgy-lime);display:block; }.budgy-month-progress p { margin:.55rem 0 0;color:#afc5bc;font-size:.65rem; }.budgy-month-progress b { color:#fff; }
+.budgy-month-hero-context { margin-top:1.2rem;display:flex;flex-wrap:wrap;gap:.45rem 1.35rem; }.budgy-month-hero-context span,.budgy-month-hero-context a { color:#afc5bc;font-size:.64rem;text-decoration:none; }.budgy-month-hero-context b { color:#fff; }.budgy-pacing { margin-top:1rem;padding:.75rem .9rem;border-radius:.75rem;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:1rem; }.budgy-pacing b { font-size:.68rem; }.budgy-pacing span,.budgy-recording-context { color:#afc5bc;font-size:.6rem; }.budgy-recording-context { margin:.65rem 0 0; }
+.budgy-setup-checklist { margin-top:1.5rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem; }.budgy-setup-checklist > div { padding:.85rem;border:1px solid rgba(255,255,255,.12);border-radius:.75rem;background:rgba(255,255,255,.05);display:grid;grid-template-columns:auto 1fr;gap:.1rem .5rem; }.budgy-setup-checklist > div > span { grid-row:1/3;color:#afc5bc; }.budgy-setup-checklist b { font-size:.65rem; }.budgy-setup-checklist small { color:#afc5bc;font-size:.55rem; }.budgy-setup-checklist .is-complete > span { color:var(--budgy-lime); }
+.budgy-early-activity > p { margin:-.7rem 0 1rem;color:var(--budgy-muted);font-size:.65rem; }.budgy-early-activity > div:last-child { display:grid; }.budgy-early-activity > div:last-child > span { padding:.65rem 0;border-top:1px solid var(--budgy-line);display:grid;grid-template-columns:minmax(0,1fr) minmax(6rem,.5fr) auto;align-items:center;gap:1rem;font-size:.68rem; }.budgy-early-activity small { color:var(--budgy-muted); }
+.budgy-home-performance { display:grid;grid-template-columns:minmax(0,1.35fr) minmax(16rem,.65fr);gap:1rem; }.budgy-home-performance > .budgy-panel:only-child { grid-column:1/-1; }.budgy-home-category-list { display:grid; }.budgy-home-category { padding:.72rem 0;border-top:1px solid var(--budgy-line);color:inherit;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.4rem 1rem;text-decoration:none; }.budgy-home-category:first-child { border-top:0; }.budgy-home-category > div:first-child { display:flex;flex-direction:column; }.budgy-home-category b,.budgy-home-category > strong { font-size:.69rem; }.budgy-home-category span { color:var(--budgy-muted);font-size:.58rem; }.budgy-home-category > strong { align-self:center; }.budgy-home-category.is-over > strong { color:#a64d42; }.budgy-home-category-track { grid-column:1/-1;height:.35rem;border-radius:99px;background:#e6ebe5;overflow:hidden; }.budgy-home-category-track i { height:100%;border-radius:inherit;background:var(--budgy-green);display:block; }.budgy-home-category.is-nearly-used .budgy-home-category-track i,.budgy-home-category.is-used .budgy-home-category-track i { background:#b27c45; }.budgy-home-category.is-over .budgy-home-category-track i { background:#a64d42; }
+.budgy-attention > div:last-child { display:grid; }.budgy-attention > div:last-child a { padding:.8rem 0;border-top:1px solid var(--budgy-line);color:inherit;display:flex;align-items:center;justify-content:space-between;gap:1rem;text-decoration:none; }.budgy-attention > div:last-child a:first-child { border-top:0; }.budgy-attention a > span:first-child { display:flex;flex-direction:column; }.budgy-attention b { font-size:.68rem; }.budgy-attention small { color:var(--budgy-muted);font-size:.58rem; }
+.budgy-actual-breakdown-layout { display:grid;grid-template-columns:minmax(22rem,.9fr) minmax(18rem,1.1fr);align-items:center;gap:2rem; }.budgy-actual-plan-list { display:grid; }.budgy-actual-plan-list a { padding:.65rem 0;border-top:1px solid var(--budgy-line);color:inherit;display:flex;justify-content:space-between;gap:1rem;font-size:.67rem;text-decoration:none; }.budgy-actual-plan-list a:first-child { border-top:0; }.budgy-actual-plan-list small { color:var(--budgy-muted);font-weight:500; }
+.budgy-home-plan-metrics { display:grid;grid-template-columns:repeat(4,minmax(0,1fr)); }.budgy-home-plan-metrics > div { padding:.35rem 1rem;border-left:1px solid var(--budgy-line);display:flex;flex-direction:column;gap:.25rem; }.budgy-home-plan-metrics > div:first-child { padding-left:0;border-left:0; }.budgy-home-plan-metrics span { color:var(--budgy-muted);font-size:.59rem; }.budgy-home-plan-metrics b { font-size:clamp(.9rem,1.6vw,1.25rem); }.budgy-home-plan.is-prominent { border-color:#bfd0c5;background:#f7faf6; }
+.budgy-home-allocation { margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--budgy-line); }.budgy-home-allocation > div { height:.45rem;border-radius:99px;background:#e6ebe5;display:flex;overflow:hidden; }.budgy-home-allocation > div i:nth-child(1){background:#d7b67d}.budgy-home-allocation > div i:nth-child(2){background:var(--budgy-green)}.budgy-home-allocation > div i:nth-child(3){background:#9eb3a9}.budgy-home-allocation p { margin:.6rem 0 0;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;color:var(--budgy-muted);font-size:.58rem; }.budgy-home-allocation b { color:var(--budgy-ink); }
+.budgy-home-savings { display:grid;grid-template-columns:minmax(0,1fr) minmax(16rem,.7fr);gap:2rem; }.budgy-home-savings h2 { margin:0;font-size:1rem; }.budgy-home-savings > div:first-child > strong { margin-top:.5rem;display:block;font-size:clamp(1.5rem,3vw,2.4rem);letter-spacing:-.05em; }.budgy-home-savings p:last-child { margin:.3rem 0 0;color:var(--budgy-muted);font-size:.62rem; }.budgy-home-savings > div:last-child { padding-left:1.3rem;border-left:1px solid var(--budgy-line);display:flex;flex-direction:column;gap:.35rem; }.budgy-home-savings > div:last-child > span { color:var(--budgy-muted);font-size:.58rem; }.budgy-home-savings > div:last-child > b { font-size:.72rem; }
+.budgy-guided-setup { width: min(100%,64rem); }
+.budgy-guided-scroll { min-height: 0; padding: clamp(1.35rem,4vw,2.5rem); overflow-y: auto; outline: 0; overscroll-behavior: contain; }
+.budgy-setup-step { max-width: 54rem; margin: 0 auto; }.budgy-setup-step h1 { max-width: 46rem; margin: 0; font-size: clamp(1.85rem,5vw,3.35rem); font-weight: 680; letter-spacing: -.055em; line-height: 1.02; }.budgy-setup-step > p:not(.budgy-eyebrow) { max-width: 43rem; margin: .75rem 0 1.3rem; color: var(--budgy-muted); font-size: .8rem; line-height: 1.6; }
+.budgy-choice-grid { margin: 1.4rem 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .65rem; }.budgy-choice-grid button { min-height: 6rem; padding: 1rem; border: 1px solid var(--budgy-line); border-radius: .9rem; background: #fff; color: var(--budgy-ink); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: .25rem; text-align: left; cursor: pointer; }.budgy-choice-grid button.is-selected { border-color: var(--budgy-green); background: var(--budgy-green-soft); box-shadow: inset 0 0 0 1px var(--budgy-green); }.budgy-choice-grid b { font-size: .78rem; }.budgy-choice-grid span { color: var(--budgy-muted); font-size: .62rem; }
+.budgy-setup-note,.budgy-existing-plan { padding: .8rem 1rem; border-radius: .75rem; background: #e9f0ea; }.budgy-setup-list { display: grid; gap: .7rem; }.budgy-setup-list article { padding: 1rem; border: 1px solid var(--budgy-line); border-radius: .9rem; background: #fff; }.budgy-setup-row-heading { margin-bottom: .7rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }.budgy-setup-row-heading b { font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; }.budgy-setup-row-heading button { border: 0; background: transparent; color: #99493f; font-size: .62rem; cursor: pointer; }
+.budgy-setup-summary { margin-top: 1rem; padding: 1rem; border-radius: .9rem; background: var(--budgy-green-deep); color: #fff; }.budgy-setup-summary .budgy-eyebrow { color: #b8d0c6; }.budgy-setup-summary dl { margin: .6rem 0 0; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); }.budgy-setup-summary dl div { padding: .2rem .8rem; border-left: 1px solid rgba(255,255,255,.17); display: flex; flex-direction: column; }.budgy-setup-summary dl div:first-child { padding-left: 0; border: 0; }.budgy-setup-summary dt { color: #b8d0c6; font-size: .56rem; }.budgy-setup-summary dd { margin: .15rem 0 0; font-size: .78rem; font-weight: 750; }.budgy-setup-summary .is-negative { color: #ffb6ac !important; }
+.budgy-outgoing-groups { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .65rem; }.budgy-outgoing-groups fieldset { min-width: 0; margin: 0; padding: .55rem; border: 1px solid var(--budgy-line); border-radius: .9rem; background: #fff; }.budgy-outgoing-groups legend { padding: 0 .35rem; color: var(--budgy-green); font-size: .58rem; font-weight: 750; text-transform: uppercase; letter-spacing: .07em; }.budgy-outgoing-groups fieldset > div { min-height: 2.6rem; padding: .25rem .4rem; border-radius: .55rem; display: grid; grid-template-columns: minmax(0,1fr) 7rem; align-items: center; gap: .5rem; }.budgy-outgoing-groups fieldset > div.is-selected { background: #edf4ee; }.budgy-outgoing-groups label { min-width: 0; display: flex; align-items: center; gap: .5rem; font-size: .67rem; cursor: pointer; }.budgy-outgoing-groups .budgy-field { margin: 0; }.budgy-outgoing-groups .budgy-money-input input { min-height: 2.15rem; padding-block: .35rem; font-size: 16px; }.budgy-existing-plan { margin-top: .75rem; }.budgy-existing-plan b { font-size: .64rem; }.budgy-existing-plan p { margin: .25rem 0 0; color: var(--budgy-muted); font-size: .6rem; line-height: 1.5; }
+.budgy-savings-question { max-width: 28rem; margin: 1.5rem 0; padding: 1.15rem; border: 1px solid var(--budgy-line); border-radius: 1rem; background: #fff; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: .7rem; }
+.budgy-ready-summary,.budgy-orientation-metrics { margin: 1.35rem 0; padding: 1.1rem; border-radius: 1rem; background: var(--budgy-green-deep); color: #fff; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .5rem; }.budgy-ready-summary span,.budgy-orientation-metrics span { padding-left: .8rem; border-left: 1px solid rgba(255,255,255,.16); color: #b8d0c6; display: flex; flex-direction: column; font-size: .58rem; }.budgy-ready-summary span:first-child,.budgy-orientation-metrics span:first-child { padding-left: 0; border: 0; }.budgy-ready-summary b,.budgy-orientation-metrics b { margin-top: .2rem; color: #fff; font-size: .82rem; }.budgy-ready-summary .is-negative b { color: #ffb6ac; }
+.budgy-plan-actual { margin: 1rem 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .7rem; }.budgy-plan-actual > div { padding: .8rem; border: 1px solid var(--budgy-line); border-radius: .75rem; background: #fff; display: flex; flex-direction: column; gap: .25rem; font-size: .65rem; }.budgy-plan-actual > div span { color: var(--budgy-muted); }.budgy-plan-actual-arrow { color: var(--budgy-green); }.budgy-money-explainer,.budgy-concept-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .55rem; }.budgy-money-explainer div,.budgy-concept-grid span { padding: .75rem; border-radius: .7rem; background: #e9f0ea; display: flex; flex-direction: column; color: var(--budgy-muted); font-size: .6rem; }.budgy-money-explainer b,.budgy-concept-grid b { color: var(--budgy-ink); font-size: .7rem; }
+.budgy-account-prompt { margin-top: 1rem; padding: .9rem; border: 1px solid var(--budgy-line); border-radius: .8rem; background: #fff; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }.budgy-account-prompt > div { display: flex; flex-direction: column; font-size: .68rem; }.budgy-account-prompt span { color: var(--budgy-muted); font-size: .6rem; }.budgy-setup-account { margin-top: 1rem; padding: 1rem; border: 1px solid var(--budgy-line); border-radius: .9rem; background: #fff; }.budgy-setup-error { margin: 0 1.35rem .6rem; }
 .budgy-visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
 .budgy-household-switcher { width: 100%; text-align: left; font: inherit; cursor: pointer; }
 .budgy-household-menu { position: absolute; z-index: 20; top: 7.7rem; left: 1rem; width: calc(100% - 2rem); padding: .45rem; border: 1px solid var(--budgy-line); border-radius: .85rem; background: #fff; box-shadow: 0 .8rem 2.5rem rgba(31,49,39,.16); display: grid; }
@@ -1487,6 +1575,9 @@
 .budgy-money-summary > div:last-child, .budgy-this-month-metrics > div:last-child { border-right: 0; }
 .budgy-money-summary span, .budgy-this-month-metrics span { color: var(--budgy-muted); font-size: .59rem; }
 .budgy-money-summary strong, .budgy-this-month-metrics strong { font-size: clamp(.9rem,1.5vw,1.25rem); }
+.budgy-money-summary > .is-debt { background: #fff7f5; box-shadow: inset .18rem 0 0 #a64d42; }
+.budgy-money-summary > .is-debt span { color: #8c514a; }
+.budgy-money-summary > .is-debt strong { color: #a64d42; }
 .budgy-money-layout { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(18rem,.65fr); gap: 1rem; align-items: start; }
 .budgy-allowance-group { margin-bottom: 1rem; }
 .budgy-allowance { padding: 1rem 0; border-top: 1px solid var(--budgy-line); }
@@ -1501,7 +1592,14 @@
 .budgy-account-card > p { margin: 0 0 .35rem; color: var(--budgy-muted); font-size: .55rem; text-transform: uppercase; letter-spacing: .08em; }.budgy-account-card.is-credit-card > p { color: #aac4bb; }
 .budgy-account-card h3 { margin: 0 0 1.2rem; font-size: 1rem; }
 .budgy-account-card dl { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }.budgy-account-card dl div,.budgy-account-balance { display: flex; flex-direction: column; }.budgy-account-card dt,.budgy-account-balance span { color: #aac4bb; font-size: .55rem; }.budgy-account-card dd { margin: .15rem 0 0; font-size: .73rem; font-weight: 700; }
-.budgy-account-card .budgy-button { margin-top: 1rem; color: inherit; }
+.budgy-account-actions { margin-top: 1rem; padding-top: .85rem; border-top: 1px solid var(--budgy-line); display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.budgy-account-card .budgy-account-actions .budgy-button { margin: 0; color: inherit; }
+.budgy-account-card.is-credit-card .budgy-account-actions { border-color: rgba(255,255,255,.16); }
+.budgy-account-card.is-credit-card .budgy-account-actions .budgy-button { border-color: #fff; background: #fff; color: var(--budgy-green-deep); }
+.budgy-account-card.is-credit-card .budgy-account-actions .budgy-button:hover { border-color: #fff; background: #f3f6f2; }
+.budgy-account-card.is-credit-card .budgy-button--card-primary { font-weight: 750; }
+.budgy-button--card-primary { min-height: var(--budgy-control-height-lg,2.75rem); }
+.budgy-account-card.is-credit-card .budgy-button--card-secondary { background: rgba(255,255,255,.9); font-weight: 620; }
 .budgy-this-month { margin-bottom: 1rem; }.budgy-this-month-metrics { grid-template-columns: repeat(4,minmax(0,1fr)); border: 0; padding: 0; }
 .budgy-key-progress { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }.budgy-key-progress > div > span { margin-bottom: .4rem; display: flex; justify-content: space-between; gap: .5rem; font-size: .62rem; }.budgy-key-progress small { color: var(--budgy-muted); }
 .budgy-account-picker { min-width: 0; margin: 0; padding: 0; border: 0; }
@@ -1552,10 +1650,41 @@
   .budgy-toast { bottom: calc(var(--budgy-mobile-nav-height) + var(--budgy-mobile-nav-action-overhang) + var(--budgy-mobile-nav-content-gap) + var(--budgy-safe-bottom)); }
 }
 @media (max-width: 48rem) {
+  .budgy-app {
+    --budgy-font-control: 0.875rem;
+    --budgy-font-control-small: 0.8125rem;
+    --budgy-font-supporting: 0.8125rem;
+    --budgy-font-meta: 0.6875rem;
+    --budgy-control-height-lg: 2.875rem;
+    --budgy-control-height-md: 2.625rem;
+    --budgy-control-height-sm: 2.5rem;
+  }
   .budgy-product-page { padding-right: 1rem; padding-left: 1rem; }
+  .budgy-sync-error { align-items: flex-start; justify-content: space-between; }
+  .budgy-sync-error > span { align-items: flex-start; flex-direction: column; gap: .15rem; }
+  .budgy-sync-error strong { white-space: normal; }
+  .budgy-button { min-height: var(--budgy-control-height-md,2.625rem); padding: .62rem .9rem; border-radius: var(--budgy-control-radius,.7rem); font-size: var(--budgy-font-control,.875rem); }
+  .budgy-app .budgy-button--primary { min-height: var(--budgy-control-height-lg,2.875rem); }
+  .budgy-button--small { min-height: var(--budgy-control-height-sm,2.5rem); padding-inline: .8rem; font-size: var(--budgy-font-control-small,.8125rem); }
+  .budgy-icon-button { width: var(--budgy-touch-target,2.75rem); height: var(--budgy-touch-target,2.75rem); }
+  .budgy-month-button { width: var(--budgy-touch-target,2.75rem); height: var(--budgy-touch-target,2.75rem); }
+  .budgy-text-link { min-height: var(--budgy-touch-target,2.75rem); font-size: var(--budgy-font-supporting,.8125rem); }
+  .budgy-page-header h1, .budgy-section-page h1, .budgy-product-header h1 { font-size: 1.75rem; }
+  .budgy-page-intro, .budgy-product-header > div > p:last-child { font-size: .875rem; line-height: 1.55; }
+  .budgy-eyebrow { font-size: var(--budgy-font-meta); line-height: 1.35; }
+  .budgy-panel-heading h2, .budgy-product-panel-heading h2, .budgy-budget-toolbar h2 { font-size: 1.0625rem; }
+  .budgy-field > span, .budgy-account-picker legend { font-size: .75rem; }
+  .budgy-field input, .budgy-field select, .budgy-field textarea, .budgy-filter-bar select, .budgy-scenario-toolbar select, .budgy-scenario-name input, .budgy-search input { min-height: var(--budgy-control-height-lg,2.875rem); font-size: 1rem; }
+  .budgy-budget-row .budgy-money-input input { min-height: 36px; padding: 6px 8px 6px 22px; font-size: 16px; }
+  .budgy-budget-row .budgy-money-input > span { left: 8px; font-size: 16px; }
+  .budgy-segmented button, .budgy-horizon-tabs button { min-height: var(--budgy-touch-target,2.75rem); font-size: var(--budgy-font-control,.875rem); }
+  .budgy-quick-actions button, .budgy-more-menu a, .budgy-more-menu button { min-height: var(--budgy-touch-target,2.75rem); font-size: var(--budgy-font-control,.875rem); }
+  .budgy-mobile-navigation .budgy-mobile-nav-link { min-height: 3.6rem; }
+  .budgy-mobile-navigation .budgy-mobile-nav-link > span { font-size: clamp(11px,var(--budgy-font-meta,.6875rem),13px); }
   .budgy-product-header { align-items: stretch; flex-direction: column; gap: 1rem; }
   .budgy-header-actions { align-items: stretch; flex-direction: column; }
   .budgy-financial-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .budgy-savings-plan-layout { grid-template-columns: minmax(0,1fr); gap: 1rem; }
   .budgy-financial-metric:nth-child(2) { border-right: 0; }
   .budgy-financial-metric:nth-child(-n+2) { border-bottom: 1px solid var(--budgy-line); }
   .budgy-income-list, .budgy-goal-grid, .budgy-projection-grid, .budgy-settings-grid, .budgy-scenario-editor { grid-template-columns: minmax(0,1fr); }
@@ -1565,7 +1694,7 @@
   .budgy-transaction-row { position: relative; grid-template-columns: minmax(0,1fr) auto; gap: .3rem 1rem; padding: .8rem 2.5rem .8rem .6rem; }
   .budgy-transaction-row > span:nth-child(2), .budgy-transaction-row > span:nth-child(3), .budgy-transaction-row > span:nth-child(4) { color: var(--budgy-muted); font-size: .6rem; }
   .budgy-transaction-row > strong { grid-column: 2; grid-row: 1; }
-  .budgy-transaction-row > button { position: absolute; right: 0; top: .7rem; }
+  .budgy-transaction-actions { position: absolute; right: 0; top: .7rem; }
   .budgy-horizon-tabs { width: 100%; margin: 0 0 1rem; overflow-x: auto; }
   .budgy-horizon-tabs button { flex: 1 0 auto; }
   .budgy-projection-hero { min-height: 17rem; padding: 1.4rem; }
@@ -1576,6 +1705,22 @@
   .budgy-comparison > div { min-width: 38rem; }
   .budgy-danger-zone { align-items: flex-start; flex-direction: column; }
   .budgy-money-layout { grid-template-columns: minmax(0,1fr); }
+  .budgy-account-card { padding: 1rem; }
+  .budgy-account-actions { margin-top: .8rem; padding-top: .8rem; gap: .5rem; }
+  .budgy-account-card.is-credit-card .budgy-account-actions .budgy-button { flex: 1 1 7.5rem; white-space: nowrap; }
+  .budgy-account-card > p, .budgy-account-card dt, .budgy-account-balance span { font-size: var(--budgy-font-meta); }
+  .budgy-account-card dd { font-size: .875rem; }
+  .budgy-allowance b { font-size: .875rem; }
+  .budgy-allowance small, .budgy-allowance p, .budgy-allowance dl div { font-size: .75rem; line-height: 1.45; }
+  .budgy-budget-group h3 { font-size: .9375rem; }
+  .budgy-budget-group header p { font-size: .75rem; }
+  .budgy-budget-group header > strong { font-size: .9375rem; }
+  .budgy-row-main b { font-size: .875rem; }
+  .budgy-row-main small { font-size: .75rem; line-height: 1.35; }
+  .budgy-financial-metric > span, .budgy-financial-metric small, .budgy-savings-plan-layout > div:first-child > p, .budgy-savings-allocations > span, .budgy-savings-allocations small { font-size: .75rem; }
+  .budgy-savings-allocations b, .budgy-savings-allocations strong { font-size: .8125rem; }
+  .budgy-metric-label, .budgy-metric-heading span { font-size: .8125rem; }
+  .budgy-metric-caption, .budgy-metric-footer, .budgy-panel-heading p, .budgy-allocation-legend span, .budgy-legend-row, .budgy-empty-activity p, .budgy-recent-list small { font-size: .75rem; }
   .budgy-money-summary { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .budgy-money-summary > div { border-bottom: 1px solid var(--budgy-line); }
   .budgy-this-month-metrics,.budgy-key-progress { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -1586,11 +1731,36 @@
   .budgy-inline-form { grid-template-columns: minmax(0,1fr); }
   .budgy-member-row { grid-template-columns: 2.6rem minmax(0,1fr) auto; }
   .budgy-member-row > span:nth-child(3) { grid-column: 2; }
+  .budgy-first-use { align-items: stretch; flex-direction: column; }
+  .budgy-home-v2 { gap: .75rem; }
+  .budgy-home-v2 > .budgy-page-header { gap: .9rem; }
+  .budgy-month-hero { padding:1.2rem 1rem; }
+  .budgy-month-hero > header { gap:1rem; }.budgy-month-hero h2 { font-size:1.7rem; }.budgy-month-hero header p:last-child { font-size:.8rem;line-height:1.5; }
+  .budgy-month-hero > header .budgy-button { align-self:flex-start;min-height:2.5rem;padding:.55rem .75rem;font-size:.78rem; }
+  .budgy-month-hero-metrics { margin-top:1.35rem;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 0; }.budgy-month-hero-metrics > div { padding-left:.8rem; }.budgy-month-hero-metrics > div:nth-child(3) { grid-column:1/-1;padding:.8rem 0 0;border-top:1px solid rgba(255,255,255,.16);border-left:0; }.budgy-month-hero-metrics strong { font-size:clamp(1.65rem,9vw,2.5rem); }.budgy-month-hero-metrics > div:last-child strong { font-size:1rem; }
+  .budgy-month-hero-context { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem; }.budgy-month-hero-context span,.budgy-month-hero-context a { font-size:.72rem;display:flex;flex-direction:column; }.budgy-pacing { align-items:flex-start;flex-direction:column;gap:.25rem; }.budgy-pacing b { font-size:.78rem; }.budgy-pacing span,.budgy-recording-context { font-size:.7rem;line-height:1.45; }
+  .budgy-setup-checklist { grid-template-columns:repeat(2,minmax(0,1fr)); }.budgy-home-performance,.budgy-actual-breakdown-layout,.budgy-home-savings { grid-template-columns:minmax(0,1fr); }.budgy-home-performance > .budgy-panel:only-child { grid-column:auto; }.budgy-actual-breakdown-layout { gap:.75rem; }.budgy-actual-breakdown .budgy-spending-visual { grid-template-columns:minmax(0,1fr); }.budgy-actual-breakdown .budgy-donut-wrap { width:min(100%,12rem); }
+  .budgy-home-plan-metrics { grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem 0; }.budgy-home-plan-metrics > div:nth-child(3) { padding-left:0;border-left:0; }.budgy-home-plan-metrics span { font-size:.75rem; }.budgy-home-plan-metrics b { font-size:1rem; }
+  .budgy-home-savings > div:last-child { padding:1rem 0 0;border-top:1px solid var(--budgy-line);border-left:0; }.budgy-early-activity > div:last-child > span { grid-template-columns:minmax(0,1fr) auto;gap:.25rem 1rem; }.budgy-early-activity small { grid-column:1; }.budgy-early-activity strong { grid-column:2;grid-row:1/3; }
+  .budgy-onboarding-layer { padding: 0; }
+  .budgy-onboarding-walkthrough { width: 100%; height: 100dvh; max-height: 100dvh; border-radius: 0; }
+  .budgy-guided-scroll { padding: 1.15rem 1rem; }
+  .budgy-setup-step h1 { font-size: clamp(2rem,10vw,2.75rem); }
+  .budgy-setup-step > p:not(.budgy-eyebrow) { font-size: .875rem; }
+  .budgy-choice-grid,.budgy-outgoing-groups { grid-template-columns: minmax(0,1fr); }
+  .budgy-choice-grid button { min-height: 4.75rem; }
+  .budgy-setup-summary dl,.budgy-ready-summary,.budgy-orientation-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem 0; }
+  .budgy-setup-summary dl div:nth-child(3),.budgy-ready-summary span:nth-child(3),.budgy-orientation-metrics span:nth-child(3) { padding-left: 0; border-left: 0; }
+  .budgy-outgoing-groups fieldset > div { grid-template-columns: minmax(0,1fr) minmax(6.5rem,7.5rem); }
+  .budgy-savings-question { grid-template-columns: minmax(0,1fr); }
+  .budgy-account-prompt { align-items: stretch; flex-direction: column; }
+  .budgy-guided-setup > footer .budgy-button { min-height: 2.875rem; font-size: .875rem; }
 }
 @media (max-width: 32rem) {
   .budgy-budget-toolbar { align-items: stretch; flex-direction: column; }
-  .budgy-budget-toolbar > div:last-child { display: grid; grid-template-columns: 1fr 1fr; }
-  .budgy-budget-row { grid-template-columns: minmax(0,1fr) 6rem 1.5rem 1.5rem; gap: .35rem; padding-inline: .75rem; }
+  .budgy-budget-toolbar > div:not(:first-child):last-child { display: grid; grid-template-columns: 1fr 1fr; }
+  .budgy-budget-row { grid-template-columns: minmax(0,1fr) 100px 44px 44px; gap: .35rem; padding-inline: .75rem; }
+  .budgy-budget-row > .budgy-icon-button { width: 44px; height: 44px; }
   .budgy-sticky-summary { grid-template-columns: repeat(2,1fr); }
   .budgy-form-grid { grid-template-columns: minmax(0,1fr); }
   .budgy-transaction-summary { grid-template-columns: minmax(0,1fr); gap: .5rem; }
@@ -1603,4 +1773,17 @@
   .budgy-report-answers,.budgy-report-grid,.budgy-report-metrics { grid-template-columns: minmax(0,1fr); }
   .budgy-report-plan-summary { grid-template-columns: minmax(0,1fr); }
   .budgy-more-menu { grid-template-columns: minmax(0,1fr); gap: .8rem; }
+  .budgy-onboarding-mini-list,.budgy-onboarding-report > div { grid-template-columns: repeat(2,1fr); }
+  .budgy-onboarding-action-key { grid-template-columns: minmax(0,1fr); }
+  .budgy-month-hero > header { flex-direction:column; }.budgy-month-hero > header .budgy-button { width:100%;justify-content:center; }.budgy-month-hero-metrics { grid-template-columns:minmax(0,1fr); }.budgy-month-hero-metrics > div,.budgy-month-hero-metrics > div:first-child { padding:.75rem 0 0;border-top:1px solid rgba(255,255,255,.16);border-left:0; }.budgy-month-hero-metrics > div:first-child { padding-top:0;border-top:0; }.budgy-month-hero-metrics > div:nth-child(3) { grid-column:auto; }.budgy-month-hero-metrics strong { font-size:2rem; }
+  .budgy-setup-checklist,.budgy-month-hero-context,.budgy-home-plan-metrics { grid-template-columns:minmax(0,1fr); }.budgy-home-plan-metrics > div,.budgy-home-plan-metrics > div:first-child,.budgy-home-plan-metrics > div:nth-child(3) { padding:.65rem 0 0;border-top:1px solid var(--budgy-line);border-left:0; }.budgy-home-plan-metrics > div:first-child { padding-top:0;border-top:0; }.budgy-home-category { grid-template-columns:minmax(0,1fr); }.budgy-home-category > strong { align-self:start; }.budgy-panel-heading { gap:.5rem; }
+  .budgy-plan-actual { grid-template-columns: minmax(0,1fr); }.budgy-plan-actual-arrow { justify-self: center; transform: rotate(90deg); }
+}
+@media (max-width: 23.5rem) {
+  .budgy-budget-row { grid-template-columns: minmax(0,1fr) 44px 44px; grid-template-rows: auto auto; row-gap: .3rem; padding-block: .25rem; }
+  .budgy-budget-row .budgy-row-main { grid-column: 1/-1; grid-row: 1; min-height: 0; }
+  .budgy-budget-row .budgy-row-main b, .budgy-budget-row .budgy-row-main small { line-height: 1.2; }
+  .budgy-budget-row .budgy-field { grid-column: 1; grid-row: 2; width: min(132px,100%); justify-self: end; }
+  .budgy-budget-row > .budgy-icon-button { grid-column: 2; grid-row: 2; }
+  .budgy-budget-row > .budgy-icon-button:last-child { grid-column: 3; }
 }

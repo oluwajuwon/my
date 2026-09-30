@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import { Session } from "@supabase/supabase-js";
 import { requireSupabase } from "../infrastructure/supabase/client";
 import { nextAuthSession } from "./authLifecycle";
+import { clearOnboardingSessionDismissal } from "../application/onboardingState";
 
 interface AuthValue {
   session: Session | null; initialLoading: boolean;
@@ -32,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp: async (email, password, displayName) => { const { error } = await client.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/budgy`, data: { display_name: displayName.trim() } } }); if (error) throw error; },
     resetPassword: async (email) => { const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/budgy/reset-password` }); if (error) throw error; },
     updatePassword: async (password) => { const { error } = await client.auth.updateUser({ password }); if (error) throw error; },
-    signOut: async () => { const { error } = await client.auth.signOut(); if (error) throw error; },
+    signOut: async () => { if(session?.user.id)clearOnboardingSessionDismissal(session.user.id);const { error } = await client.auth.signOut(); if (error) throw error; },
   }), [client, session, initialLoading]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

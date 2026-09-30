@@ -30,7 +30,7 @@ export const MoneyInput: React.FC<{
   const[editing,setEditing]=useState(formatMoneyInput(value));const[focused,setFocused]=useState(false);const inputRef=useRef<HTMLInputElement>(null);
   useEffect(()=>{if(!focused)setEditing(formatMoneyInput(value));},[value,focused]);
   const commit=()=>{const next=parseMoneyInput(editing);onChange(next);setFocused(false);setEditing(formatMoneyInput(next));};
-  return <label className="budgy-field" htmlFor={id}>{label&&<span>{label}</span>}<div className="budgy-money-input"><span>£</span><input ref={inputRef} id={id} inputMode="decimal" type="text" pattern="[0-9]*[.]?[0-9]*" value={focused?editing:formatMoneyInput(value)} required={required} onFocus={(event)=>{const input=event.currentTarget;setFocused(true);setEditing(value===0?"":penceToInput(value));requestAnimationFrame(()=>input.select());}} onChange={(event)=>setEditing(sanitizeMoneyEditingInput(event.target.value))} onBlur={commit} onKeyDown={(event)=>{if(event.key==="Enter")event.currentTarget.blur();}} /></div></label>;
+  return <label className="budgy-field" htmlFor={id}>{label&&<span>{label}</span>}<div className="budgy-money-input"><span>£</span><input ref={inputRef} id={id} inputMode="decimal" type="text" value={focused?editing:formatMoneyInput(value)} required={required} onFocus={(event)=>{const input=event.currentTarget;setFocused(true);setEditing(value===0?"":penceToInput(value));requestAnimationFrame(()=>input.select());}} onChange={(event)=>setEditing(sanitizeMoneyEditingInput(event.target.value))} onBlur={commit} onKeyDown={(event)=>{if(event.key==="Enter")event.currentTarget.blur();}} /></div></label>;
 };
 
 export const OwnerSelector: React.FC<{ value: Owner; onChange: (value: Owner) => void; label?: string }> = ({ value, onChange, label = "Owner" }) => {
@@ -39,8 +39,8 @@ export const OwnerSelector: React.FC<{ value: Owner; onChange: (value: Owner) =>
   return <label className="budgy-field"><span>{label}</span><select value={value} onChange={(event) => onChange(event.target.value)}>{options.map((owner) => <option key={owner.value} value={owner.value}>{owner.label}</option>)}</select></label>;
 };
 
-export const CategorySelector: React.FC<{ value: string; categories: string[]; onChange: (value: string) => void }> = ({ value, categories, onChange }) => (
-  <label className="budgy-field"><span>Category</span><select value={value} onChange={(event) => onChange(event.target.value)}>{categories.map((category) => <option key={category}>{category}</option>)}</select></label>
+export const CategorySelector: React.FC<{ value: string; categories: string[]; onChange: (value: string) => void;label?:string }> = ({ value, categories, onChange,label="Category" }) => (
+  <label className="budgy-field"><span>{label}</span><select required value={value} onChange={(event) => onChange(event.target.value)}>{categories.map((category) => <option key={category}>{category}</option>)}</select></label>
 );
 
 export const ProgressBar: React.FC<{ value: number; tone?: "default" | "warning" }> = ({ value, tone = "default" }) => (

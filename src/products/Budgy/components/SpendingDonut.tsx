@@ -13,16 +13,18 @@ const colors = [
   "#b1a594",
 ];
 
-const SpendingDonut: React.FC<{ groups: BudgetGroupTotal[]; total: number }> = ({
+const SpendingDonut: React.FC<{ groups: BudgetGroupTotal[]; total: number;label?:string;centreLabel?:string }> = ({
   groups,
   total,
+  label="Planned spending",
+  centreLabel="Planned",
 }) => {
   let offset = 0;
 
   return (
     <div className="budgy-spending-visual">
       <div className="budgy-donut-wrap">
-        <svg className="budgy-donut" viewBox="0 0 42 42" role="img" aria-label={"Planned spending " + formatMoney(total)}>
+        <svg className="budgy-donut" viewBox="0 0 42 42" role="img" aria-label={label+" "+formatMoney(total)}>
           <circle cx="21" cy="21" r="15.9155" className="budgy-donut-track" />
           {groups.map((group, index) => {
             const percentage = group.shareOfSpending * 100;
@@ -33,7 +35,7 @@ const SpendingDonut: React.FC<{ groups: BudgetGroupTotal[]; total: number }> = (
                 cy="21"
                 r="15.9155"
                 fill="none"
-                stroke={colors[index]}
+                stroke={colors[index%colors.length]}
                 strokeWidth="5.5"
                 strokeDasharray={percentage + " " + (100 - percentage)}
                 strokeDashoffset={-offset}
@@ -44,12 +46,12 @@ const SpendingDonut: React.FC<{ groups: BudgetGroupTotal[]; total: number }> = (
             return circle;
           })}
         </svg>
-        <div className="budgy-donut-centre"><span>Planned</span><strong>{formatMoney(total)}</strong></div>
+        <div className="budgy-donut-centre"><span>{centreLabel}</span><strong>{formatMoney(total)}</strong></div>
       </div>
       <ul className="budgy-spending-legend">
         {groups.map((group, index) => (
           <li className="budgy-legend-row" key={group.group}>
-            <i className="budgy-legend-dot" style={{ backgroundColor: colors[index] }} />
+            <i className="budgy-legend-dot" style={{ backgroundColor: colors[index%colors.length] }} />
             <span>{group.group}</span>
             <strong>{formatMoney(group.amount)}</strong>
           </li>

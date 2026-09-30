@@ -5,6 +5,7 @@ import { useHousehold } from "../application/HouseholdContext";
 import { useAuth } from "../auth/AuthProvider";
 import { HouseholdInviteRow } from "../infrastructure/supabase/database.types";
 import { householdRepository } from "../repositories/householdRepository";
+import { describeBudgyError } from "../application/errors";
 
 const initials=(name:string)=>name.split(/\s+/).map((part)=>part[0]).join("").slice(0,2).toUpperCase();
 const date=(value:string)=>new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"short",year:"numeric"}).format(new Date(value));
@@ -15,8 +16,8 @@ const HouseholdSettings:React.FC=()=>{
   const owner=household.membership.role==="owner";const[name,setName]=useState(household.household.name);const[displayName,setDisplayName]=useState(me?.displayName??"");const[avatarUrl,setAvatarUrl]=useState(me?.avatarUrl??"");
   const[inviteEmail,setInviteEmail]=useState("");const[inviteLink,setInviteLink]=useState("");const[invites,setInvites]=useState<HouseholdInviteRow[]>([]);const[message,setMessage]=useState("");const[busy,setBusy]=useState(false);const[createName,setCreateName]=useState("");
   const loadInvites=useCallback(async()=>{if(owner)setInvites(await householdRepository.invitations(household.household.id));},[household.household.id,owner]);
-  useEffect(()=>{void loadInvites().catch(()=>setMessage("Invitations could not be loaded."));},[loadInvites]);
-  const act=async(action:()=>Promise<void>,success:string)=>{setBusy(true);setMessage("");try{await action();setMessage(success);}catch(error){setMessage(error instanceof Error?error.message:"That change could not be saved.");}finally{setBusy(false);}};
+  useEffect(()=>{void loadInvites().catch((error)=>setMessage(describeBudgyError(error,"Invitations could not be loaded.")));},[loadInvites]);
+  const act=async(action:()=>Promise<void>,success:string)=>{setBusy(true);setMessage("");try{await action();setMessage(success);}catch(error){setMessage(describeBudgyError(error,"That change could not be saved."));}finally{setBusy(false);}};
   const invite=async(email:string)=>{const link=await createHouseholdInvitation(household.household.id,email);setInviteLink(link);setInviteEmail("");await loadInvites();};
   return <div className="budgy-product-page budgy-household-settings"><header className="budgy-product-header"><div><p className="budgy-eyebrow">Settings</p><h1>Household</h1><p>Manage the people and identity behind your shared plan.</p></div></header>
     {message&&<div className="budgy-inline-notice" role="status">{message}<button type="button" onClick={()=>setMessage("")}>×</button></div>}

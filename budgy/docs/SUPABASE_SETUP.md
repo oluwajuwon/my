@@ -27,6 +27,10 @@ If local Phase 2 data was imported before member-name cleanup was added, apply `
 
 Phase 3.6 requires `202609280005_refunds.sql`. It adds refunds as a first-class transaction movement and permits an explicitly allocated refund to reduce the matching monthly allowance actual. Monthly reports are derived in the application from the existing household rows, so they do not require a separate reports table or migration.
 
+First-time onboarding requires `202609300001_user_onboarding.sql`. It stores completion, completion time and walkthrough version on each user's own profile. The authenticated-user-only RPC marks onboarding complete; skipping is deliberately session-only and does not change the database.
+
+Typed income and expense classification requires `202609300002_transaction_categories.sql`. It marks all existing categories as expense categories, seeds household income categories, links planned income sources to an income type and preferred account, and lets actual income reference its planned source. Existing income transactions are deliberately left as uncategorised rather than being guessed from their descriptions.
+
 The migration creates profiles, households, memberships, budget months, income, categories, budget items, transactions, savings goals, scenarios and changes, structured activity events, secure invitation records, and idempotent import markers.
 
 ## 4. Authentication and redirect URLs
@@ -54,6 +58,7 @@ Every household-owned table has RLS enabled. `is_household_member(uuid)` and `is
 - Cross-household UUID manipulation fails policy checks.
 - Only owners can rename households, create/cancel invitations, or remove members through guarded RPCs.
 - Members can update only their own profile; there is no policy for editing another member's identity.
+- Onboarding state is per profile. Users can read only profiles in their households, can update only their own profile, and the completion RPC always targets `auth.uid()` rather than a client-supplied user ID.
 - Direct membership deletion is disabled. The removal RPC preserves the former member's display label on financial history and prevents removal of the last owner.
 - Invitation acceptance checks hash, expiry, unused status and the authenticated email.
 - Activity rows are readable by members but created by database triggers, not arbitrary client text.

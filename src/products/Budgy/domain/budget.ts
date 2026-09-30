@@ -11,6 +11,7 @@ import {
   Scenario,
 } from "./types";
 import { sumPence } from "./money";
+import { transactionBudgetMonth } from "./months";
 
 export const groupOrder: BudgetGroup[] = [
   "Home",
@@ -90,10 +91,10 @@ export const calculateBudgetActuals = (
   const planned = groupBudgetItems(plan);
   const spent = new Map<string, Pence>();
   transactions
-    .filter((transaction) => (transaction.type === "expense"||transaction.type==="refund") && transaction.date.startsWith(month))
+    .filter((transaction) => (transaction.type === "expense"||transaction.type==="refund") && transactionBudgetMonth(transaction)===month)
     .forEach((transaction) => {
       const allocatedItem = plan.budget.find((item) => item.id === transaction.budgetItemId);
-      const group = allocatedItem?.group ?? transaction.category;
+      const group = allocatedItem?.group ?? transaction.category ?? "Uncategorised expense";
       spent.set(group, (spent.get(group) ?? 0) + (transaction.type==="refund"?-transaction.amount:transaction.amount));
     });
   const groups = new Set([...planned.map((group) => group.group), ...Array.from(spent.keys())]);

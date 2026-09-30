@@ -9,8 +9,8 @@ export const householdPlan: MonthlyPlan = {
   month: initialMonth,
   householdName: "Our household",
   income: [
-    { id: "income-juwon", name: "Juwon salary", owner: "Juwon", amount: 490_000, recurring: true },
-    { id: "income-wife", name: "Wife salary", owner: "Wife", amount: 260_000, recurring: true },
+    { id: "income-juwon", name: "Juwon salary", owner: "Juwon", amount: 490_000, recurring: true, category:"Salary" },
+    { id: "income-wife", name: "Wife salary", owner: "Wife", amount: 260_000, recurring: true, category:"Salary" },
   ],
   savings: 250_000,
   budget: [
@@ -38,12 +38,14 @@ export const householdPlan: MonthlyPlan = {
 };
 
 export const defaultCategories = ["Home", "Food", "Transport", "Subscriptions", "Phones", "Future plans", "Giving", "Personal"];
+export const defaultIncomeCategories = ["Salary", "Bonus", "Freelance / Side income", "Investment income", "Benefits", "Gift", "Other income"];
 
 export const initialBudgyData: BudgyData = {
   schemaVersion: 1,
   householdName: "Our household",
   members: [],
   categories: defaultCategories,
+  incomeCategories: defaultIncomeCategories,
   months: { [initialMonth]: householdPlan },
   transactions: [], accounts: [], goals: [], scenarios: [],
 };

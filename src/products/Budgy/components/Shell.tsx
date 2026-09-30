@@ -16,7 +16,7 @@ const BudgyLogo:React.FC=()=> <div className="budgy-brand" aria-label="Budgy"><s
 const Shell:React.FC=()=>{
   const household=useHousehold();
   const{session,signOut}=useAuth();
-  const{data,month,saving,syncError,retry,updateData}=useBudgyStore();
+  const{month,saving,syncError,retry,updateData}=useBudgyStore();
   const location=useLocation();
   const[householdMenu,setHouseholdMenu]=useState(false);
   const[quickMenu,setQuickMenu]=useState(false);
@@ -38,7 +38,7 @@ const Shell:React.FC=()=>{
     </aside>
 
     <div className="budgy-mobile-header"><BudgyLogo/><Link className="budgy-mobile-avatar" to="/budgy/settings/household" aria-label="Household settings">{initials}</Link></div>
-    <main className="budgy-main">{syncError&&<div className="budgy-sync-error" role="alert"><span>{syncError}</span><button type="button" onClick={retry}>Retry</button></div>}<Outlet/></main>
+    <main className="budgy-main">{syncError&&<div className="budgy-sync-error" role="alert"><span><strong>Couldn’t save that change</strong><small>{syncError}</small></span><button type="button" onClick={retry}>Reload saved data</button></div>}<Outlet/></main>
 
     <nav className="budgy-mobile-navigation" aria-label="Mobile Budgy navigation">
       <NavLink to="/budgy" end className={({isActive})=>isActive?"budgy-mobile-nav-link is-active":"budgy-mobile-nav-link"}><Icon name="overview" size={20}/><span>Home</span></NavLink>
@@ -49,7 +49,7 @@ const Shell:React.FC=()=>{
     </nav>
 
     <Dialog open={quickMenu} variant="sheet" title="Quick add" description="Record money movement without leaving where you are." onClose={()=>setQuickMenu(false)}><div className="budgy-quick-actions">{quickAddOptions.map((option)=><button key={option.type} className={option.primary?"is-primary":""} type="button" onClick={()=>{setQuickMenu(false);setQuickType(option.type);}}><span>{option.label}</span><b aria-hidden="true">→</b></button>)}</div></Dialog>
-    <Dialog open={quickType!==null} variant="sheet" title="Add money movement" description={hasTransactionDraft(draftKey)?"Your unfinished transaction has been restored.":"Record this against your shared household."} onClose={closeTransaction}>{quickType&&<TransactionForm month={month} categories={data.categories} initialType={quickType} onCancel={()=>setQuickType(null)} onSave={(transaction)=>{updateData((current)=>({...current,transactions:[...current.transactions,transaction]}));setQuickType(null);}}/>}</Dialog>
+    <Dialog open={quickType!==null} variant="sheet" title="Add money movement" description={hasTransactionDraft(draftKey)?"Your unfinished transaction has been restored.":"Record this against your shared household."} onClose={closeTransaction}>{quickType&&<TransactionForm month={month} initialType={quickType} onCancel={()=>setQuickType(null)} onSave={(transaction)=>{updateData((current)=>({...current,transactions:[...current.transactions,transaction]}));setQuickType(null);}}/>}</Dialog>
     <Dialog open={moreOpen} variant="sheet" title="More" description="Everything else in Budgy, organised by purpose." onClose={()=>setMoreOpen(false)}><div className="budgy-more-menu"><section><p>Money management</p>{moreLink("/budgy/transactions","Transactions")}{moreLink("/budgy/reports","Reports")}{moreLink("/budgy/goals","Goals")}</section><section><p>Planning</p>{moreLink("/budgy/projections","Projections")}{moreLink("/budgy/scenarios","Scenarios")}</section><section><p>Household</p>{moreLink("/budgy/settings/household","Members & household settings")}</section><section><p>Account</p>{moreLink("/budgy/settings","App settings")}<button type="button" onClick={()=>{setMoreOpen(false);void signOut();}}>Sign out<span aria-hidden="true">→</span></button></section></div></Dialog>
   </div>;
 };
