@@ -12,6 +12,7 @@ import About from './pages/About';
 import Stories from './pages/Stories';
 import * as serviceWorker from './serviceWorker';
 import BudgyApp from './products/Budgy';
+import NestApp from './products/Nest';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: '/budgy/*',
     element: <BudgyApp />,
+  },
+  {
+    path: '/nest/*',
+    element: <NestApp />,
   },
 ]);
 

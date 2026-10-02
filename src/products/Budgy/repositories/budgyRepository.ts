@@ -1,4 +1,4 @@
-import { BudgyData, BudgetItem, CategoryType, FinancialAccount, HOUSEHOLD_OWNER, IncomeSource, MonthlyPlan, Scenario } from "../domain/types";
+import { BudgyData, BudgetItem, CategoryType, FinancialAccount, HOUSEHOLD_OWNER, IncomeSource, MonthlyPlan, Pence, Scenario } from "../domain/types";
 import { legacyOwner } from "../domain/ownership";
 import { requireSupabase } from "../infrastructure/supabase/client";
 import { BudgetItemRow, BudgetMonthRow, CategoryRow, FinancialAccountRow, IncomeSourceRow, SavingsGoalRow, ScenarioChangeRow, ScenarioRow, TransactionRow } from "../infrastructure/supabase/database.types";
@@ -45,7 +45,7 @@ const loadBudget = async (household: HouseholdSession) => {
     plans[key] = {
       month: key, householdName: household.household.name, savings: Number(row.savings_target_pence),
       income: income.filter((entry) => entry.budget_month_id === row.id).map((entry) => ({ id: entry.id, name: entry.name, owner: ownerValue(entry.owner_user_id, entry.owner_label), amount: Number(entry.amount_pence), recurring: entry.recurring, category:categoryById.get(entry.category_id??""),preferredAccountId:entry.preferred_account_id??undefined })),
-      budget: items.filter((entry) => entry.budget_month_id === row.id).map((entry) => ({ id: entry.id, name: entry.name, group: categoryById.get(entry.category_id) ?? "Other", owner: ownerValue(entry.owner_user_id, entry.owner_label), amount: Number(entry.planned_amount_pence), recurring: entry.recurring, trackActuals: entry.track_actuals })),
+      budget: items.filter((entry) => entry.budget_month_id === row.id).map((entry) => ({ id: entry.id, name: entry.name, group: categoryById.get(entry.category_id??"") ?? (entry.allocation_purpose==="debt_payment"?"Debt payments":entry.allocation_purpose==="investing"?"Investing":entry.allocation_purpose==="saving"?"Saving":"Other"), owner: ownerValue(entry.owner_user_id, entry.owner_label), amount: Number(entry.planned_amount_pence), recurring: entry.recurring, trackActuals: entry.track_actuals,purpose:entry.allocation_purpose,linkedAccountId:entry.linked_account_id??undefined })),
     };
   });
   return { plans, categories: expenseCategories.map((entry) => entry.name), incomeCategories:incomeCategories.map((entry)=>entry.name), monthRows, categoriesRows: categories };
@@ -61,6 +61,11 @@ export const validScenario = (value: unknown): value is { plan: MonthlyPlan; one
 };
 
 export const budgyRepository = {
+  async moveBudgetMoney(household:HouseholdSession,monthKeyValue:string,destinationItemId:string,amount:Pence,sourceItemId?:string,confirmOverPlan=false):Promise<void>{
+    const client=requireSupabase();const{year,month}=splitMonth(monthKeyValue);
+    const{data,error}=await client.from("budget_months").select("id").eq("household_id",household.household.id).eq("year",year).eq("month",month).single();if(error)throw error;
+    const{error:moveError}=await client.rpc("move_budget_money",{target_household:household.household.id,target_budget_month:(data as{id:string}).id,destination_item:destinationItemId,move_amount_pence:amount,source_item:sourceItemId??null,confirm_over_plan:confirmOverPlan});if(moveError)throw moveError;
+  },
   async load(household: HouseholdSession): Promise<BudgyData> {
     const client = requireSupabase();
     const id = household.household.id;
@@ -111,7 +116,7 @@ export const budgyRepository = {
     const{data:scenarios}=await client.from("scenarios").select("id").eq("household_id",id);
     const scenarioIds=(scenarios as Array<{id:string}>|null)?.map((row)=>row.id)??[];
     if(scenarioIds.length){const{error}=await client.from("scenario_changes").delete().in("scenario_id",scenarioIds);if(error)throw error;}
-    for(const table of ["transactions","financial_accounts","savings_goals","scenarios","income_sources","budget_items","budget_months","categories"]){const{error}=await client.from(table).delete().eq("household_id",id);if(error)throw error;}
+    for(const table of ["transactions","savings_goals","scenarios","income_sources","budget_items","financial_accounts","budget_months","categories"]){const{error}=await client.from(table).delete().eq("household_id",id);if(error)throw error;}
     await this.ensureBaseline(household,month);return this.load(household);
   },
 
@@ -153,7 +158,7 @@ export const budgyRepository = {
         const key=isBudgetPlanningType(row.type)?row.budgetMonth??monthFromDate(row.date):null;let budgetMonthId:string|null=null;
         if(key){const{year,month}=splitMonth(key);const{data:existing,error:lookupError}=await client.from("budget_months").select("id").eq("household_id",householdId).eq("year",year).eq("month",month).maybeSingle();if(lookupError)throw lookupError;if(existing)budgetMonthId=(existing as{id:string}).id;else{const{data:created,error:createError}=await client.from("budget_months").upsert({household_id:householdId,year,month,savings_target_pence:next.months[key]?.savings??0},{onConflict:"household_id,year,month"}).select("id").single();if(createError)throw createError;budgetMonthId=(created as{id:string}).id;}}
         const categoryType=row.type==="income"?"income":row.type==="expense"||row.type==="refund"?"expense":null;
-        const { error } = await client.from("transactions").upsert({ id: row.id, household_id: householdId, budget_month_id:budgetMonthId, category_id: categoryType&&row.category?categoryIds.get(`${categoryType}:${row.category}`)??null:null, type: row.type, amount_pence: row.amount, description: row.description, ...ownerFields(row.owner,household), transaction_date: row.date, note: row.note ?? null, created_by: userData.user!.id, account_id:row.accountId??null,destination_account_id:row.destinationAccountId??null,budget_item_id:row.type==="expense"||row.type==="refund"?row.budgetItemId??null:null,income_source_id:row.type==="income"?row.incomeSourceId??null:null,savings_goal_id:row.type==="transfer"?row.savingsGoalId??null:null }); if (error) throw error;
+        const { error } = await client.from("transactions").upsert({ id: row.id, household_id: householdId, budget_month_id:budgetMonthId, category_id: categoryType&&row.category?categoryIds.get(`${categoryType}:${row.category}`)??null:null, type: row.type, amount_pence: row.amount, description: row.description, ...ownerFields(row.owner,household), transaction_date: row.date, note: row.note ?? null, created_by: userData.user!.id, account_id:row.accountId??null,destination_account_id:row.destinationAccountId??null,budget_item_id:row.type==="expense"||row.type==="refund"||row.type==="credit_card_payment"?row.budgetItemId??null:null,income_source_id:row.type==="income"?row.incomeSourceId??null:null,savings_goal_id:row.type==="transfer"?row.savingsGoalId??null:null }); if (error) throw error;
       }
     }
     if (changed(previous.scenarios, next.scenarios)) await this.syncScenarios(previous.scenarios,next.scenarios,household,userData.user!.id);
@@ -167,7 +172,7 @@ export const budgyRepository = {
   async syncBudget(previous: BudgetItem[], next: BudgetItem[], household: HouseholdSession, budgetMonthId: string, categoryIds: Map<string,string>) {
     const client=requireSupabase(); const nextIds=new Set(next.map((row)=>row.id));
     for(const row of previous) if(!nextIds.has(row.id)){const {error}=await client.from("budget_items").delete().eq("id",row.id);if(error)throw error;}
-    for(const row of next) if(!previous.some((old)=>old.id===row.id)||changed(previous.find((old)=>old.id===row.id),row)){const {error}=await client.from("budget_items").upsert({id:row.id,household_id:household.household.id,budget_month_id:budgetMonthId,category_id:categoryIds.get(`expense:${row.group}`),name:row.name,...ownerFields(row.owner,household),planned_amount_pence:row.amount,recurring:row.recurring,track_actuals:row.trackActuals!==false});if(error)throw error;}
+    for(const row of next) if(!previous.some((old)=>old.id===row.id)||changed(previous.find((old)=>old.id===row.id),row)){const purpose=row.purpose??"spending";const {error}=await client.from("budget_items").upsert({id:row.id,household_id:household.household.id,budget_month_id:budgetMonthId,category_id:purpose==="spending"?categoryIds.get(`expense:${row.group}`)??null:null,name:row.name,...ownerFields(row.owner,household),planned_amount_pence:row.amount,recurring:row.recurring,track_actuals:row.trackActuals!==false,allocation_purpose:purpose,linked_account_id:purpose==="debt_payment"?row.linkedAccountId??null:null});if(error)throw error;}
   },
   async syncAccounts(previous:FinancialAccount[],next:FinancialAccount[],household:HouseholdSession){
     const client=requireSupabase();const nextIds=new Set(next.map((row)=>row.id));

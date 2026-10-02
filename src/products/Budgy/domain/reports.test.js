@@ -24,7 +24,18 @@ it("builds actual category totals with planned differences",()=>expect(calculate
 it("attributes spending to transaction owners rather than actors",()=>expect(calculateMemberBreakdown(transactions,"2026-09",name).find((row)=>row.label==="Household").amount).toBe(8000));
 it("calculates bank opening, activity and closing balances",()=>expect(calculateAccountMovement(bank,transactions,"2026-09")).toMatchObject({opening:100000,moneyIn:75000,moneyOut:55000,closing:120000}));
 it("calculates card purchases, refunds, payments and closing debt",()=>expect(calculateAccountMovement(card,transactions,"2026-09")).toMatchObject({opening:50000,purchases:10000,refunds:2000,payments:30000,closing:28000,availableCredit:172000}));
-it("builds remaining budget and integer-pence summary",()=>{const report=buildMonthlyReport(data,"2026-09",name);expect(report.remainingBudget).toBe(47000);expect(report.netCashFlow).toBe(62000);expect(Number.isInteger(report.spending)).toBe(true);});
+it("builds remaining budget and separates card-payment cash flow",()=>{const report=buildMonthlyReport(data,"2026-09",name);expect(report.remainingBudget).toBe(47000);expect(report.netCashFlow).toBe(32000);expect(report.cashDebtPayments).toBe(30000);expect(Number.isInteger(report.spending)).toBe(true);});
+it("reports planned and fulfilled debt payments separately from spending",()=>{
+  const debtPlan={id:"amex-payment",name:"Amex payment",group:"Debt payments",owner:"household",amount:40000,recurring:true,trackActuals:true,purpose:"debt_payment",linkedAccountId:"card"};
+  const linkedPayment={...transactions[4],budgetMonth:"2026-09",budgetItemId:"amex-payment"};
+  const withDebtPlan={...data,months:{"2026-09":{...plan,budget:[...plan.budget,debtPlan]}},transactions:[...transactions.filter((row)=>row.id!=="payment"),linkedPayment]};
+  const report=buildMonthlyReport(withDebtPlan,"2026-09",name);
+  expect(report.plannedDebtPayments).toBe(40000);
+  expect(report.actualDebtPayments).toBe(30000);
+  expect(report.budgetSpending).toBe(13000);
+  expect(report.remainingBudget).toBe(47000);
+  expect(report.categories.some((row)=>row.key==="Debt payments")).toBe(false);
+});
 it("groups income by type, source and owner and links planned to actual",()=>{const report=buildMonthlyReport(data,"2026-09",name);expect(report.incomeBreakdown[0]).toMatchObject({label:"Salary",amount:75000});expect(report.incomeBySource[0]).toMatchObject({label:"Employer",amount:75000});expect(report.incomeByMember[0]).toMatchObject({label:"Juwon",amount:75000});expect(report.plannedVsActualIncome[0]).toMatchObject({planned:75000,amount:75000,difference:0});});
 it("keeps legacy income without a classification as uncategorised income",()=>{const legacy=tx("legacy-income","income",10000,{category:undefined,accountId:"bank"});expect(buildMonthlyReport({...data,transactions:[legacy]},"2026-09",name).incomeBreakdown[0]).toMatchObject({label:"Uncategorised income",amount:10000});});
 it("does not assume planned savings were actually saved",()=>{const report=buildMonthlyReport({...data,transactions:transactions.filter((row)=>row.type!=="transfer")},"2026-09",name);expect(report.plannedSavings).toBe(20000);expect(report.savings).toBe(0);});

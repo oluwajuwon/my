@@ -6,7 +6,7 @@ export type BudgetMonthMode="auto"|"manual";
 export const monthFromDate=(date:string)=>date.slice(0,7);
 export const currentLocalMonth=(date=new Date())=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}`;
 export const isBudgetMonthKey=(value:unknown):value is string=>typeof value==="string"&&/^\d{4}-(0[1-9]|1[0-2])$/.test(value);
-export const isBudgetPlanningType=(type:Transaction["type"])=>type==="expense"||type==="refund"||type==="income";
+export const isBudgetPlanningType=(type:Transaction["type"])=>type==="expense"||type==="refund"||type==="income"||type==="credit_card_payment";
 export const transactionBudgetMonth=(transaction:Transaction)=>isBudgetPlanningType(transaction.type)?transaction.budgetMonth??monthFromDate(transaction.date):undefined;
 
 export const shiftMonthKey=(month:string,amount:number)=>{

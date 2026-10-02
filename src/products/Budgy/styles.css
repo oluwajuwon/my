@@ -1334,7 +1334,7 @@
 .budgy-product-panel { min-width: 0; padding: 1.35rem; border: 1px solid rgba(25,53,47,.08); border-radius: 1.15rem; background: #fff; box-shadow: 0 .35rem 1.5rem rgba(31,61,53,.035); }
 .budgy-product-panel-heading { margin-bottom: 1.1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .budgy-product-panel-heading h2, .budgy-budget-toolbar h2 { margin: 0; font-size: 1.05rem; letter-spacing: -.025em; }
-.budgy-financial-strip { margin-bottom: 1rem; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border: 1px solid rgba(25,53,47,.08); border-radius: 1.15rem; background: #fff; overflow: hidden; }
+.budgy-financial-strip { margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit,minmax(10rem,1fr)); border: 1px solid rgba(25,53,47,.08); border-radius: 1.15rem; background: #fff; overflow: hidden; }
 .budgy-financial-metric { min-width: 0; padding: 1.25rem; border-right: 1px solid var(--budgy-line); display: flex; flex-direction: column; }
 .budgy-financial-metric:last-child { border-right: 0; background: #edf5ef; }
 .budgy-financial-metric > span { color: var(--budgy-muted); font-size: .68rem; }
@@ -1544,7 +1544,7 @@
 .budgy-attention > div:last-child { display:grid; }.budgy-attention > div:last-child a { padding:.8rem 0;border-top:1px solid var(--budgy-line);color:inherit;display:flex;align-items:center;justify-content:space-between;gap:1rem;text-decoration:none; }.budgy-attention > div:last-child a:first-child { border-top:0; }.budgy-attention a > span:first-child { display:flex;flex-direction:column; }.budgy-attention b { font-size:.68rem; }.budgy-attention small { color:var(--budgy-muted);font-size:.58rem; }
 .budgy-actual-breakdown-layout { display:grid;grid-template-columns:minmax(22rem,.9fr) minmax(18rem,1.1fr);align-items:center;gap:2rem; }.budgy-actual-plan-list { display:grid; }.budgy-actual-plan-list a { padding:.65rem 0;border-top:1px solid var(--budgy-line);color:inherit;display:flex;justify-content:space-between;gap:1rem;font-size:.67rem;text-decoration:none; }.budgy-actual-plan-list a:first-child { border-top:0; }.budgy-actual-plan-list small { color:var(--budgy-muted);font-weight:500; }
 .budgy-home-plan-metrics { display:grid;grid-template-columns:repeat(4,minmax(0,1fr)); }.budgy-home-plan-metrics > div { padding:.35rem 1rem;border-left:1px solid var(--budgy-line);display:flex;flex-direction:column;gap:.25rem; }.budgy-home-plan-metrics > div:first-child { padding-left:0;border-left:0; }.budgy-home-plan-metrics span { color:var(--budgy-muted);font-size:.59rem; }.budgy-home-plan-metrics b { font-size:clamp(.9rem,1.6vw,1.25rem); }.budgy-home-plan.is-prominent { border-color:#bfd0c5;background:#f7faf6; }
-.budgy-home-allocation { margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--budgy-line); }.budgy-home-allocation > div { height:.45rem;border-radius:99px;background:#e6ebe5;display:flex;overflow:hidden; }.budgy-home-allocation > div i:nth-child(1){background:#d7b67d}.budgy-home-allocation > div i:nth-child(2){background:var(--budgy-green)}.budgy-home-allocation > div i:nth-child(3){background:#9eb3a9}.budgy-home-allocation p { margin:.6rem 0 0;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;color:var(--budgy-muted);font-size:.58rem; }.budgy-home-allocation b { color:var(--budgy-ink); }
+.budgy-home-allocation { margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--budgy-line); }.budgy-home-allocation > div { height:.45rem;border-radius:99px;background:#e6ebe5;display:flex;overflow:hidden; }.budgy-home-allocation > div i:nth-child(1){background:#d7b67d}.budgy-home-allocation > div i:nth-child(2){background:#9f584d}.budgy-home-allocation > div i:nth-child(3){background:var(--budgy-green)}.budgy-home-allocation > div i:nth-child(4){background:#9eb3a9}.budgy-home-allocation p { margin:.6rem 0 0;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;color:var(--budgy-muted);font-size:.58rem; }.budgy-home-allocation b { color:var(--budgy-ink); }
 .budgy-home-savings { display:grid;grid-template-columns:minmax(0,1fr) minmax(16rem,.7fr);gap:2rem; }.budgy-home-savings h2 { margin:0;font-size:1rem; }.budgy-home-savings > div:first-child > strong { margin-top:.5rem;display:block;font-size:clamp(1.5rem,3vw,2.4rem);letter-spacing:-.05em; }.budgy-home-savings p:last-child { margin:.3rem 0 0;color:var(--budgy-muted);font-size:.62rem; }.budgy-home-savings > div:last-child { padding-left:1.3rem;border-left:1px solid var(--budgy-line);display:flex;flex-direction:column;gap:.35rem; }.budgy-home-savings > div:last-child > span { color:var(--budgy-muted);font-size:.58rem; }.budgy-home-savings > div:last-child > b { font-size:.72rem; }
 .budgy-guided-setup { width: min(100%,64rem); }
 .budgy-guided-scroll { min-height: 0; padding: clamp(1.35rem,4vw,2.5rem); overflow-y: auto; outline: 0; overscroll-behavior: contain; }
@@ -1786,4 +1786,19 @@
   .budgy-budget-row .budgy-field { grid-column: 1; grid-row: 2; width: min(132px,100%); justify-self: end; }
   .budgy-budget-row > .budgy-icon-button { grid-column: 2; grid-row: 2; }
   .budgy-budget-row > .budgy-icon-button:last-child { grid-column: 3; }
+}
+
+/* Monthly money purposes */
+.budgy-home-plan-metrics { grid-template-columns: repeat(auto-fit,minmax(9rem,1fr)); }
+.budgy-debt-plan { margin: 1rem 0; border-color: #dcc9c5; background: #fff9f7; }
+.budgy-debt-plan > header .budgy-category-symbol { background: #f3d9d3; color: #93483f; }
+.budgy-card-payment-plan { margin: .85rem 0 0; padding: .7rem .8rem; border: 1px solid rgba(255,255,255,.18); border-radius: .7rem; display: flex; flex-direction: column; gap: .2rem; color: #c6d6d1; font-size: .62rem; }
+.budgy-card-payment-plan b { color: #fff; font-size: .72rem; }
+.budgy-reallocation-preview { margin: .85rem 0; padding: .85rem; border-radius: .8rem; background: var(--budgy-green-soft); display: grid; gap: .55rem; }
+.budgy-reallocation-preview p { margin: 0; display: flex; justify-content: space-between; gap: 1rem; font-size: .7rem; }
+.budgy-reallocation-preview span { color: var(--budgy-muted); }
+.budgy-warning-check { padding: .8rem; border: 1px solid #d8b07c; border-radius: .75rem; background: #fff9ee; }
+@media (max-width: 32rem) {
+  .budgy-home-plan-metrics { grid-template-columns: minmax(0,1fr); }
+  .budgy-reallocation-preview p { align-items: flex-start; flex-direction: column; gap: .15rem; }
 }

@@ -10,10 +10,11 @@ import { EmptyState, FinancialMetric, MoneyInput, MonthPicker, OwnerSelector, Pr
 import { createId } from "../domain/id";
 import { budgetItemActual } from "../domain/accounts";
 import { Link, useSearchParams } from "react-router-dom";
+import { allocationPurpose, calculateAllocationProgress, calculateReallocationPreview, validateReallocation } from "../domain/allocations";
 
 
 const Budget: React.FC = () => {
-  const { data, month, plan, setMonth, updateMonth, updateData } = useBudgyStore();
+  const { data, month, plan, setMonth, updateMonth, updateData,reallocate } = useBudgyStore();
   const [searchParams,setSearchParams]=useSearchParams();
   const [itemDialog, setItemDialog] = useState<BudgetItem | "new" | null>(null);
   const [incomeDialog, setIncomeDialog] = useState<IncomeSource | "new" | null>(null);
@@ -22,12 +23,15 @@ const Budget: React.FC = () => {
   const [deleted, setDeleted] = useState<BudgetItem | null>(null);
   const [newCategory, setNewCategory] = useState("");
   const [categoryDialog, setCategoryDialog] = useState(false);
+  const [moveOpen,setMoveOpen]=useState(false);const[moveFrom,setMoveFrom]=useState("");const[moveTo,setMoveTo]=useState("");const[moveAmount,setMoveAmount]=useState(0);const[confirmOver,setConfirmOver]=useState(false);const[moveError,setMoveError]=useState("");
   const summary = useMemo(() => calculateHouseholdSummary(plan), [plan]);
   const groups = useMemo(() => groupBudgetItems(plan), [plan]);
   const actuals = useMemo(() => calculateBudgetActuals(plan, data.transactions, month), [plan, data.transactions, month]);
   const allocated = summary.income === 0 ? 0 : summary.allocated / summary.income;
   const goalSavings=data.goals.reduce((total,goal)=>total+goal.monthlyContribution,0);
   const unassignedSavings=plan.savings-goalSavings;
+  const debtItems=plan.budget.filter((item)=>allocationPurpose(item)==="debt_payment");
+  const preview=useMemo(()=>{try{return moveTo&&moveAmount>0?calculateReallocationPreview(plan,data.transactions,month,moveFrom||undefined,moveTo,moveAmount):null;}catch{return null;}},[data.transactions,month,moveAmount,moveFrom,moveTo,plan]);
 
   useEffect(()=>{
     if(searchParams.get("add")!=="budget-item")return;
@@ -54,7 +58,7 @@ const Budget: React.FC = () => {
   const copyLastMonth = () => {
     const previous = Object.keys(data.months).filter((key) => key < month).sort().reverse()[0];
     if (!previous) return;
-    updateMonth((current) => ({ ...current, income: data.months[previous].income.map((item) => ({ ...item })), budget: data.months[previous].budget.map((item) => ({ ...item })), savings: data.months[previous].savings }));
+    updateMonth((current) => ({ ...current, income: data.months[previous].income.map((item) => ({ ...item,id:createId() })), budget: data.months[previous].budget.map((item) => ({ ...item,id:createId() })), savings: data.months[previous].savings }));
   };
 
   return <div className="budgy-product-page budgy-budget-page">
@@ -63,6 +67,7 @@ const Budget: React.FC = () => {
     <section className="budgy-financial-strip" aria-label="Budget summary">
       <FinancialMetric label="Household income" value={summary.income} />
       <FinancialMetric label="Planned spending" value={summary.spending} />
+      <FinancialMetric label="Debt payments" value={summary.debtPayments} detail="Planned repayments · not new spending" />
       <FinancialMetric label="Planned savings" value={summary.savings} detail="Target only · record transfers to track actual savings" />
       <FinancialMetric label="Left to allocate" value={summary.remaining} detail={`${(allocated * 100).toFixed(1)}% allocated`} />
     </section>
@@ -77,9 +82,9 @@ const Budget: React.FC = () => {
       <div className="budgy-income-list">{plan.income.map((source) => <button type="button" key={source.id} onClick={() => openIncome(source)}><span><b>{source.name}</b><small>{ownerLabel(source.owner,data.members)} · {source.recurring ? "Recurring" : "One-off"}</small></span><strong>{formatMoney(source.amount)}</strong></button>)}</div>
     </section>
 
-    <div className="budgy-budget-toolbar"><div><p className="budgy-eyebrow">Money out</p><h2>Monthly plan</h2></div><div><button className="budgy-button budgy-button--quiet" type="button" onClick={() => setCategoryDialog(true)}>+ Category</button><button className="budgy-button budgy-button--primary" type="button" onClick={() => setItemDialog("new")}>+ Budget item</button></div></div>
+    <div className="budgy-budget-toolbar"><div><p className="budgy-eyebrow">Money out</p><h2>Monthly purposes</h2></div><div><button className="budgy-button budgy-button--quiet" type="button" disabled={!plan.budget.length} title={!plan.budget.length?"Add a budget item before moving money":undefined} onClick={()=>{setMoveFrom("");setMoveTo(plan.budget[0]?.id??"");setMoveAmount(0);setMoveOpen(true);}}>Move money</button><button className="budgy-button budgy-button--quiet" type="button" onClick={() => setCategoryDialog(true)}>+ Category</button><button className="budgy-button budgy-button--primary" type="button" onClick={() => setItemDialog("new")}>+ Budget item</button></div></div>
 
-    {!groups.length&&<EmptyState title="Create your first budget item" description="Plan where your household income should go each month." action={<button className="budgy-button budgy-button--primary" type="button" onClick={()=>setItemDialog("new")}>Create your first budget item</button>}/>}<div className="budgy-budget-groups">{groups.map((group) => {
+    {!plan.budget.length&&<EmptyState title="Create your first budget item" description="Plan where your household income should go each month." action={<button className="budgy-button budgy-button--primary" type="button" onClick={()=>setItemDialog("new")}>Create your first budget item</button>}/>}<div className="budgy-budget-groups">{groups.map((group) => {
       const actual = actuals.find((entry) => entry.group === group.group);
       return <section className="budgy-budget-group" key={group.group}>
         <header><div><span className="budgy-category-symbol">{group.group[0]}</span><div><h3>{group.group}</h3><p>{actual?.spent ? `${formatMoney(actual.spent)} spent of ${formatMoney(group.amount)}` : `${plan.budget.filter((item) => item.group === group.group).length} planned items`}</p></div></div><strong>{formatMoney(group.amount)}</strong></header>
@@ -92,10 +97,20 @@ const Budget: React.FC = () => {
       </section>;
     })}</div>
 
-    <div className="budgy-sticky-summary"><span>Income <b>{formatMoney(summary.income)}</b></span><span>Budgeted <b>{formatMoney(summary.spending)}</b></span><span>Savings target <b>{formatMoney(summary.savings)}</b></span><span className={summary.remaining < 0 ? "is-negative" : ""}>Left <b>{formatMoney(summary.remaining)}</b></span></div>
+    {!!debtItems.length&&<section className="budgy-budget-group budgy-debt-plan"><header><div><span className="budgy-category-symbol">D</span><div><h3>Debt payments</h3><p>Planned repayments reduce debt without counting as new spending.</p></div></div><strong>{formatMoney(summary.debtPayments)}</strong></header><div className="budgy-budget-rows">{debtItems.map((item)=>{const progress=calculateAllocationProgress(item,data.transactions,month);const card=data.accounts.find((account)=>account.id===item.linkedAccountId);return <div className="budgy-budget-row" key={item.id}><button className="budgy-row-main" type="button" onClick={()=>setItemDialog(item)}><span><b>{item.name}</b><small>{card?.name??"Credit card"} · {item.recurring?"Recurring":"One-off"}</small><small>{formatMoney(progress.actual)} paid · {progress.remaining<0?`${formatMoney(Math.abs(progress.remaining))} above plan`:`${formatMoney(progress.remaining)} remaining`}</small></span></button><MoneyInput value={item.amount} onChange={(amount)=>updateMonth((current)=>({...current,budget:current.budget.map((entry)=>entry.id===item.id?{...entry,amount}:entry)}))}/><Link className="budgy-icon-button" aria-label={`View payments for ${item.name}`} to={`/budgy/transactions?budget=${item.id}&budgetMonth=${month}`}>→</Link><button className="budgy-icon-button" type="button" aria-label={`Remove ${item.name}`} onClick={()=>setDeleteItem(item)}>×</button></div>;})}</div></section>}
+
+    <div className="budgy-sticky-summary"><span>Income <b>{formatMoney(summary.income)}</b></span><span>Spending <b>{formatMoney(summary.spending)}</b></span><span>Debt payments <b>{formatMoney(summary.debtPayments)}</b></span><span className={summary.remaining < 0 ? "is-negative" : ""}>Left <b>{formatMoney(summary.remaining)}</b></span></div>
     {deleted && <div className="budgy-toast" role="status"><span>{deleted.name} deleted</span><button type="button" onClick={() => { updateMonth((current) => ({ ...current, budget: [...current.budget, deleted] })); setDeleted(null); }}>Undo</button></div>}
 
-    <Dialog open={itemDialog !== null} title={itemDialog === "new" ? "Add budget item" : "Edit budget item"} onClose={() => setItemDialog(null)}>{itemDialog && <BudgetItemForm item={itemDialog === "new" ? undefined : itemDialog} categories={data.categories} onSave={saveItem} onCancel={() => setItemDialog(null)} />}</Dialog>
+    <Dialog open={itemDialog !== null} title={itemDialog === "new" ? "Add money purpose" : "Edit money purpose"} onClose={() => setItemDialog(null)}>{itemDialog && <BudgetItemForm item={itemDialog === "new" ? undefined : itemDialog} categories={data.categories} accounts={data.accounts} transactions={data.transactions} onSave={saveItem} onCancel={() => setItemDialog(null)} />}</Dialog>
+    <Dialog open={moveOpen} title="Move planned money" description="This edits the plan only. It does not create a transaction or change an account balance." onClose={()=>setMoveOpen(false)}>
+      <form className="budgy-form" onSubmit={async(event)=>{event.preventDefault();setMoveError("");try{const next=calculateReallocationPreview(plan,data.transactions,month,moveFrom||undefined,moveTo,moveAmount);const validation=validateReallocation(next,confirmOver);if(!validation.valid){setMoveError(validation.message);return;}await reallocate(moveTo,moveAmount,moveFrom||undefined,confirmOver);setMoveOpen(false);}catch(error){setMoveError(error instanceof Error?error.message:"Budgy could not move that money.");}}}>
+        <div className="budgy-form-grid"><label className="budgy-field"><span>From</span><select value={moveFrom} onChange={(event)=>{setMoveFrom(event.target.value);setConfirmOver(false);}}><option value="">Unallocated · {formatMoney(summary.remaining)}</option>{plan.budget.filter((item)=>item.id!==moveTo).map((item)=><option key={item.id} value={item.id}>{item.name} · {formatMoney(item.amount)}</option>)}</select></label><label className="budgy-field"><span>To</span><select required value={moveTo} onChange={(event)=>setMoveTo(event.target.value)}><option value="">Choose purpose</option>{plan.budget.filter((item)=>item.id!==moveFrom).map((item)=><option key={item.id} value={item.id}>{item.name}</option>)}</select></label><MoneyInput label="Amount to move" value={moveAmount} onChange={setMoveAmount} required/></div>
+        {preview&&<div className="budgy-reallocation-preview"><p><span>{preview.from?.name??"Unallocated"}</span><b>{formatMoney(preview.fromBefore)} → {formatMoney(preview.fromAfter??preview.fromBefore-preview.amount)}</b></p><p><span>{preview.to.name}</span><b>{formatMoney(preview.toBefore)} → {formatMoney(preview.toAfter)}</b></p></div>}
+        {preview?.wouldPutSourceOverPlan&&<label className="budgy-check budgy-warning-check"><input type="checkbox" checked={confirmOver} onChange={(event)=>setConfirmOver(event.target.checked)}/><span>{preview.from?.name} would become {formatMoney(preview.fromActual-(preview.fromAfter??0))} over plan. I understand recorded spending will not change.</span></label>}
+        {moveError&&<p className="budgy-auth-message" role="alert">{moveError}</p>}<div className="budgy-dialog-actions"><button type="button" className="budgy-button budgy-button--quiet" onClick={()=>setMoveOpen(false)}>Cancel</button><button className="budgy-button budgy-button--primary" type="submit">Confirm move</button></div>
+      </form>
+    </Dialog>
     <Dialog open={incomeDialog !== null} title={incomeDialog === "new" ? "Add income source" : "Edit income source"} onClose={() => setIncomeDialog(null)}>{incomeDraft && <form className="budgy-form" onSubmit={saveIncome}><label className="budgy-field"><span>Source name</span><input autoFocus required value={incomeDraft.name} onChange={(event) => setIncomeDraft({ ...incomeDraft, name:event.target.value })} placeholder="Employer or client" /></label><div className="budgy-form-grid"><MoneyInput label="Planned monthly amount" value={incomeDraft.amount} onChange={(amount) => setIncomeDraft({ ...incomeDraft, amount })} /><label className="budgy-field"><span>Income type</span><select required value={incomeDraft.category??data.incomeCategories[0]??""} onChange={(event)=>setIncomeDraft({...incomeDraft,category:event.target.value})}>{data.incomeCategories.map((entry)=><option key={entry}>{entry}</option>)}</select></label><OwnerSelector value={incomeDraft.owner} onChange={(owner) => setIncomeDraft({ ...incomeDraft, owner })} /><label className="budgy-field"><span>Usually paid into</span><select value={incomeDraft.preferredAccountId??""} onChange={(event)=>setIncomeDraft({...incomeDraft,preferredAccountId:event.target.value||undefined})}><option value="">No preferred account</option>{data.accounts.filter((account)=>account.isActive&&account.type!=="credit_card").map((account)=><option key={account.id} value={account.id}>{account.name}</option>)}</select></label></div><label className="budgy-check"><input type="checkbox" checked={incomeDraft.recurring} onChange={(event) => setIncomeDraft({ ...incomeDraft, recurring: event.target.checked })} />Repeat in new months</label><div className="budgy-dialog-actions">{incomeDialog !== "new" && <button className="budgy-button budgy-button--danger-quiet" type="button" onClick={() => { updateMonth((current) => ({ ...current, income: current.income.filter((entry) => entry.id !== incomeDraft.id) })); setIncomeDialog(null); }}>Delete</button>}<button className="budgy-button budgy-button--primary" type="submit">Save income</button></div></form>}</Dialog>
     <Dialog open={categoryDialog} title="Add custom category" onClose={() => setCategoryDialog(false)}><form className="budgy-form" onSubmit={(event) => { event.preventDefault(); const category = newCategory.trim(); if (category && !data.categories.includes(category)) updateData((current) => ({ ...current, categories: [...current.categories, category] })); setNewCategory(""); setCategoryDialog(false); }}><label className="budgy-field"><span>Category name</span><input autoFocus required value={newCategory} onChange={(event) => setNewCategory(event.target.value)} /></label><div className="budgy-dialog-actions"><button className="budgy-button budgy-button--primary" type="submit">Add category</button></div></form></Dialog>
     <ConfirmationDialog open={!!deleteItem} title="Delete budget item?" description={`${deleteItem?.name ?? "This item"} will be removed from ${month}.`} confirmLabel="Delete item" strong onCancel={() => setDeleteItem(null)} onConfirm={() => { if (deleteItem) { updateMonth((current) => ({ ...current, budget: current.budget.filter((entry) => entry.id !== deleteItem.id) })); setDeleted(deleteItem); } setDeleteItem(null); }} />

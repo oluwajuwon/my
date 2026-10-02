@@ -47,5 +47,8 @@ declare month_id uuid; category_ids jsonb; member_one uuid; member_two uuid; mem
     (target_household,member_one,member_one_name||' current account','current_account','GBP',0,null,null,null),
     (target_household,member_two,member_two_name||' current account','current_account','GBP',0,null,null,null),
     (target_household,member_one,'Example credit card','credit_card','GBP',0,200000,0,current_date+14);
+  insert into public.budget_items(household_id,budget_month_id,category_id,name,owner_label,planned_amount_pence,recurring,allocation_purpose,linked_account_id)
+  values(target_household,month_id,null,'Example credit card payoff','Household',60000,true,'debt_payment',
+    (select id from public.financial_accounts where household_id=target_household and name='Example credit card' limit 1));
 end $$;
 revoke all on function public.seed_budgy_example(uuid) from public, anon, authenticated;

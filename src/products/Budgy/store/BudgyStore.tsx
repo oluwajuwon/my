@@ -1,5 +1,5 @@
 import React,{createContext,useCallback,useContext,useEffect,useMemo,useRef,useState}from"react";
-import{BudgyData,MonthlyPlan}from"../domain/types";
+import{BudgyData,MonthlyPlan,Pence}from"../domain/types";
 import{HouseholdSession}from"../repositories/householdRepository";
 import{budgyRepository}from"../repositories/budgyRepository";
 import{subscribeToHousehold}from"../infrastructure/supabase/realtime";
@@ -7,7 +7,7 @@ import{describeBudgyError}from"../application/errors";
 import{currentLocalMonth,inheritedMonth}from"../domain/months";
 
 const clone=<T,>(value:T):T=>JSON.parse(JSON.stringify(value))as T;
-interface BudgyStoreValue{data:BudgyData;month:string;plan:MonthlyPlan;saving:boolean;syncError:string;setMonth:(month:string)=>void;updateMonth:(updater:(plan:MonthlyPlan)=>MonthlyPlan)=>void;updateData:(updater:(data:BudgyData)=>BudgyData)=>void;saveData:(updater:(data:BudgyData)=>BudgyData)=>Promise<void>;replaceData:(data:BudgyData)=>void;resetData:()=>void;retry:()=>void;}
+interface BudgyStoreValue{data:BudgyData;month:string;plan:MonthlyPlan;saving:boolean;syncError:string;setMonth:(month:string)=>void;updateMonth:(updater:(plan:MonthlyPlan)=>MonthlyPlan)=>void;updateData:(updater:(data:BudgyData)=>BudgyData)=>void;saveData:(updater:(data:BudgyData)=>BudgyData)=>Promise<void>;reallocate:(destinationItemId:string,amount:Pence,sourceItemId?:string,confirmOverPlan?:boolean)=>Promise<void>;replaceData:(data:BudgyData)=>void;resetData:()=>void;retry:()=>void;}
 const BudgyStore=createContext<BudgyStoreValue|null>(null);
 
 export const BudgyStoreProvider:React.FC<{children:React.ReactNode;initialData:BudgyData;household:HouseholdSession}>=({children,initialData,household})=>{
@@ -21,10 +21,11 @@ export const BudgyStoreProvider:React.FC<{children:React.ReactNode;initialData:B
   const setMonth=useCallback((nextMonth:string)=>{if(!nextMonth)return;if(!latest.current.months[nextMonth])commit((current)=>({...current,months:{...current.months,[nextMonth]:inheritedMonth(current,nextMonth)}}));setActiveMonth(nextMonth);},[commit]);
   const updateMonth=useCallback((updater:(plan:MonthlyPlan)=>MonthlyPlan)=>commit((current)=>{const active=current.months[month]??inheritedMonth(current,month);return{...current,months:{...current.months,[month]:updater(active)}};}),[commit,month]);
   const updateData=useCallback((updater:(value:BudgyData)=>BudgyData)=>commit(updater),[commit]);
+  const reallocate=useCallback(async(destinationItemId:string,amount:Pence,sourceItemId?:string,confirmOverPlan=false)=>{setSaving(true);try{await budgyRepository.moveBudgetMoney(householdRef.current,month,destinationItemId,amount,sourceItemId,confirmOverPlan);await refresh();setSyncError("");}catch(error){setSyncError(describeBudgyError(error,"Budgy could not move that planned money."));throw error;}finally{setSaving(false);}},[month,refresh]);
   const replaceData=useCallback((next:BudgyData)=>commit(()=>clone(next)),[commit]);
   const resetData=useCallback(()=>{const resetMonth=currentLocalMonth();pendingWrites.current+=1;setSaving(true);void budgyRepository.reset(householdRef.current,resetMonth).then((next)=>{setData(next);setActiveMonth(resetMonth);setSyncError("");}).catch((error)=>setSyncError(describeBudgyError(error,"Budgy could not reset your data."))).finally(()=>{pendingWrites.current-=1;setSaving(false);pendingRealtime.current=false;});},[]);
   const plan=data.months[month]??inheritedMonth(data,month);
-  const value=useMemo(()=>({data,month,plan,saving,syncError,setMonth,updateMonth,updateData,saveData,replaceData,resetData,retry:refresh}),[data,month,plan,saving,syncError,setMonth,updateMonth,updateData,saveData,replaceData,resetData,refresh]);
+  const value=useMemo(()=>({data,month,plan,saving,syncError,setMonth,updateMonth,updateData,saveData,reallocate,replaceData,resetData,retry:refresh}),[data,month,plan,saving,syncError,setMonth,updateMonth,updateData,saveData,reallocate,replaceData,resetData,refresh]);
   return <BudgyStore.Provider value={value}>{children}</BudgyStore.Provider>;
 };
 export const useBudgyStore=()=>{const value=useContext(BudgyStore);if(!value)throw new Error("useBudgyStore must be used inside BudgyStoreProvider");return value;};

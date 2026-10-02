@@ -18,6 +18,14 @@ it("makes actual spending and left-to-spend primary for the active month",()=>{
   expect(model.leftToSpend).toBe(184953);
 });
 
+it("keeps debt-payment allocations out of left to spend while including them in plan allocation",()=>{
+  const input=data();input.accounts=[{id:"card",name:"Amex",owner:"household",type:"credit_card",currency:"GBP",openingBalance:449115,isActive:true},{id:"bank",name:"Lloyds",owner:"household",type:"current_account",currency:"GBP",openingBalance:500000,isActive:true}];
+  input.months["2026-10"]={...input.months["2026-10"],budget:[...input.months["2026-10"].budget,{id:"debt",name:"Amex payoff",group:"Debt payments",owner:"household",amount:60000,recurring:true,purpose:"debt_payment",linkedAccountId:"card"}]};
+  const payment={id:"payment",type:"credit_card_payment",amount:40000,description:"Amex payment",owner:"household",date:"2026-10-12",budgetMonth:"2026-10",budgetItemId:"debt",accountId:"bank",destinationAccountId:"card"};
+  const model=buildHomeViewModel({...input,transactions:[expense(),payment]},"2026-10",today);
+  expect(model.spendingPlan).toBe(473253);expect(model.leftToSpend).toBe(184953);expect(model.plannedDebtPayments).toBe(60000);expect(model.actualDebtPayments).toBe(40000);expect(model.plan.remaining).toBe(-33253);
+});
+
 it("counts purchases once while excluding transfers and card repayments",()=>{
   const rows=[expense({amount:5000,accountId:"card"}),expense({id:"transfer",type:"transfer",amount:5000,accountId:"bank",destinationAccountId:"savings",budgetItemId:undefined,category:undefined}),expense({id:"payment",type:"credit_card_payment",amount:5000,accountId:"bank",destinationAccountId:"card",budgetItemId:undefined,category:undefined})];
   expect(calculateBudgetSpending(rows,"2026-10")).toBe(5000);

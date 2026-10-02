@@ -9,6 +9,7 @@ const onboardingMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supa
 const transactionCategoryMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202609300002_transaction_categories.sql"), "utf8");
 const transactionMonthMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202609300004_transaction_budget_month.sql"), "utf8");
 const guidedOnboardingMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202609300005_guided_onboarding.sql"), "utf8");
+const purposeMigration = fs.readFileSync(path.join(process.cwd(), "budgy/supabase/migrations/202610010001_money_purposes.sql"), "utf8");
 
 it("enables RLS and bases household access on authenticated membership", () => {
   ["households", "household_members", "budget_months", "income_sources", "categories", "budget_items", "transactions", "savings_goals", "scenarios", "scenario_changes", "activity_events", "household_invites", "household_imports"].forEach((table) => {
@@ -77,4 +78,14 @@ it("separates transaction dates from household-scoped budget months",()=>{
   expect(transactionMonthMigration).toContain("budget_month_id=new.budget_month_id");
   expect(transactionMonthMigration).toContain("Choose the budget month this transaction counts toward");
   expect(transactionMonthMigration).toContain("new.budget_month_id:=null");
+});
+
+it("secures typed money purposes and atomic household reallocations",()=>{
+  expect(purposeMigration).toContain("create type public.allocation_purpose as enum ('spending','debt_payment','saving','investing')");
+  expect(purposeMigration).toContain("public.is_household_member(target_household)");
+  expect(purposeMigration).toContain("for update");
+  expect(purposeMigration).toContain("Card payments can only fulfil a debt-payment allocation");
+  expect(purposeMigration).toContain("linked_debt_account is distinct from new.destination_account_id");
+  expect(purposeMigration).toContain("grant execute on function public.move_budget_money");
+  expect(purposeMigration).toContain("'budget.reallocated'");
 });

@@ -4,6 +4,7 @@ import { currentLocalMonth, transactionBudgetMonth } from "./months";
 import { formatMoney } from "./money";
 import { calculateActualSavings } from "./reports";
 import { BudgyData, FinancialAccount, MonthlyPlan, Pence, Transaction } from "./types";
+import { allocationPurpose, calculateActualDebtPayments, calculatePlannedDebtPayments, calculatePlannedSpending } from "./allocations";
 
 export type MonthLifecycle="setup"|"ready"|"active"|"complete"|"future";
 export type SpendingPaceStatus="below"|"close"|"ahead";
@@ -18,18 +19,19 @@ export interface HomeViewModel{
   month:string;monthName:string;lifecycle:MonthLifecycle;copy:HomeMonthCopy;plan:ReturnType<typeof calculateHouseholdSummary>;
   spendingPlan:Pence;actualSpending:Pence;leftToSpend:Pence;spendingUsedRate:number;budgetTransactionCount:number;
   actualSavings:Pence;creditCardDebt:Pence;daysRemaining:number|null;pacing:HomePacing|null;
+  plannedDebtPayments:Pence;actualDebtPayments:Pence;
   categories:HomeCategoryProgress[];actualCategories:HomeCategoryProgress[];attention:HomeAttentionItem[];
   earlyTransactions:Transaction[];primaryAction:{label:string;to:string};hasPlan:boolean;hasActualSpending:boolean;
-  allocation:{spendingRate:number;savingsRate:number;unallocatedRate:number};projection:{twelveMonths:Pence;fiveYears:Pence};
+  allocation:{spendingRate:number;debtRate:number;savingsRate:number;unallocatedRate:number};projection:{twelveMonths:Pence;fiveYears:Pence};
 }
 
 const sum=(values:number[])=>values.reduce((total,value)=>total+value,0);
-const planningRows=(transactions:Transaction[],month:string)=>transactions.filter((row)=>transactionBudgetMonth(row)===month&&(row.type==="expense"||row.type==="refund"||row.type==="income"));
+const planningRows=(transactions:Transaction[],month:string)=>transactions.filter((row)=>transactionBudgetMonth(row)===month&&(row.type==="expense"||row.type==="refund"||row.type==="income"||row.type==="credit_card_payment"));
 const spendingRows=(transactions:Transaction[],month:string)=>transactions.filter((row)=>transactionBudgetMonth(row)===month&&(row.type==="expense"||row.type==="refund"));
 const monthName=(month:string)=>{const[year,index]=month.split("-").map(Number);return new Intl.DateTimeFormat("en-GB",{month:"long",year:"numeric"}).format(new Date(year,index-1,1));};
 const shortMonthName=(month:string)=>{const[year,index]=month.split("-").map(Number);return new Intl.DateTimeFormat("en-GB",{month:"long"}).format(new Date(year,index-1,1));};
 const monthEndDate=(month:string)=>{const[year,index]=month.split("-").map(Number);return new Date(year,index,0);};
-const trackedPlan=(plan:MonthlyPlan)=>plan.budget.filter((item)=>item.trackActuals!==false);
+const trackedPlan=(plan:MonthlyPlan)=>plan.budget.filter((item)=>item.trackActuals!==false&&allocationPurpose(item)==="spending");
 
 export const calculateBudgetSpending=(transactions:Transaction[],month:string)=>sum(spendingRows(transactions,month).map(spendingEffect));
 export const calculateBudgetRemaining=(plan:MonthlyPlan,transactions:Transaction[],month:string)=>sum(trackedPlan(plan).map((item)=>item.amount))-calculateBudgetSpending(transactions,month);
@@ -63,12 +65,12 @@ export const calculateCategoryProgress=(plan:MonthlyPlan,transactions:Transactio
 };
 
 const dateOnly=(date:Date)=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
-export const deriveAttentionItems=(categories:HomeCategoryProgress[],transactions:Transaction[],accounts:FinancialAccount[],month:string,today=new Date()):HomeAttentionItem[]=>{
+export const deriveAttentionItems=(categories:HomeCategoryProgress[],transactions:Transaction[],accounts:FinancialAccount[],month:string,today=new Date(),plan?:MonthlyPlan):HomeAttentionItem[]=>{
   const items:HomeAttentionItem[]=[];
   categories.filter((row)=>row.key!=="Uncategorised"&&(row.status==="over"||row.status==="used"||row.status==="nearly-used")).forEach((row)=>items.push({kind:row.status==="over"?"over-plan":"nearly-used",title:row.key,detail:row.remaining<0?`${formatMoney(Math.abs(row.remaining))} over plan`:row.remaining===0?"Nothing remaining in this category":`${formatMoney(row.remaining)} remaining`,to:`/budgy/transactions?category=${encodeURIComponent(row.key)}&budgetMonth=${month}`,priority:row.status==="over"?100:row.status==="used"?80:50+row.usedRate}));
   const uncategorised=spendingRows(transactions,month).filter((row)=>!row.category&&!row.budgetItemId).length;if(uncategorised)items.push({kind:"uncategorised",title:`${uncategorised} transaction${uncategorised===1?"":"s"}`,detail:"Need a category",to:`/budgy/transactions?budgetMonth=${month}`,priority:90});
   const todayKey=dateOnly(today);const soon=new Date(today);soon.setDate(soon.getDate()+7);const soonKey=dateOnly(soon);
-  accountBalances(accounts,transactions.filter((row)=>row.date<=todayKey)).filter((account)=>account.type==="credit_card"&&account.balance>0&&account.paymentDueDate&&account.paymentDueDate>=todayKey&&account.paymentDueDate<=soonKey).forEach((account)=>items.push({kind:"card-due",title:account.name,detail:`Payment due ${new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"short"}).format(new Date(`${account.paymentDueDate}T12:00:00`))}`,to:"/budgy/money",priority:70}));
+  accountBalances(accounts,transactions.filter((row)=>row.date<=todayKey)).filter((account)=>account.type==="credit_card"&&account.balance>0&&account.paymentDueDate&&account.paymentDueDate>=todayKey&&account.paymentDueDate<=soonKey).forEach((account)=>{const paymentPlan=plan?.budget.find((item)=>allocationPurpose(item)==="debt_payment"&&item.linkedAccountId===account.id);const remaining=paymentPlan?paymentPlan.amount-calculateActualDebtPayments(transactions,month,paymentPlan.id):0;items.push({kind:"card-due",title:account.name,detail:`${paymentPlan&&remaining>0?`${formatMoney(remaining)} of planned payment remaining · `:""}Due ${new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"short"}).format(new Date(`${account.paymentDueDate}T12:00:00`))}`,to:"/budgy/money",priority:70});});
   return items.sort((a,b)=>b.priority-a.priority).slice(0,3);
 };
 
@@ -77,8 +79,8 @@ export const getMonthCopy=(lifecycle:MonthLifecycle,month:string,hasActivity:boo
 const debtAtMonthEnd=(data:BudgyData,month:string)=>accountBalances(data.accounts,data.transactions.filter((row)=>row.date<=`${month}-31`)).filter((account)=>account.type==="credit_card").reduce((total,account)=>total+account.balance,0);
 export const buildHomeViewModel=(data:BudgyData,month:string,today=new Date()):HomeViewModel=>{
   const plan=data.months[month];if(!plan)throw new Error(`Missing budget month ${month}`);
-  const planSummary=calculateHouseholdSummary(plan);const rows=planningRows(data.transactions,month);const actualSpending=calculateBudgetSpending(data.transactions,month);const spendingPlan=sum(trackedPlan(plan).map((item)=>item.amount));const categories=calculateCategoryProgress(plan,data.transactions,month);const lifecycle=deriveMonthLifecycle(plan,data.transactions,month,today);const hasActivity=rows.length>0;const current=currentLocalMonth(today);const end=monthEndDate(month);const daysRemaining=month===current?Math.max(0,end.getDate()-today.getDate()):null;const projection=projectSavings(plan.savings,60);
+  const planSummary=calculateHouseholdSummary(plan);const rows=planningRows(data.transactions,month);const actualSpending=calculateBudgetSpending(data.transactions,month);const spendingPlan=calculatePlannedSpending(plan);const plannedDebtPayments=calculatePlannedDebtPayments(plan);const actualDebtPayments=calculateActualDebtPayments(data.transactions,month);const categories=calculateCategoryProgress(plan,data.transactions,month);const lifecycle=deriveMonthLifecycle(plan,data.transactions,month,today);const hasActivity=rows.length>0||actualDebtPayments>0;const current=currentLocalMonth(today);const end=monthEndDate(month);const daysRemaining=month===current?Math.max(0,end.getDate()-today.getDate()):null;const projection=projectSavings(plan.savings,60);
   const primaryAction=lifecycle==="setup"?{label:"Set up this month",to:"/budgy/budget"}:lifecycle==="complete"?{label:`View ${shortMonthName(month)} report`,to:`/budgy/reports?month=${month}`}:lifecycle==="active"?{label:"Add transaction",to:"/budgy/transactions?add=transaction"}:{label:"Review budget",to:"/budgy/budget"};
   const earlyTransactions=spendingRows(data.transactions,month).filter((row)=>!row.date.startsWith(month)).sort((a,b)=>b.date.localeCompare(a.date));
-  return{month,monthName:monthName(month),lifecycle,copy:getMonthCopy(lifecycle,month,hasActivity),plan:planSummary,spendingPlan,actualSpending,leftToSpend:spendingPlan-actualSpending,spendingUsedRate:spendingPlan?actualSpending/spendingPlan:actualSpending>0?1:0,budgetTransactionCount:rows.length,actualSavings:calculateActualSavings(data.transactions,data.accounts,month),creditCardDebt:debtAtMonthEnd(data,month),daysRemaining,pacing:lifecycle==="active"?deriveSpendingPace(actualSpending,spendingPlan,month,today):null,categories,actualCategories:categories.filter((row)=>row.spent>0),attention:lifecycle==="active"?deriveAttentionItems(categories,data.transactions,data.accounts,month,today):[],earlyTransactions,primaryAction,hasPlan:plan.income.length>0&&plan.budget.length>0,hasActualSpending:actualSpending>0,allocation:{spendingRate:planSummary.spendingRate,savingsRate:planSummary.savingsRate,unallocatedRate:planSummary.remainingRate},projection:{twelveMonths:projection[12].balance,fiveYears:projection[60].balance}};
+  return{month,monthName:monthName(month),lifecycle,copy:getMonthCopy(lifecycle,month,hasActivity),plan:planSummary,spendingPlan,actualSpending,leftToSpend:spendingPlan-actualSpending,spendingUsedRate:spendingPlan?actualSpending/spendingPlan:actualSpending>0?1:0,budgetTransactionCount:rows.length,actualSavings:calculateActualSavings(data.transactions,data.accounts,month),creditCardDebt:debtAtMonthEnd(data,month),plannedDebtPayments,actualDebtPayments,daysRemaining,pacing:lifecycle==="active"?deriveSpendingPace(actualSpending,spendingPlan,month,today):null,categories,actualCategories:categories.filter((row)=>row.spent>0),attention:lifecycle==="active"?deriveAttentionItems(categories,data.transactions,data.accounts,month,today,plan):[],earlyTransactions,primaryAction,hasPlan:plan.income.length>0&&plan.budget.length>0,hasActualSpending:actualSpending>0,allocation:{spendingRate:planSummary.spendingRate,debtRate:planSummary.income?plannedDebtPayments/planSummary.income:0,savingsRate:planSummary.savingsRate,unallocatedRate:planSummary.remainingRate},projection:{twelveMonths:projection[12].balance,fiveYears:projection[60].balance}};
 };

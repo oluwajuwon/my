@@ -3,12 +3,13 @@ export type Pence = number;
 export type Owner = string;
 export type BudgetGroup = string;
 export type CategoryType = "expense" | "income";
+export type AllocationPurpose = "spending" | "debt_payment" | "saving" | "investing";
 export const HOUSEHOLD_OWNER = "household";
 
 export interface HouseholdMemberIdentity { id: string; displayName: string; }
 
 export interface IncomeSource { id: string; name: string; owner: Owner; amount: Pence; recurring: boolean; category?: string; preferredAccountId?: string; }
-export interface BudgetItem { id: string; name: string; group: BudgetGroup; owner: Owner; amount: Pence; recurring: boolean; trackActuals?: boolean; }
+export interface BudgetItem { id: string; name: string; group: BudgetGroup; owner: Owner; amount: Pence; recurring: boolean; trackActuals?: boolean; purpose?: AllocationPurpose; linkedAccountId?: string; }
 export interface HouseholdPlan { householdName: string; income: IncomeSource[]; savings: Pence; budget: BudgetItem[]; }
 export interface MonthlyPlan extends HouseholdPlan { month: string; }
 
@@ -45,6 +46,7 @@ export interface BudgyData {
 
 export interface HouseholdSummary {
   income: Pence; spending: Pence; savings: Pence; allocated: Pence; remaining: Pence;
+  debtPayments: Pence; savingAllocations: Pence; investing: Pence;
   savingsRate: number; spendingRate: number; remainingRate: number;
 }
 

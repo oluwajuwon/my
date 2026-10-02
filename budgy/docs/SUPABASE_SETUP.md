@@ -31,6 +31,8 @@ First-time onboarding requires `202609300001_user_onboarding.sql`. It stores com
 
 Typed income and expense classification requires `202609300002_transaction_categories.sql`. It marks all existing categories as expense categories, seeds household income categories, links planned income sources to an income type and preferred account, and lets actual income reference its planned source. Existing income transactions are deliberately left as uncategorised rather than being guessed from their descriptions.
 
+Monthly money purposes require `202610010001_money_purposes.sql`. It safely defaults existing budget items to spending, adds explicit debt-payment plans linked to credit-card accounts, lets confirmed card payments fulfil those plans without becoming spending, and adds the atomic household reallocation RPC. Apply it before deploying the matching frontend.
+
 The migration creates profiles, households, memberships, budget months, income, categories, budget items, transactions, savings goals, scenarios and changes, structured activity events, secure invitation records, and idempotent import markers.
 
 ## 4. Authentication and redirect URLs
@@ -116,3 +118,16 @@ Keep database DTOs separate from the domain models used by pure financial calcul
 Add the two `REACT_APP_` public variables to the deployment environment, apply migrations before deploying the frontend, configure production Auth redirects and SMTP, and verify the SPA fallback still serves `/budgy/*`. No service-role key is required by or permitted in the client.
 
 Before launch, manually test signup confirmation, sign-in/out, reset links, invite expiry/email mismatch, two-browser Realtime updates, failed-network retries, local import, and all cross-household RLS probes.
+## Money-purpose definitions
+
+Budgy keeps planning, spending, and account movement distinct:
+
+- **Planned spending** is money assigned to ordinary expense/consumption items.
+- **Actual spending** is qualifying expense transactions, net of refunds.
+- **Planned debt payment** is money assigned to reducing an existing card balance.
+- **Actual debt payment** is a qualifying card-payment transaction linked to that monthly purpose.
+- **Left to spend** is planned spending minus actual spending. Debt payments never increase it.
+- **Left to allocate** is planned household income minus spending purposes, debt-payment purposes, other allocation purposes, and the first-class savings target.
+- **Available cash** comes from account ledgers. **Available credit** comes from a card limit minus debt. Neither is interchangeable with a budget amount.
+
+The `202610010001_money_purposes.sql` migration adds the typed purpose and card relationship. Existing budget items migrate to `spending`; planned savings remains the existing `budget_months.savings_target_pence` source of truth.

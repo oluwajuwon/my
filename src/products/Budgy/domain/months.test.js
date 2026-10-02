@@ -16,9 +16,9 @@ it("falls back to the transaction date for legacy records and offers adjacent mo
   expect(availableBudgetMonths({months:{},householdName:"Home"},"2026-09-28")).toEqual(["2026-08","2026-09","2026-10"]);
 });
 
-it("does not assign planning months to transfers or card payments",()=>{
+it("does not assign planning months to transfers but supports planned card payments",()=>{
   expect(transactionBudgetMonth({...expense,type:"transfer"})).toBeUndefined();
-  expect(changeTransactionDate({...expense,type:"credit_card_payment"},"2026-10-01","auto").budgetMonth).toBeUndefined();
+  expect(changeTransactionDate({...expense,type:"credit_card_payment"},"2026-10-01","auto").budgetMonth).toBe("2026-10");
 });
 
 it("uses the local calendar month instead of a UTC date slice",()=>{

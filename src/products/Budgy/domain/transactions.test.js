@@ -23,6 +23,7 @@ it("rejects expense categories on income and income categories on expenses",()=>
 it("rejects a stale monthly budget allocation",()=>{
   expect(isValidTransaction(base,{...context,budgetItems:[]})).toBe(false);
   expect(isValidTransaction(base,{...context,budgetItems:[{id:"food-budget",name:"Food",group:"Food",owner:"u1",amount:10000,recurring:true,trackActuals:true}]})).toBe(true);
+  expect(isValidTransaction(base,{...context,budgetItems:[{id:"food-budget",name:"Amex payoff",group:"Debt payments",owner:"u1",amount:10000,recurring:true,trackActuals:true,purpose:"debt_payment",linkedAccountId:"card"}]})).toBe(false);
 });
 
 it("clears incompatible fields when the transaction type changes",()=>{

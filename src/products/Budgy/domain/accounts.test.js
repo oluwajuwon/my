@@ -38,6 +38,8 @@ it("calculates available credit in integer pence",()=>{
 
 it("calculates household left-to-spend from tracked allowances only",()=>{
   expect(monthlyControl([personal,transport],[expense()],"2026-09",750000,250000)).toEqual({planned:67000,spent:6740,leftToSpend:60260,unallocatedIncome:433000});
+  const debt={id:"debt",name:"Amex payoff",group:"Debt payments",owner:"household",amount:60000,recurring:true,trackActuals:true,purpose:"debt_payment",linkedAccountId:"card"};
+  expect(monthlyControl([personal,transport,debt],[expense()],"2026-09",750000,250000)).toEqual({planned:67000,spent:6740,leftToSpend:60260,unallocatedIncome:373000});
 });
 
 it("defaults ownership and payment source to the current user",()=>{

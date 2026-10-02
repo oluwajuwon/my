@@ -1,5 +1,5 @@
 import { BudgetItem, BudgetItemActual, FinancialAccount, Pence, Transaction } from "./types";
-import { transactionBudgetMonth } from "./months";
+import { allocationPurpose, calculateAllocationProgress } from "./allocations";
 
 export interface AccountBalance extends FinancialAccount { balance: Pence; availableCredit?: Pence; }
 
@@ -7,16 +7,14 @@ export const isMonthlyExpense = (transaction: Transaction) => transaction.type =
 export const spendingEffect = (transaction: Transaction) => transaction.type === "expense" ? transaction.amount : transaction.type === "refund" ? -transaction.amount : 0;
 
 export const budgetItemActual = (item: BudgetItem, transactions: Transaction[], month: string): BudgetItemActual => {
-  const spent = transactions
-    .filter((transaction) => (transaction.type === "expense"||transaction.type==="refund") && transactionBudgetMonth(transaction)===month && transaction.budgetItemId === item.id)
-    .reduce((sum, transaction) => sum + spendingEffect(transaction), 0);
+  const spent = calculateAllocationProgress(item,transactions,month).actual;
   return { budgetItemId: item.id, planned: item.amount, spent, remaining: item.amount - spent, usedRate: item.amount === 0 ? (spent ? 1 : 0) : spent / item.amount };
 };
 
 export const suggestBudgetItem = (owner: string, category: string, items: BudgetItem[]) => {
   const normal = category.trim().toLowerCase();
   const desired = ["shopping", "eating out"].includes(normal) ? "personal" : normal;
-  const tracked = items.filter((item) => item.trackActuals !== false);
+  const tracked = items.filter((item) => item.trackActuals !== false&&allocationPurpose(item)==="spending");
   return tracked.find((item) => item.owner === owner && (item.group.toLowerCase() === desired || item.name.toLowerCase() === desired))
     ?? tracked.find((item) => item.owner === owner && item.group.toLowerCase().includes(desired))
     ?? tracked.find((item) => item.group.toLowerCase() === desired);
@@ -40,10 +38,11 @@ export const accountBalances = (accounts: FinancialAccount[], transactions: Tran
 });
 
 export const monthlyControl = (items: BudgetItem[], transactions: Transaction[], month: string, plannedIncome: Pence, savings: Pence) => {
-  const actuals = items.filter((item) => item.trackActuals !== false).map((item) => budgetItemActual(item, transactions, month));
+  const actuals = items.filter((item) => item.trackActuals !== false&&allocationPurpose(item)==="spending").map((item) => budgetItemActual(item, transactions, month));
   const planned = actuals.reduce((sum, item) => sum + item.planned, 0);
   const spent = actuals.reduce((sum, item) => sum + item.spent, 0);
-  return { planned, spent, leftToSpend: planned - spent, unallocatedIncome: plannedIncome - planned - savings };
+  const allPlannedPurposes=items.reduce((sum,item)=>sum+item.amount,0);
+  return { planned, spent, leftToSpend: planned - spent, unallocatedIncome: plannedIncome - allPlannedPurposes - savings };
 };
 
 export type PaceStatus = "On track" | "Watch spending" | "Over budget";

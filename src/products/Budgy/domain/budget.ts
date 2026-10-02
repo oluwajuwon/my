@@ -12,6 +12,7 @@ import {
 } from "./types";
 import { sumPence } from "./money";
 import { transactionBudgetMonth } from "./months";
+import { allocationPurpose, calculatePlannedPurpose, calculatePlannedSpending } from "./allocations";
 
 export const groupOrder: BudgetGroup[] = [
   "Home",
@@ -28,14 +29,20 @@ export const calculateHouseholdSummary = (
   plan: HouseholdPlan,
 ): HouseholdSummary => {
   const income = sumPence(plan.income.map((source) => source.amount));
-  const spending = sumPence(plan.budget.map((item) => item.amount));
-  const allocated = spending + plan.savings;
+  const spending = calculatePlannedSpending(plan);
+  const debtPayments = calculatePlannedPurpose(plan,"debt_payment");
+  const savingAllocations = calculatePlannedPurpose(plan,"saving");
+  const investing = calculatePlannedPurpose(plan,"investing");
+  const allocated = plan.budget.reduce((sum,item)=>sum+item.amount,0) + plan.savings;
   const remaining = income - allocated;
 
   return {
     income,
     spending,
     savings: plan.savings,
+    debtPayments,
+    savingAllocations,
+    investing,
     allocated,
     remaining,
     savingsRate: income === 0 ? 0 : plan.savings / income,
@@ -47,10 +54,10 @@ export const calculateHouseholdSummary = (
 export const groupBudgetItems = (
   plan: HouseholdPlan,
 ): BudgetGroupTotal[] => {
-  const spending = sumPence(plan.budget.map((item) => item.amount));
+  const spending = sumPence(plan.budget.filter((item)=>allocationPurpose(item)==="spending").map((item) => item.amount));
   const totals = new Map<BudgetGroup, Pence>();
 
-  plan.budget.forEach((item) => {
+  plan.budget.filter((item)=>allocationPurpose(item)==="spending").forEach((item) => {
     totals.set(item.group, (totals.get(item.group) ?? 0) + item.amount);
   });
 
@@ -93,7 +100,7 @@ export const calculateBudgetActuals = (
   transactions
     .filter((transaction) => (transaction.type === "expense"||transaction.type==="refund") && transactionBudgetMonth(transaction)===month)
     .forEach((transaction) => {
-      const allocatedItem = plan.budget.find((item) => item.id === transaction.budgetItemId);
+      const allocatedItem = plan.budget.find((item) => item.id === transaction.budgetItemId&&allocationPurpose(item)==="spending");
       const group = allocatedItem?.group ?? transaction.category ?? "Uncategorised expense";
       spent.set(group, (spent.get(group) ?? 0) + (transaction.type==="refund"?-transaction.amount:transaction.amount));
     });
@@ -125,7 +132,7 @@ export const calculateProjection = (
 export const calculateScenarioSummary = (scenario: Scenario): HouseholdSummary => {
   const summary = calculateHouseholdSummary(scenario.plan);
   const spending = summary.spending + scenario.oneOffExpenses;
-  const allocated = spending + summary.savings;
+  const allocated = summary.allocated + scenario.oneOffExpenses;
   return {
     ...summary,
     spending,
