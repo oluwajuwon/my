@@ -1,0 +1,5 @@
+import React,{useState} from "react";
+import { LuPause,LuPlay } from "react-icons/lu";
+import { exerciseById } from "../../data/exercises";
+const ExerciseAnimation:React.FC<{exerciseId:string;compact?:boolean}>=({exerciseId,compact})=>{const[playing,setPlaying]=useState(true);const exercise=exerciseById(exerciseId);return <div className={`vela-exercise-visual ${compact?"is-compact":""} ${playing?"is-playing":"is-paused"}`} role="img" aria-label={`Abstract movement guide for ${exercise.name}. Written instructions are available below.`}><div className="vela-figure" aria-hidden="true"><i className="head"/><i className="torso"/><i className="arm arm-a"/><i className="arm arm-b"/><i className="leg leg-a"/><i className="leg leg-b"/></div><span className="vela-muscle-tag">{exercise.primaryMuscles.join(" · ")}</span><button type="button" onClick={()=>setPlaying((value)=>!value)} aria-label={playing?"Pause movement guide":"Play movement guide"}>{playing?<LuPause/>:<LuPlay/>}</button></div>;};
+export default ExerciseAnimation;

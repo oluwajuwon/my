@@ -1,0 +1,23 @@
+import React,{useCallback,useEffect,useMemo,useRef,useState} from "react";
+import {Navigate,Route,Routes,useLocation} from "react-router-dom";
+import {VelaData} from "../domain/types";
+import {useVelaAuth} from "../auth/AuthProvider";
+import {ForgotPassword,ResetPassword,SignIn,SignUp,Welcome} from "../auth/AuthScreens";
+import {authDestination} from "../auth/routing";
+import {cachedUserData,SupabaseFitnessDataRepository} from "../repositories/fitnessDataRepository";
+import {VelaStoreProvider} from "../store/VelaStore";
+import {AccountProvider} from "./AccountContext";
+import {requireVelaSupabase} from "../infrastructure/supabase/client";
+import VelaProductRoutes from "./VelaProductRoutes";
+
+const Loading=()=> <main className="vela-auth-loading"><div><div className="vela-auth-brand"><i>v</i><strong>vela</strong></div><div className="vela-auth-skeleton"/><p>Restoring your plan…</p></div></main>;
+export const VelaBootstrap:React.FC=()=>{const auth=useVelaAuth();const location=useLocation();const[data,setData]=useState<VelaData|null>(null);const[loadError,setLoadError]=useState("");const repository=useRef<SupabaseFitnessDataRepository|null>(null);const userId=auth.user?.id;
+ const load=useCallback(async()=>{if(!auth.user)return;setLoadError("");const nextRepository=new SupabaseFitnessDataRepository(auth.user);repository.current=nextRepository;try{setData(await nextRepository.load());}catch{const cached=cachedUserData(auth.user);setData(cached);setLoadError("Offline — showing changes saved on this device. Vela will retry when you make your next change.");}},[auth.user]);
+ useEffect(()=>{if(userId)void load();else{setData(null);repository.current=null;}},[userId,load]);
+ const recovery=auth.isRecovery||location.pathname.endsWith("/reset-password");const destination=authDestination({loading:auth.isLoading,authenticated:auth.isAuthenticated,recovery,onboardingComplete:Boolean(data?.profile.onboarded)});
+ const account=useMemo(()=>({mode:"authenticated" as const,email:auth.user?.email,firstName:data?.profile.name??String(auth.user?.user_metadata.first_name??"Athlete"),lastName:String(auth.user?.user_metadata.last_name??""),signOut:async()=>{setData(null);repository.current=null;await auth.signOut();},deleteAccount:async()=>{const client=requireVelaSupabase();const{error}=await client.functions.invoke("delete-vela-account");if(error)throw error;setData(null);repository.current=null;await auth.signOut();}}),[auth,data?.profile.name]);
+ if(destination==="loading"||(auth.isAuthenticated&&!data))return <Loading/>;
+ if(destination==="reset-password")return <Routes><Route path="reset-password" element={<ResetPassword/>}/><Route path="*" element={<ResetPassword/>}/></Routes>;
+ if(destination==="public")return <Routes><Route index element={<Welcome/>}/><Route path="sign-in" element={<SignIn/>}/><Route path="sign-up" element={<SignUp/>}/><Route path="forgot-password" element={<ForgotPassword/>}/><Route path="reset-password" element={<ResetPassword/>}/><Route path="*" element={<Navigate to="/vela" replace/>}/></Routes>;
+ return <AccountProvider value={account}><VelaStoreProvider initialData={data!} onPersist={async(next)=>{setData(next);await repository.current?.save(next);}}>{loadError&&<div className="vela-sync-banner" role="status">{loadError}</div>}<VelaProductRoutes onboardingOnly={destination==="onboarding"}/></VelaStoreProvider></AccountProvider>;
+};

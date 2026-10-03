@@ -13,6 +13,7 @@ import Stories from './pages/Stories';
 import * as serviceWorker from './serviceWorker';
 import BudgyApp from './products/Budgy';
 import NestApp from './products/Nest';
+import VelaApp from './products/Vela';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: '/nest/*',
     element: <NestApp />,
+  },
+  {
+    path: '/vela/*',
+    element: <VelaApp />,
   },
 ]);
 

@@ -1,0 +1,12 @@
+import { VelaData, Workout } from "../domain/types";
+import { calculateMacroTarget } from "../domain/nutrition";
+import { generateWorkout } from "../domain/training";
+
+export const demoProfile:VelaData["profile"]={name:"Alex",goal:"lose-fat",experience:"intermediate",location:"full-gym",equipment:["bodyweight","dumbbell","barbell","bench","cable","machine","kettlebell","pull-up-bar","cardio"],daysPerWeek:4,workoutMinutes:60,heightCm:178,weightKg:81.4,targetWeightKg:76,age:31,sex:"male",activity:"moderate",styles:["strength","hypertrophy"],dislikedExercises:[],limitations:[],diet:"balanced",restrictions:[],dislikedFoods:[],mealsPerDay:4,cooking:"some",unit:"kg",onboarded:true};
+const iso=(daysAgo:number)=>{const date=new Date();date.setDate(date.getDate()-daysAgo);return date.toISOString().slice(0,10);};
+const complete=(workout:Workout,daysAgo:number,scale:number):Workout=>({...workout,id:`history-${daysAgo}`,date:iso(daysAgo),status:"complete",startedAt:`${iso(daysAgo)}T17:30:00.000Z`,completedAt:`${iso(daysAgo)}T18:24:00.000Z`,exercises:workout.exercises.map((item)=>({...item,sets:item.sets.map((set,index)=>({...set,completedWeightKg:Math.round(set.targetWeightKg*scale*2)/2,completedReps:Math.max(set.targetReps[0],set.targetReps[1]-index),completedAt:`${iso(daysAgo)}T18:00:00.000Z`}))}))});
+export const createDemoData=():VelaData=>{
+ const today=generateWorkout(demoProfile,0,new Date()); const history=[28,25,21,18,14,11,7,4].map((days,index)=>complete(generateWorkout(demoProfile,index%4,new Date()),days,.9+index*.015));
+ const mealIds=["yoghurt-oats","chicken-rice","salmon-potato","protein-smoothie"];
+ return {version:1,profile:demoProfile,macros:calculateMacroTarget(demoProfile),workouts:[today,...history],readiness:[{date:iso(0),energy:4,sleep:3,soreness:2,stress:2,motivation:4}],meals:mealIds.map((recipeId,index)=>({id:`meal-${iso(0)}-${index}`,recipeId,servings:1,eaten:index<2,date:iso(0)})),nutritionDays:[0,1,2,3,4,5,6].map((days)=>({date:iso(days),extraCalories:days?120:0,extraProtein:days?8:0,extraCarbs:days?15:0,extraFat:days?3:0,waterMl:days?2200:900})),measurements:Array.from({length:9},(_,index)=>({id:`measure-${index}`,date:iso((8-index)*7),weightKg:Number((83.2-index*.22).toFixed(1)),waistCm:Number((88-index*.25).toFixed(1))})),records:[{id:"pr-1",exerciseId:"db-bench",kind:"weight",value:28,date:iso(11)},{id:"pr-2",exerciseId:"back-squat",kind:"estimated-1rm",value:104,date:iso(18)},{id:"pr-3",exerciseId:"barbell-row",kind:"reps",value:12,date:iso(7)}],groceryChecks:[],streak:6};
+};

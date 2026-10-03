@@ -1,0 +1,12 @@
+import { MacroTarget, PlannedMeal, Recipe, UserProfile } from "./types";
+
+export const calculateMacroTarget=(profile:UserProfile):MacroTarget=>{
+  const sexOffset=profile.sex==="male"?5:profile.sex==="female"?-161:-78; const bmr=10*profile.weightKg+6.25*profile.heightCm-5*profile.age+sexOffset;
+  const factor={low:1.35,moderate:1.55,high:1.75}[profile.activity]; const adjustment=profile.goal==="lose-fat"?-400:profile.goal==="build-muscle"?250:0;
+  const calories=Math.max(profile.sex==="male"?1500:1200,Math.round((bmr*factor+adjustment)/10)*10); const protein=Math.round(profile.weightKg*(profile.goal==="lose-fat"?2:1.8)); const fat=Math.round(calories*.27/9); const carbs=Math.max(50,Math.round((calories-protein*4-fat*9)/4));
+  return {calories,protein,carbs,fat};
+};
+export const mealTotals=(meals:PlannedMeal[],recipes:Recipe[])=>meals.reduce((total,meal)=>{const recipe=recipes.find((item)=>item.id===meal.recipeId);if(!recipe)return total;return {calories:total.calories+recipe.calories*meal.servings,protein:total.protein+recipe.protein*meal.servings,carbs:total.carbs+recipe.carbs*meal.servings,fat:total.fat+recipe.fat*meal.servings};},{calories:0,protein:0,carbs:0,fat:0});
+export const replacementScore=(original:Recipe,candidate:Recipe)=>Math.abs(original.calories-candidate.calories)+Math.abs(original.protein-candidate.protein)*8+(original.mealType===candidate.mealType?0:250);
+export const findMealReplacements=(original:Recipe,recipes:Recipe[],profile:UserProfile,tolerance=.25)=>recipes.filter((candidate)=>candidate.id!==original.id&&candidate.mealType===original.mealType&&Math.abs(candidate.calories-original.calories)<=original.calories*tolerance&&!candidate.allergens.some((allergen)=>profile.restrictions.includes(allergen))&&candidate.dietTags.includes(profile.diet)).sort((a,b)=>replacementScore(original,a)-replacementScore(original,b)).slice(0,4);
+export const buildGroceryList=(meals:PlannedMeal[],recipes:Recipe[])=>{const combined=new Map<string,{name:string;quantity:number;unit:string;category:string}>();meals.forEach((meal)=>{const recipe=recipes.find((item)=>item.id===meal.recipeId);recipe?.ingredients.forEach((ingredient)=>{const key=`${ingredient.name}-${ingredient.unit}`;const current=combined.get(key);combined.set(key,{...ingredient,quantity:(current?.quantity??0)+ingredient.quantity*meal.servings});});});return Array.from(combined.values()).sort((a,b)=>a.category.localeCompare(b.category)||a.name.localeCompare(b.name));};
