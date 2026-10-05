@@ -11,6 +11,17 @@ export const getAgeRelevantActions = (child: Child, now = new Date()): AgeReleva
 };
 
 export interface RepeatAction { key: string; label: string; draft: QuickLogDraft; kind: "feed" | "nappy" | "medicine" }
+export interface RankedAction { id: QuickActionId; score: number; reasons: string[] }
+const activityAction = (type: import("./types").Activity["type"]): QuickActionId => type === "breastfeed" || type === "bottle" ? "feed" : type === "tummyTime" ? "tummyTime" : type;
+export const rankQuickActions = (input: { child: Child; userId: string; activities: import("./types").Activity[]; currentState: "awake" | "sleeping" | "feeding"; preferred?: string[]; now?: Date }): RankedAction[] => {
+  const now = input.now ?? new Date(); const available = getAgeRelevantActions(input.child, now); const candidates = [...available.primary, ...available.more];
+  return candidates.map((id) => { let score = available.primary.includes(id) ? 40 : 10; const reasons = [available.primary.includes(id) ? "age-relevant primary action" : "age-relevant action"];
+    const recent = input.activities.filter((item) => item.childId === input.child.id && item.createdBy === input.userId && activityAction(item.type) === id && now.getTime() - new Date(item.occurredAt).getTime() < 14 * 86400000); score += Math.min(30, recent.length * 3); if (recent.length) reasons.push("frequently used by this parent");
+    const last = recent[0]; if (last && now.getTime() - new Date(last.occurredAt).getTime() < 6 * 3600000) { score += 8; reasons.push("used recently"); }
+    if (input.currentState === "awake" && id === "sleep") { score += 7; reasons.push("child is awake"); } if (input.currentState === "sleeping" && id === "sleep") score -= 30;
+    const preferredIndex = input.preferred?.indexOf(id) ?? -1; if (preferredIndex >= 0) { score += 20 - preferredIndex; reasons.push("parent preference"); }
+    return { id, score, reasons }; }).sort((a, b) => b.score - a.score || candidates.indexOf(a.id) - candidates.indexOf(b.id));
+};
 
 export const deriveRepeatActions = (activities: import("./types").Activity[], childId: string, limit = 4, now = new Date()): RepeatAction[] => {
   const seen = new Set<string>();

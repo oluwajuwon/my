@@ -1,0 +1,8 @@
+import React, { useMemo, useState } from "react";
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { useNestAuth } from "../auth/AuthProvider";
+import { requireNestSupabase } from "../infrastructure/supabase/client";
+import { SupabaseNestRepository } from "../repositories/nestSupabaseRepository";
+
+const JoinInvitation: React.FC = () => { const auth = useNestAuth(); const [params] = useSearchParams(); const navigate = useNavigate(); const [error, setError] = useState(""); const [busy, setBusy] = useState(false); const token = params.get("token") ?? ""; const repository = useMemo(() => auth.user ? new SupabaseNestRepository(requireNestSupabase(), auth.user.id) : null, [auth.user]); if (!auth.session) return <Navigate to="/nest/sign-in" state={{ from: `/nest/join?token=${encodeURIComponent(token)}` }} replace/>; return <main className="nest-join"><section><span className="nest-brand-mark">n</span><p>HOUSEHOLD INVITATION</p><h1>Join your family in Nest.</h1><span>Once accepted, you’ll share the same children, care timeline, supplies and insights—under your own parent profile.</span>{error && <p className="nest-form-error">{error}</p>}<button type="button" disabled={busy || !token} onClick={async() => { setBusy(true); try { await repository?.acceptInvitation(token); navigate("/nest", { replace: true }); } catch (caught) { setError(caught instanceof Error ? caught.message : "This invitation could not be accepted"); } finally { setBusy(false); } }}>{busy ? "Joining…" : "Accept invitation"}</button><Link to="/nest">Not now</Link></section></main>; };
+export default JoinInvitation;

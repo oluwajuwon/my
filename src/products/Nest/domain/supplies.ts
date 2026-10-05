@@ -1,4 +1,5 @@
 import { Expense, NestData, ShoppingItem, Supply } from "./types";
+import { createId } from "./id";
 
 export type SupplyStatus = "running-low" | "soon" | "all-good";
 export const estimateSupplyRunOut = (supply: Pick<Supply, "quantity" | "estimatedDailyUsage">): number | null => supply.estimatedDailyUsage && supply.estimatedDailyUsage > 0 ? Math.max(0, Math.floor(supply.quantity / supply.estimatedDailyUsage)) : null;
@@ -10,7 +11,7 @@ export const getSupplyStatus = (supply: Supply): SupplyStatus => {
 };
 export const getLowStockSupplies = (supplies: Supply[], childId: string): Supply[] => supplies.filter((item) => item.active && (!item.childId || item.childId === childId) && getSupplyStatus(item) !== "all-good");
 
-const id = (prefix: string, now: Date): string => `${prefix}-${now.getTime().toString(36)}`;
+const id = (_prefix: string, _now: Date): string => createId();
 export const addSupplyToShoppingList = (data: NestData, supplyId: string, now = new Date()): NestData => {
   const supply = data.supplies.find((item) => item.id === supplyId);
   if (!supply || data.shoppingItems.some((item) => item.supplyId === supplyId && !item.completed)) return data;

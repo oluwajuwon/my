@@ -25,7 +25,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-server": "http-server ./build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "vela:import-exercises": "node scripts/vela-exercises/repdb/import.js"
   },
   "eslintConfig": {
     "extends": "react-app"

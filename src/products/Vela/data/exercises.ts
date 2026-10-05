@@ -1,74 +1,17 @@
-import { Exercise, Experience, Equipment, MovementPattern, Muscle, ProgressionType } from "../domain/types";
+import catalogue from "./generated/exercises.json";
+import { Exercise } from "../domain/types";
 
-type Seed = [string,string,Muscle,MovementPattern,Equipment[],Experience,Muscle[],ProgressionType?];
-const seeds:Seed[] = [
- ["barbell-bench","Barbell Bench Press","chest","push-horizontal",["barbell","bench"],"intermediate",["triceps","shoulders"]],
- ["db-bench","Dumbbell Bench Press","chest","push-horizontal",["dumbbell","bench"],"beginner",["triceps","shoulders"]],
- ["incline-db","Incline Dumbbell Press","chest","push-horizontal",["dumbbell","bench"],"beginner",["shoulders","triceps"]],
- ["machine-chest","Machine Chest Press","chest","push-horizontal",["machine"],"beginner",["triceps"]],
- ["cable-fly","Cable Fly","chest","isolation",["cable"],"beginner",["shoulders"]],
- ["push-up","Push-Up","chest","push-horizontal",["bodyweight"],"beginner",["triceps","core"],"bodyweight"],
- ["assisted-dip","Assisted Dip","chest","push-horizontal",["machine"],"beginner",["triceps"]],
- ["pull-up","Pull-Up","back","pull-vertical",["pull-up-bar"],"intermediate",["biceps"],"bodyweight"],
- ["lat-pulldown","Lat Pulldown","back","pull-vertical",["cable"],"beginner",["biceps"]],
- ["barbell-row","Barbell Row","back","pull-horizontal",["barbell"],"intermediate",["biceps","hamstrings"]],
- ["one-arm-row","One-arm Dumbbell Row","back","pull-horizontal",["dumbbell","bench"],"beginner",["biceps"]],
- ["seated-row","Seated Cable Row","back","pull-horizontal",["cable"],"beginner",["biceps"]],
- ["chest-row","Chest-supported Row","back","pull-horizontal",["dumbbell","bench"],"beginner",["biceps"]],
- ["face-pull","Face Pull","back","pull-horizontal",["cable"],"beginner",["shoulders"]],
- ["deadlift","Conventional Deadlift","back","hinge",["barbell"],"advanced",["hamstrings","glutes","core"]],
- ["ohp","Standing Overhead Press","shoulders","push-vertical",["barbell"],"intermediate",["triceps","core"]],
- ["db-shoulder","Dumbbell Shoulder Press","shoulders","push-vertical",["dumbbell","bench"],"beginner",["triceps"]],
- ["lateral-raise","Dumbbell Lateral Raise","shoulders","isolation",["dumbbell"],"beginner",[]],
- ["cable-lateral","Cable Lateral Raise","shoulders","isolation",["cable"],"beginner",[]],
- ["reverse-fly","Reverse Fly","shoulders","isolation",["dumbbell"],"beginner",["back"]],
- ["arnold-press","Arnold Press","shoulders","push-vertical",["dumbbell"],"intermediate",["triceps"]],
- ["barbell-curl","Barbell Curl","biceps","isolation",["barbell"],"beginner",[]],
- ["db-curl","Dumbbell Curl","biceps","isolation",["dumbbell"],"beginner",[]],
- ["hammer-curl","Hammer Curl","biceps","isolation",["dumbbell"],"beginner",[]],
- ["cable-curl","Cable Curl","biceps","isolation",["cable"],"beginner",[]],
- ["triceps-pushdown","Triceps Pushdown","triceps","isolation",["cable"],"beginner",[]],
- ["skull-crusher","EZ-bar Skull Crusher","triceps","isolation",["barbell","bench"],"intermediate",[]],
- ["overhead-extension","Overhead Triceps Extension","triceps","isolation",["dumbbell"],"beginner",[]],
- ["close-grip-pushup","Close-grip Push-Up","triceps","push-horizontal",["bodyweight"],"beginner",["chest"],"bodyweight"],
- ["back-squat","Back Squat","quads","squat",["barbell"],"intermediate",["glutes","core"]],
- ["front-squat","Front Squat","quads","squat",["barbell"],"advanced",["glutes","core"]],
- ["goblet-squat","Goblet Squat","quads","squat",["dumbbell"],"beginner",["glutes","core"]],
- ["leg-press","Leg Press","quads","squat",["machine"],"beginner",["glutes"]],
- ["leg-extension","Leg Extension","quads","isolation",["machine"],"beginner",[]],
- ["split-squat","Bulgarian Split Squat","quads","lunge",["dumbbell","bench"],"intermediate",["glutes"]],
- ["walking-lunge","Walking Lunge","quads","lunge",["dumbbell"],"beginner",["glutes"]],
- ["step-up","Dumbbell Step-Up","quads","lunge",["dumbbell","bench"],"beginner",["glutes"]],
- ["rdl","Romanian Deadlift","hamstrings","hinge",["barbell"],"intermediate",["glutes","back"]],
- ["db-rdl","Dumbbell Romanian Deadlift","hamstrings","hinge",["dumbbell"],"beginner",["glutes"]],
- ["leg-curl","Seated Leg Curl","hamstrings","isolation",["machine"],"beginner",[]],
- ["lying-curl","Lying Leg Curl","hamstrings","isolation",["machine"],"beginner",[]],
- ["nordic-curl","Nordic Curl","hamstrings","isolation",["bodyweight"],"advanced",["glutes"],"bodyweight"],
- ["hip-thrust","Barbell Hip Thrust","glutes","hinge",["barbell","bench"],"intermediate",["hamstrings"]],
- ["glute-bridge","Glute Bridge","glutes","hinge",["bodyweight"],"beginner",["hamstrings"],"bodyweight"],
- ["cable-kickback","Cable Glute Kickback","glutes","isolation",["cable"],"beginner",[]],
- ["sumo-squat","Sumo Dumbbell Squat","glutes","squat",["dumbbell"],"beginner",["quads"]],
- ["standing-calf","Standing Calf Raise","calves","isolation",["machine"],"beginner",[]],
- ["seated-calf","Seated Calf Raise","calves","isolation",["machine"],"beginner",[]],
- ["single-calf","Single-leg Calf Raise","calves","isolation",["bodyweight"],"beginner",[],"bodyweight"],
- ["plank","Plank","core","core",["bodyweight"],"beginner",[],"time"],
- ["dead-bug","Dead Bug","core","core",["bodyweight"],"beginner",[],"reps"],
- ["cable-crunch","Cable Crunch","core","core",["cable"],"beginner",[],"double"],
- ["pallof","Pallof Press","core","core",["cable"],"beginner",[],"reps"],
- ["hanging-knee","Hanging Knee Raise","core","core",["pull-up-bar"],"intermediate",[],"bodyweight"],
- ["farmer-carry","Farmer Carry","full-body","carry",["dumbbell"],"beginner",["core","shoulders"],"time"],
- ["kb-swing","Kettlebell Swing","full-body","hinge",["kettlebell"],"intermediate",["glutes","hamstrings","cardio"]],
- ["thruster","Dumbbell Thruster","full-body","squat",["dumbbell"],"intermediate",["quads","shoulders","cardio"]],
- ["rowing","Rowing Machine","cardio","cardio",["cardio"],"beginner",["back","quads"],"time"],
- ["incline-walk","Incline Treadmill Walk","cardio","cardio",["cardio"],"beginner",["calves","glutes"],"time"],
- ["bike","Stationary Bike","cardio","cardio",["cardio"],"beginner",["quads"],"time"],
- ["jump-rope","Jump Rope","cardio","cardio",["bodyweight"],"intermediate",["calves"],"time"],
- ["cat-cow","Cat–Cow","mobility","mobility",["bodyweight"],"beginner",["back"],"time"],
- ["world-stretch","World’s Greatest Stretch","mobility","mobility",["bodyweight"],"beginner",["glutes","hamstrings"],"time"],
- ["hip-flexor","Half-kneeling Hip Flexor Stretch","mobility","mobility",["bodyweight"],"beginner",["quads"],"time"],
- ["thoracic-rotation","Open-book Thoracic Rotation","mobility","mobility",["bodyweight"],"beginner",["back","shoulders"],"time"],
-];
+export const exercises = catalogue.exercises as Exercise[];
 
-const substitutions = (seed:Seed):string[] => seeds.filter((candidate) => candidate[0] !== seed[0] && (candidate[3] === seed[3] || candidate[2] === seed[2])).slice(0,5).map((candidate)=>candidate[0]);
-export const exercises:Exercise[] = seeds.map((seed)=>({ id:seed[0], name:seed[1], category:seed[2], movementPattern:seed[3], equipment:seed[4], difficulty:seed[5], primaryMuscles:[seed[2]], secondaryMuscles:seed[6], progressionType:seed[7] ?? "double", unilateral:/one-arm|single|split|step-up|lunge|kickback/i.test(seed[1]), bodyweight:seed[4].includes("bodyweight"), instructions:[`Set up with a stable position and prepare for the ${seed[3].replace(/-/g," ")} pattern.`,"Move through a comfortable, controlled range of motion.","Finish each rep in control before beginning the next."], cues:["Brace before each rep","Use a smooth tempo","Stop if you feel sharp pain"], commonMistakes:["Rushing the lowering phase","Using more load than can be controlled"], substitutions:[] })).map((exercise,index)=>({...exercise,substitutions:substitutions(seeds[index])}));
-export const exerciseById = (id:string):Exercise => exercises.find((item)=>item.id===id) ?? exercises[0];
+// These retired seed IDs had no exact RepDB equivalent. Resolve them to the
+// closest maintained movement so saved workouts never become unreadable.
+const retiredAliases:Record<string,string> = {
+  "close-grip-pushup":"push-up",
+  "world-stretch":"repdb-downward-dog-to-low-lunge",
+};
+
+const byId = new Map(exercises.map(exercise=>[exercise.id,exercise]));
+const bySlug = new Map(exercises.map(exercise=>[exercise.slug,exercise]));
+
+export const exerciseById = (id:string):Exercise => byId.get(id) ?? bySlug.get(id) ?? byId.get(retiredAliases[id]) ?? exercises[0];
+export const exerciseCatalogueMeta = catalogue.source;

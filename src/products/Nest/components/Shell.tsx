@@ -6,6 +6,7 @@ import ChildSwitcher from "./ChildSwitcher";
 import Icon, { IconName } from "./Icon";
 import QuickLog, { QuickLogStart } from "./QuickLog";
 import NightCare from "./NightCare";
+import { useNestAccount } from "../application/AccountContext";
 
 const navigation: Array<{ label: string; path: string; icon: IconName; end?: boolean }> = [
   { label: "Today", path: NEST_BASE_PATH, icon: "home", end: true },
@@ -16,19 +17,21 @@ const navigation: Array<{ label: string; path: string; icon: IconName; end?: boo
 
 const Shell: React.FC = () => {
   const [quickLog, setQuickLog] = useState<QuickLogStart | null>(null);
-  const [nightMode, setNightMode] = useState(false);
-  const { toast, dismissToast } = useNestStore();
+  const { data, toast, dismissToast, saving, syncError, retry, setNightCare } = useNestStore();
+  const [nightMode, setNightMode] = useState(data.userPreferences.nightCareEnabled);
+  const account = useNestAccount();
+  const toggleNightCare = () => { const enabled = !nightMode; setNightMode(enabled); setNightCare(enabled); };
   useEffect(() => { if (!toast) return; const id = window.setTimeout(dismissToast, 5000); return () => window.clearTimeout(id); }, [toast, dismissToast]);
   return <div className={`nest-app ${nightMode ? "is-night" : ""}`}>
     <aside className="nest-sidebar">
       <a href={NEST_BASE_PATH} className="nest-brand"><span className="nest-brand-mark">n</span><span><strong>{productConfig.name}</strong><small>{productConfig.tagline}</small></span></a>
       <ChildSwitcher/>
       <nav aria-label={`${productConfig.name} navigation`}>{navigation.map((item) => <NavLink key={item.path} to={item.path} end={item.end} className={({ isActive }) => isActive ? "is-active" : ""}><Icon name={item.icon}/><span>{item.label}</span></NavLink>)}</nav>
-      <button className="nest-night-toggle" type="button" onClick={() => setNightMode((value) => !value)}><Icon name="moon"/><span><strong>Night care</strong><small>{nightMode ? "Return to daytime" : "Low-light essentials"}</small></span><i className={nightMode ? "on" : ""}/></button>
-      <p className="nest-sidebar-foot">Shared with Ama & Daniel<br/><span>Everything is up to date</span></p>
+      <button className="nest-night-toggle" type="button" onClick={toggleNightCare}><Icon name="moon"/><span><strong>Night care</strong><small>{nightMode ? "Return to daytime" : "Low-light essentials"}</small></span><i className={nightMode ? "on" : ""}/></button>
+      <p className="nest-sidebar-foot">{account.mode === "demo" ? "Explicit demo mode" : "Private household"}<br/><span>{saving ? "Saving shared changes…" : "Everything is up to date"}</span></p><button className="nest-sign-out" type="button" onClick={() => void account.signOut()}>{account.mode === "demo" ? "Leave demo" : "Sign out"}</button>
     </aside>
-    <div className="nest-mobile-header"><a href={NEST_BASE_PATH} className="nest-brand"><span className="nest-brand-mark">n</span><strong>{productConfig.name}</strong></a><div><button type="button" className="nest-mobile-night" aria-label={nightMode ? "Exit Night Care" : "Open Night Care"} onClick={() => setNightMode((value) => !value)}><Icon name="moon"/></button><ChildSwitcher/></div></div>
-    <main className="nest-main">{nightMode ? <NightCare openLog={setQuickLog}/> : <Outlet/>}</main>
+    <div className="nest-mobile-header"><a href={NEST_BASE_PATH} className="nest-brand"><span className="nest-brand-mark">n</span><strong>{productConfig.name}</strong></a><div><button type="button" className="nest-mobile-night" aria-label={nightMode ? "Exit Night Care" : "Open Night Care"} onClick={toggleNightCare}><Icon name="moon"/></button><ChildSwitcher/></div></div>
+    <main className="nest-main">{syncError && <div className="nest-sync-error" role="alert"><span><strong>That change is safe on screen, but hasn’t synced.</strong><small>{syncError}</small></span><button type="button" onClick={retry}>Try again</button></div>}{nightMode ? <NightCare openLog={setQuickLog}/> : <Outlet/>}</main>
     <nav className="nest-mobile-nav" aria-label={`${productConfig.name} mobile navigation`}>
       {navigation.slice(0, 2).map((item) => <NavLink key={item.path} to={item.path} end={item.end} className={({ isActive }) => isActive ? "is-active" : ""}><Icon name={item.icon}/><span>{item.label}</span></NavLink>)}
       <button className="nest-quick-button" type="button" aria-label="Quick log" onClick={() => setQuickLog("main")}><i><Icon name="plus" size={28}/></i><span>Log</span></button>

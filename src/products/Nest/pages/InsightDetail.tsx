@@ -1,0 +1,12 @@
+import React, { useMemo } from "react";
+import { Link, useParams } from "react-router-dom";
+import Icon from "../components/Icon";
+import { NEST_BASE_PATH } from "../config/product";
+import { generateInsights } from "../domain/intelligence/insights";
+import { formatDuration } from "../domain/insights";
+import { useNestStore } from "../store/NestStore";
+
+const unitFor = (metric: unknown): string => metric === "bottle-amount" ? "ml" : metric === "nappies" ? " per day" : "m";
+const value = (amount: number | undefined, metric: unknown): string => amount === undefined ? "—" : metric === "bottle-amount" ? `${Math.round(amount)}ml` : metric === "nappies" ? `${amount.toFixed(1)} per day` : formatDuration(amount * 60000);
+const InsightDetail: React.FC = () => { const { insightId } = useParams(); const { data, selectedChild } = useNestStore(); const result = useMemo(() => generateInsights(data.activities, selectedChild), [data.activities, selectedChild]); const insight = result.insights.find((item) => item.id === insightId); if (!insight) return <div className="nest-page nest-insight-detail"><Link to={`${NEST_BASE_PATH}/insights`}>← Back to insights</Link><div className="nest-empty-state"><Icon name="sparkle"/><strong>This observation is no longer current.</strong><small>Nest updates insights as new care data is logged.</small></div></div>; const difference = Math.abs(Math.round(insight.difference ?? 0)); const metric = insight.supportingData.metric; return <div className="nest-page nest-insight-detail"><Link to={`${NEST_BASE_PATH}/insights`}>← Back to insights</Link><header><p>{insight.category.toUpperCase()} · {insight.period.toUpperCase()}</p><h1>{insight.title}</h1><span>{insight.observation}</span></header><section><div><small>PREVIOUS PERIOD</small><strong>{value(insight.baselineValue, metric)}</strong></div><span><b>{insight.difference && insight.difference > 0 ? "+" : "−"}{difference}{unitFor(metric)}</b><small>change</small></span><div><small>RECENT PERIOD</small><strong>{value(insight.currentValue, metric)}</strong></div></section><footer><Icon name="sparkle"/><p><strong>How Nest worked this out</strong>Based on {insight.sampleSize} observations. Nest compares recent activity with {selectedChild.name}’s own previous pattern, uses robust middle ranges so one unusual day doesn’t dominate, and only surfaces changes above a meaningful threshold.</p></footer><p className="nest-safety-note">This describes a logged pattern. It is not medical or dosing advice.</p></div>; };
+export default InsightDetail;

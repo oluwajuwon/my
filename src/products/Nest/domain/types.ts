@@ -1,9 +1,11 @@
 export type ActivityType = "breastfeed" | "bottle" | "sleep" | "nappy" | "medicine" | "temperature" | "pump" | "tummyTime" | "bath" | "mood" | "note";
 export type NappyKind = "wet" | "dirty" | "both" | "dry";
 
-export interface User { id: string; displayName: string }
-export interface HouseholdMember { userId: string; role: "owner" | "parent" | "caregiver" }
-export interface Household { id: string; name: string; members: HouseholdMember[] }
+export interface User { id: string; email?: string; displayName: string; avatarUrl?: string; createdAt?: string }
+export interface HouseholdMember { id?: string; userId: string; role: "owner" | "parent" | "caregiver"; relationshipLabel?: string; joinedAt?: string }
+export interface Household { id: string; name: string; createdBy?: string; createdAt?: string; members: HouseholdMember[] }
+export interface HouseholdInvitation { id: string; householdId: string; email: string; role: HouseholdMember["role"]; expiresAt: string; acceptedAt?: string; invitedBy: string }
+export interface UserPreferences { userId: string; selectedHouseholdId?: string; selectedChildId?: string; preferredQuickActions: string[]; dismissedPrompts: string[]; nightCareEnabled: boolean; preferredUnits: { temperature: "celsius" | "fahrenheit"; volume: "ml" | "oz" } }
 
 export type PreferenceCategory = "like" | "dislike" | "soothing" | "routine" | "note";
 export interface ChildPreference { id: string; childId: string; category: PreferenceCategory; label: string }
@@ -31,9 +33,12 @@ export interface Expense { id: string; householdId: string; childId: string; amo
 export interface Milestone { id: string; childId: string; title: string; occurredAt: string; note?: string }
 
 export interface NestData {
-  version: 2;
+  version: 3;
   users: User[];
   household: Household;
+  households: Household[];
+  invitations: HouseholdInvitation[];
+  userPreferences: UserPreferences;
   children: Child[];
   activities: Activity[];
   supplies: Supply[];

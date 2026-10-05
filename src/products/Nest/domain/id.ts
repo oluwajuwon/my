@@ -1,0 +1,1 @@
+export const createId = (): string => typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (value) => { const random = Math.floor(Math.random() * 16); return (value === "x" ? random : (random & 3) | 8).toString(16); });

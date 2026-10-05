@@ -1,4 +1,4 @@
-import { Exercise, Readiness, UserProfile, Workout, WorkoutExercise, WorkoutRecommendation } from "./types";
+import { Equipment, Exercise, Readiness, UserProfile, Workout, WorkoutExercise, WorkoutRecommendation } from "./types";
 import { exercises } from "../data/exercises";
 
 const splits:Record<number,Array<{title:string;focus:string;muscles:string[]}>> = {
@@ -11,10 +11,14 @@ const makeSet=(exerciseId:string,index:number,profile:UserProfile)=>({id:`${exer
 
 export const generateWorkout = (profile:UserProfile, dayIndex=0, date=new Date()):Workout => {
   const strategy=splits[Math.min(5,Math.max(2,profile.daysPerWeek))] ?? splits[4]; const day=strategy[dayIndex%strategy.length];
-  const allowed=(exercise:Exercise)=>exercise.equipment.every((item)=>item==="bodyweight"||profile.equipment.includes(item))&&!profile.dislikedExercises.includes(exercise.id);
+  const limitationCompatible=(exercise:Exercise)=>profile.limitations.every(value=>{const limitation=value.toLowerCase();if(limitation.includes("shoulder"))return exercise.tags.includes("shoulder_safe");if(limitation.includes("knee"))return exercise.tags.includes("knee_safe");if(limitation.includes("back"))return exercise.tags.includes("lower_back_safe");return true;});
+  const allowed=(exercise:Exercise)=>exercise.equipment.every((item)=>item==="bodyweight"||profile.equipment.includes(item))&&!profile.dislikedExercises.includes(exercise.id)&&limitationCompatible(exercise);
+  const desiredGoal=profile.goal==="build-muscle"?"hypertrophy":profile.goal==="get-stronger"?"strength":profile.goal==="athletic"?"power":profile.goal==="general-fitness"?"endurance":undefined;
+  const musclePatterns:Record<string,Exercise["movementPattern"][]>={chest:["push-horizontal"],back:["pull-horizontal","pull-vertical"],shoulders:["push-vertical","isolation"],biceps:["isolation"],triceps:["isolation","push-horizontal"],quads:["squat","lunge"],hamstrings:["hinge","isolation"],glutes:["hinge","squat","lunge"],calves:["isolation"],core:["core"]};
+  const score=(exercise:Exercise,muscle:string,index:number)=>{const patterns=musclePatterns[muscle];return(exercise.category===muscle?20:0)+(patterns?(patterns.includes(exercise.movementPattern)?6:-8):0)+(exercise.catalogueTier==="core"?8:exercise.catalogueTier==="standard"?3:0)+(exercise.difficulty===profile.experience?4:exercise.difficulty==="beginner"?1:0)+(desiredGoal&&exercise.goals.includes(desiredGoal)?3:0)+(profile.styles.some(style=>exercise.tags.includes(style.toLowerCase().replace(/\s+/g,"_")))?2:0)+(index<3&&exercise.mechanic==="compound"?3:0)-(exercise.catalogueTier==="specialized"?2:0);};
   const chosen:Exercise[]=[];
-  day.muscles.forEach((muscle)=>{const match=exercises.find((item)=>item.category===muscle&&allowed(item)&&!chosen.includes(item));if(match)chosen.push(match);});
-  exercises.filter(allowed).forEach((item)=>{if(chosen.length<7&&!chosen.includes(item)&&day.muscles.includes(item.category))chosen.push(item);});
+  day.muscles.forEach((muscle,index)=>{const match=exercises.filter((item)=>allowed(item)&&!chosen.includes(item)&&item.category===muscle).sort((a,b)=>score(b,muscle,index)-score(a,muscle,index)||a.name.localeCompare(b.name))[0];if(match)chosen.push(match);});
+  exercises.filter(allowed).filter(item=>day.muscles.includes(item.category)).sort((a,b)=>score(b,b.category,chosen.length)-score(a,a.category,chosen.length)||a.name.localeCompare(b.name)).forEach((item)=>{if(chosen.length<7&&!chosen.includes(item))chosen.push(item);});
   const workoutExercises:WorkoutExercise[]=chosen.slice(0,profile.workoutMinutes<=30?5:7).map((exercise,index)=>({id:`we-${dayIndex}-${index}`,exerciseId:exercise.id,restSeconds:index<3?120:75,priority:index+1,sets:Array.from({length:index<3?3:2},(_,set)=>makeSet(exercise.id,set,profile))}));
   return {id:`workout-${date.toISOString().slice(0,10)}-${dayIndex}`,title:day.title,focus:day.focus,date:date.toISOString().slice(0,10),estimatedMinutes:profile.workoutMinutes,exercises:workoutExercises,status:"planned"};
 };
@@ -35,5 +39,14 @@ export const recommendProgression=(target:[number,number],weightKg:number,lastRe
   if(failed)return {weightKg:lastReps.filter((rep)=>rep<target[0]-1).length>1?Math.max(0,weightKg-2):weightKg,reps:lastReps.map((rep)=>Math.max(target[0],rep)),reason:"Performance dipped below the range. Consolidate technique before adding load.",action:lastReps.filter((rep)=>rep<target[0]-1).length>1?"reduce":"hold"};
   return {weightKg,reps:lastReps.map((rep)=>Math.min(target[1],rep+1)),reason:"Keep the load and add reps across the sets.",action:"hold"};
 };
-export const rankSubstitutions=(source:Exercise,profile:UserProfile):Exercise[]=>exercises.filter((item)=>item.id!==source.id&&item.equipment.every((eq)=>eq==="bodyweight"||profile.equipment.includes(eq))&&!profile.dislikedExercises.includes(item.id)).map((item)=>({item,score:(item.movementPattern===source.movementPattern?5:0)+(item.primaryMuscles.some((m)=>source.primaryMuscles.includes(m))?3:0)+(item.difficulty===source.difficulty?1:0)})).filter(({score})=>score>=3).sort((a,b)=>b.score-a.score).slice(0,6).map(({item})=>item);
+export type ReplacementReason="equipment"|"pain"|"preference"|"variety";
+export const rankSubstitutions=(source:Exercise,profile:UserProfile,reason:ReplacementReason="equipment"):Exercise[]=>exercises.filter((item)=>item.id!==source.id&&item.equipment.every((eq)=>eq==="bodyweight"||profile.equipment.includes(eq))&&!profile.dislikedExercises.includes(item.id)&&profile.limitations.every(value=>{const limitation=value.toLowerCase();if(limitation.includes("shoulder"))return item.tags.includes("shoulder_safe");if(limitation.includes("knee"))return item.tags.includes("knee_safe");if(limitation.includes("back"))return item.tags.includes("lower_back_safe");return true;})).map((item)=>({item,score:(item.movementPattern===source.movementPattern?8:0)+(item.category===source.category?5:0)+(item.primaryMuscles.some((m)=>source.primaryMuscles.includes(m))?4:0)+(item.mechanic===source.mechanic?3:0)+(item.goals.some(goal=>source.goals.includes(goal))?2:0)+(item.difficulty===source.difficulty?2:0)+(item.catalogueTier==="core"?2:0)+(reason==="pain"&&item.tags.some(tag=>tag.includes("safe"))?3:0)+(reason==="variety"&&item.equipment.some(eq=>!source.equipment.includes(eq))?2:0)})).filter(({score})=>score>=8).sort((a,b)=>b.score-a.score||a.item.name.localeCompare(b.item.name)).slice(0,8).map(({item})=>item);
 export const workoutVolume=(workout:Workout)=>workout.exercises.flatMap((item)=>item.sets).reduce((sum,set)=>sum+(set.completedReps??0)*(set.completedWeightKg??set.targetWeightKg),0);
+
+export const equipmentPresetForLocation=(location:UserProfile["location"]):Equipment[]=>({
+  "full-gym":["bodyweight","dumbbell","barbell","bench","cable","machine","band","kettlebell","pull-up-bar","cardio","smith-machine","ez-bar","trap-bar","plates","dip-station","rings","ab-wheel","stability-ball","plyo-box","suspension-trainer","battle-rope","jump-rope","sled","medicine-ball","climbing-rope"],
+  "home-gym":["bodyweight","dumbbell","barbell","bench","band","kettlebell","pull-up-bar","plates","ab-wheel","stability-ball","plyo-box","rings","jump-rope"],
+  home:["bodyweight"],
+  outdoors:["bodyweight","band","kettlebell","jump-rope","pull-up-bar"],
+  mixed:["bodyweight","dumbbell","barbell","bench","cable","machine","band","kettlebell","pull-up-bar","cardio"],
+}[location] as Equipment[]);

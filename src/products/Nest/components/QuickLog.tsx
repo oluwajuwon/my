@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NEST_BASE_PATH } from "../config/product";
-import { getAgeRelevantActions, QuickActionId } from "../domain/actions";
+import { getAgeRelevantActions, QuickActionId, rankQuickActions } from "../domain/actions";
+import { getCurrentChildState } from "../domain/brief";
 import { findRecentMedicineLog } from "../domain/medicine";
 import { useNestStore } from "../store/NestStore";
 import Icon, { IconName } from "./Icon";
@@ -16,7 +17,7 @@ const actionMeta: Record<QuickActionId, { label: string; icon: IconName; note: s
 };
 
 const QuickLog: React.FC<{ open: boolean; onClose(): void; startAt?: QuickLogStart }> = ({ open, onClose, startAt = "main" }) => {
-  const { data, selectedChild, log } = useNestStore();
+  const { data, selectedChild, currentUser, log } = useNestStore();
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("main");
   const [milk, setMilk] = useState<"formula" | "expressed">("formula");
@@ -24,6 +25,7 @@ const QuickLog: React.FC<{ open: boolean; onClose(): void; startAt?: QuickLogSta
   const [temperature, setTemperature] = useState(36.8);
   const [note, setNote] = useState("");
   const config = getAgeRelevantActions(selectedChild);
+  const rankedMore = rankQuickActions({ child: selectedChild, userId: currentUser.id, activities: data.activities, currentState: getCurrentChildState(data.activities, selectedChild.id), preferred: data.userPreferences.preferredQuickActions }).filter((item) => config.more.includes(item.id));
   const medicines = data.medicines.filter((item) => item.childId === selectedChild.id && item.active);
   useEffect(() => { if (open) setStep(startAt); }, [open, startAt]);
   const close = () => { setStep("main"); setMilk("formula"); setSelectedMedicine(null); setTemperature(36.8); setNote(""); onClose(); };
@@ -45,7 +47,7 @@ const QuickLog: React.FC<{ open: boolean; onClose(): void; startAt?: QuickLogSta
       {step === "breast" && <div className="nest-choice-grid"><button onClick={() => done({ type: "breastfeed", side: "left" })} type="button"><strong>Left</strong><small>Start timer</small></button><button onClick={() => done({ type: "breastfeed", side: "right" })} type="button"><strong>Right</strong><small>Start timer</small></button></div>}
       {step === "bottle" && <><div className="nest-segment"><button className={milk === "formula" ? "is-active" : ""} type="button" onClick={() => setMilk("formula")}>Formula</button><button className={milk === "expressed" ? "is-active" : ""} type="button" onClick={() => setMilk("expressed")}>Expressed</button></div><div className="nest-amount-grid">{amounts.map((amount) => <button key={amount} type="button" onClick={() => done({ type: "bottle", amountMl: amount, milk })}><strong>{amount}</strong><small>ml</small></button>)}</div></>}
       {step === "nappy" && <div className="nest-choice-grid">{([['wet','Wet'],['dirty','Dirty'],['both','Wet + dirty'],['dry','Dry']] as const).map(([kind, label]) => <button key={kind} type="button" onClick={() => done({ type: "nappy", kind })}><strong>{label}</strong><small>Log now</small></button>)}</div>}
-      {step === "more" && <div className="nest-more-action-grid">{config.more.map((id) => { const item = actionMeta[id]; return <button type="button" key={id} onClick={() => chooseMore(id)}><span><Icon name={item.icon}/></span><strong>{item.label}</strong><small>{item.note}</small></button>; })}</div>}
+      {step === "more" && <div className="nest-more-action-grid">{rankedMore.map(({ id }) => { const item = actionMeta[id]; return <button type="button" key={id} onClick={() => chooseMore(id)}><span><Icon name={item.icon}/></span><strong>{item.label}</strong><small>{item.note}</small></button>; })}</div>}
       {step === "medicine" && <div className="nest-choice-list">{medicines.length ? medicines.map((medicine) => <button type="button" key={medicine.id} onClick={() => chooseMedicine(medicine.id)}><span><Icon name="medicine"/></span><div><strong>{medicine.name}</strong><small>{medicine.defaultDose} {medicine.unit} · {medicine.schedule === "daily" ? "Daily" : "As needed"}</small></div><b>Log now</b></button>) : <p className="nest-sheet-empty">No medicines or supplements are being tracked for {selectedChild.name}.</p>}</div>}
       {step === "medicine-warning" && selectedMedicine && (() => { const medicine = medicines.find((item) => item.id === selectedMedicine); const recent = findRecentMedicineLog(data.activities, selectedMedicine, selectedChild.id); const user = data.users.find((item) => item.id === recent?.createdBy); return <div className="nest-duplicate-warning"><span><Icon name="medicine"/></span><p><strong>{medicine?.name} was logged by {user?.displayName ?? "a parent"} at {recent ? new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit" }).format(new Date(recent.occurredAt)) : "recently"}.</strong>This is a duplicate check, not dosing advice.</p><button type="button" onClick={() => done({ type: "medicine", medicineId: selectedMedicine })}>Log another dose anyway</button></div>; })()}
       {step === "temperature" && <div className="nest-number-stepper"><button type="button" aria-label="Decrease temperature" onClick={() => setTemperature((value) => Math.round((value - .1) * 10) / 10)}>−</button><strong>{temperature.toFixed(1)}<small>°C</small></strong><button type="button" aria-label="Increase temperature" onClick={() => setTemperature((value) => Math.round((value + .1) * 10) / 10)}>+</button><button className="nest-sheet-primary" type="button" onClick={() => done({ type: "temperature", valueCelsius: temperature })}>Log temperature</button></div>}

@@ -1,5 +1,332 @@
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@keyframes vela-modal-in{from{opacity:0;transform:translateY(8px) scale(.98)}}@keyframes vela-arm-a{50%{transform:rotate(75deg)}}@keyframes vela-arm-b{50%{transform:rotate(-75deg)}}@keyframes vela-body{50%{transform:translateY(7px)}}
-@media(max-width:1050px){.vela-today-layout{grid-template-columns:1fr}.vela-today-side{grid-template-columns:1fr 1fr;grid-template-rows:auto}.vela-today-grid{grid-template-columns:1fr 1fr}.vela-nutrition-glance{grid-row:span 2}.vela-progress-summary{grid-template-columns:1fr 1fr}.vela-library-grid{grid-template-columns:1fr 1fr}.vela-workout-mode>main{grid-template-columns:1fr}.vela-set-panel{position:static}.vela-rest-dock{width:min(680px,calc(100% - 280px))}}
-@media(max-width:760px){.vela-app{display:block;padding:62px 0 calc(72px + env(safe-area-inset-bottom));overflow-x:hidden}.vela-sidebar{display:none}.vela-mobile-head{height:62px;position:fixed;top:0;left:0;right:0;z-index:70;background:var(--nav);color:white;padding:0 16px;display:flex;align-items:center;justify-content:space-between}.vela-mobile-head .vela-brand i{width:31px;height:31px}.vela-mobile-head>button{width:42px;height:42px;border:0;background:transparent;color:white;font-size:20px}.vela-bottom-nav{position:fixed;z-index:70;bottom:0;left:0;right:0;height:calc(66px + env(safe-area-inset-bottom));padding:5px 5px env(safe-area-inset-bottom);background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}.vela-bottom-nav a{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none;color:var(--muted);font-size:8px}.vela-bottom-nav a svg{font-size:19px}.vela-bottom-nav a.active{color:var(--brand);font-weight:700}.vela-page{padding:25px 16px 55px}.vela-page-head{align-items:flex-start;margin-bottom:24px}.vela-page-head h1{font-size:31px}.vela-page-head>div>p:last-child{font-size:12px}.vela-page-head>.vela-button{padding:0 12px;font-size:10px}.vela-today-layout,.vela-today-grid,.vela-nutrition-hero,.vela-progress-grid,.vela-settings-grid,.vela-detail-hero,.vela-detail-grid,.vela-recipe-hero,.vela-recipe-grid,.vela-grocery-grid{grid-template-columns:1fr}.vela-workout-hero{min-height:385px;padding:22px 20px}.vela-hero-body{align-items:flex-start;padding-top:38px}.vela-hero-body h2{font-size:38px}.vela-orbit{width:110px;height:110px;position:absolute;right:-40px;top:35px;opacity:.55}.vela-workout-meta{flex-direction:column;gap:4px}.vela-hero-actions{gap:8px}.vela-hero-actions .vela-button{flex:1;padding:0 8px;font-size:10px}.vela-today-side{grid-template-columns:1fr}.vela-today-grid{display:block}.vela-today-grid>article{margin-top:12px}.vela-nutrition-glance{padding:19px}.vela-modal-layer{align-items:flex-end;padding:0}.vela-modal{border-radius:22px 22px 0 0;max-height:94vh;padding-bottom:calc(22px + env(safe-area-inset-bottom))}.vela-adjust-grid{grid-template-columns:1fr 1fr}.vela-toast{bottom:calc(78px + env(safe-area-inset-bottom));max-width:calc(100% - 24px);width:max-content}.vela-program-hero{padding:22px;display:block}.vela-program-score{text-align:left;padding:18px 0 0}.vela-program-hero>div>div{flex-wrap:wrap}.vela-week-plan{display:flex;overflow-x:auto;padding-bottom:5px}.vela-week-plan article{min-width:88px}.vela-train-grid{grid-template-columns:1fr;gap:25px}.vela-library-grid{grid-template-columns:1fr}.vela-section>header{align-items:flex-start}.vela-section>header input{width:145px}.vela-workout-mode{padding-bottom:170px}.vela-workout-mode>header{padding:0 13px}.vela-workout-mode>main{padding:18px 14px}.vela-exercise-visual{height:280px}.vela-exercise-title h1{font-size:25px}.vela-workout-tools button{flex:1;justify-content:center;padding:0 5px}.vela-rest-dock{left:10px;right:10px;bottom:10px;transform:none;width:auto;grid-template-columns:auto 1fr;padding:10px}.vela-rest-dock>div:last-child{grid-column:1/-1}.vela-rest-dock>div:last-child button{flex:1}.vela-complete-stats{grid-template-columns:1fr 1fr;gap:18px}.vela-complete-stats div:nth-child(2){border:0}.vela-detail-hero{gap:22px}.vela-detail-hero .vela-exercise-visual{height:300px}.vela-detail-grid{margin-top:25px}.vela-cue-grid{grid-template-columns:1fr}.vela-nutrition-hero{padding:20px}.vela-nutrition-hero>div:first-child{gap:15px}.vela-nutrition-macros{gap:6px}.vela-nutrition-macros>div{padding:10px}.vela-meal-list article{grid-template-columns:63px minmax(0,1fr) auto;padding:12px 0;gap:10px}.vela-meal-list .vela-food-visual{width:63px;height:58px}.vela-replace{grid-column:2}.vela-eaten{grid-column:3;grid-row:1/3}.vela-replace span{display:none}.vela-nutrition-lower{grid-template-columns:1fr}.vela-recipe-hero>.vela-food-visual{height:270px}.vela-recipe-hero>div>div{flex-wrap:wrap}.vela-progress-summary,.vela-profile-metrics{grid-template-columns:1fr 1fr}.vela-chart-card{padding:17px}.vela-chart-card>header{align-items:flex-start}.vela-range{overflow:auto;max-width:180px}.vela-line-chart{height:190px}.vela-line-chart svg{height:155px}.vela-profile-head{align-items:flex-start;flex-wrap:wrap}.vela-profile-head>span{width:58px;height:58px}.vela-profile-head h1{font-size:30px}.vela-profile-head>a{margin-left:0}.vela-onboarding>main{margin-top:4vh}.vela-location-options{grid-template-columns:repeat(3,1fr)}.vela-duration-options{grid-template-columns:repeat(5,1fr)}.vela-onboard-options.goals,.vela-profile-fields{grid-template-columns:1fr}.vela-plan-result{grid-template-columns:1fr 1fr}}
-@media(max-width:390px){.vela-page-head{display:block}.vela-page-head>.vela-button{margin-top:13px}.vela-hero-body h2{font-size:34px}.vela-readiness-card{padding:18px}.vela-nutrition-glance header{align-items:flex-start}.vela-ring-wrap.small .vela-ring{width:64px;height:64px}.vela-progress-summary,.vela-profile-metrics{grid-template-columns:1fr}.vela-nutrition-hero>div:first-child{display:block}.vela-nutrition-hero .vela-ring-wrap{margin-bottom:15px}.vela-meal-list article{grid-template-columns:54px minmax(0,1fr) auto}.vela-meal-list .vela-food-visual{width:54px;height:54px}.vela-meal-copy>a{font-size:13px}.vela-meal-copy small{line-height:1.25}.vela-adjust-grid{grid-template-columns:1fr}.vela-workout-mode>header>div{display:none}.vela-workout-mode>header{grid-template-columns:1fr 1fr}.vela-set-inputs{gap:6px}.vela-complete-stats{font-size:11px}.vela-location-options{grid-template-columns:1fr 1fr}.vela-duration-options{grid-template-columns:repeat(3,1fr)}.vela-plan-result{grid-template-columns:1fr}.vela-onboarding>footer .vela-button{padding:0 12px}}
-@media(prefers-reduced-motion:reduce){.vela-app *,.vela-onboarding *{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+:root {
+  --vela-mobile-nav-height: 68px;
+  --vela-mobile-header-height: 62px;
+  --vela-page-gutter: clamp(26px, 4vw, 64px);
+  --vela-control-height: 54px;
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@keyframes vela-modal-in { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+@keyframes vela-arm-a { 50% { transform: rotate(75deg); } }
+@keyframes vela-arm-b { 50% { transform: rotate(-75deg); } }
+@keyframes vela-body { 50% { transform: translateY(7px); } }
+
+/* Width safety belongs to components, not a hidden document overflow. */
+.vela-app,
+.vela-main,
+.vela-page,
+.vela-page > *,
+.vela-app section,
+.vela-app article,
+.vela-app aside,
+.vela-app header,
+.vela-onboarding main,
+.vela-onboarding section,
+.vela-auth section,
+.vela-auth-card,
+.vela-workout-mode main,
+.vela-workout-mode section { min-width: 0; }
+
+.vela-app img,
+.vela-auth img,
+.vela-onboarding img { max-width: 100%; }
+
+.vela-app.vela-focus-mode {
+  display: block;
+  min-height: 100dvh;
+  padding: 0;
+}
+
+.vela-focus-mode .vela-toast {
+  top: calc(76px + env(safe-area-inset-top));
+  bottom: auto;
+}
+
+.vela-onboarding .vela-button.primary { color: #fff; }
+.vela-profile-fields input,
+.vela-profile-fields select,
+.vela-measure-form input,
+.vela-delete-confirm input,
+.vela-section > header input { font-size: 16px; }
+.vela-profile-fields input,
+.vela-profile-fields select,
+.vela-delete-confirm input { min-height: var(--vela-control-height); }
+
+@media (max-width: 1050px) {
+  .vela-today-layout { grid-template-columns: 1fr; }
+  .vela-today-side { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .vela-today-grid { grid-template-columns: 1fr 1fr; }
+  .vela-nutrition-glance { grid-row: span 2; }
+  .vela-progress-summary { grid-template-columns: 1fr 1fr; }
+  .vela-library-grid { grid-template-columns: 1fr 1fr; }
+  .vela-workout-mode > main { grid-template-columns: 1fr; }
+  .vela-set-panel { position: static; }
+  .vela-rest-dock { width: min(680px, calc(100% - 280px)); }
+}
+
+@media (min-width: 1024px) {
+  .vela-focus-mode .vela-rest-dock {
+    left: 50%;
+    width: min(720px, calc(100% - 40px));
+  }
+}
+
+/* Tablet and phone use the app shell; the sidebar starts only at 1024px. */
+@media (max-width: 1023px) {
+  :root { --vela-page-gutter: 32px; }
+
+  .vela-app {
+    display: block;
+    min-height: 100dvh;
+    padding: calc(var(--vela-mobile-header-height) + env(safe-area-inset-top)) 0 calc(var(--vela-mobile-nav-height) + env(safe-area-inset-bottom));
+  }
+
+  .vela-sidebar { display: none; }
+  .vela-main { width: 100%; }
+
+  .vela-mobile-head {
+    min-height: calc(var(--vela-mobile-header-height) + env(safe-area-inset-top));
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 70;
+    background: var(--nav);
+    color: white;
+    padding: env(safe-area-inset-top) var(--vela-page-gutter) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .vela-mobile-head .vela-brand i { width: 32px; height: 32px; }
+  .vela-mobile-head > button { width: 44px; height: 44px; border: 0; background: transparent; color: white; font-size: 20px; display: grid; place-items: center; }
+
+  .vela-bottom-nav {
+    position: fixed;
+    z-index: 70;
+    inset: auto 0 0;
+    min-height: calc(var(--vela-mobile-nav-height) + env(safe-area-inset-bottom));
+    padding: 4px 8px env(safe-area-inset-bottom);
+    background: var(--surface);
+    background: color-mix(in srgb, var(--surface) 96%, transparent);
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    box-shadow: 0 -8px 30px rgba(15, 30, 20, .07);
+  }
+
+  .vela-bottom-nav a { min-width: 0; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: var(--muted); font-size: 10px; line-height: 1; }
+  .vela-bottom-nav a svg { font-size: 20px; }
+  .vela-bottom-nav a.active { color: var(--brand); font-weight: 700; }
+  .vela-bottom-nav a.active svg { color: var(--brand-2); filter: drop-shadow(0 1px 0 var(--brand)); }
+
+  .vela-page { max-width: 900px; padding: 36px var(--vela-page-gutter) 56px; }
+  .vela-toast { bottom: calc(var(--vela-mobile-nav-height) + 12px + env(safe-area-inset-bottom)); max-width: calc(100% - 32px); }
+  .vela-sync-banner { top: calc(var(--vela-mobile-header-height) + env(safe-area-inset-top) + 8px); width: calc(100% - 32px); text-align: center; }
+
+  .vela-rest-dock { left: var(--vela-page-gutter); right: var(--vela-page-gutter); bottom: calc(12px + env(safe-area-inset-bottom)); width: auto; transform: none; }
+
+  .vela-auth,
+  .vela-welcome,
+  .vela-auth-loading,
+  .vela-setup { min-height: 100dvh; }
+  .vela-auth { display: block; }
+  .vela-auth-story { min-height: auto; padding: 28px 32px; }
+  .vela-auth-story > div { margin: 42px 0 8px; }
+  .vela-auth-story h1 { font-size: clamp(34px, 6vw, 48px); margin: 5px 0 12px; }
+  .vela-auth-story > div > p:last-child { max-width: 620px; font-size: 14px; }
+  .vela-auth-story ul { display: none; }
+  .vela-auth-panel { min-height: auto; align-items: flex-start; padding: 38px 32px 76px; }
+  .vela-auth-card { width: min(520px, 100%); }
+  .vela-auth-security { bottom: 24px; }
+
+  .vela-modal { max-height: calc(100dvh - env(safe-area-inset-top) - 24px); }
+
+  .vela-onboarding { min-height: 100dvh; }
+  .vela-onboarding > main { margin-top: clamp(28px, 5vh, 52px); }
+  .vela-onboarding > footer { position: sticky; bottom: 0; z-index: 20; width: 100%; padding: 14px max(32px, calc((100% - 760px) / 2)) calc(14px + env(safe-area-inset-bottom)); background: rgba(244, 245, 240, .96); backdrop-filter: blur(12px); }
+  .vela-onboarding > main { padding-bottom: 24px; }
+  .vela-location-options { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Phone layout */
+@media (max-width: 767px) {
+  :root { --vela-page-gutter: 20px; }
+
+  .vela-page { padding: 26px var(--vela-page-gutter) 48px; }
+  .vela-page-head { align-items: flex-start; margin-bottom: 24px; gap: 16px; }
+  .vela-page-head h1 { font-size: clamp(32px, 9vw, 40px); }
+  .vela-page-head > div > p:last-child { font-size: 14px; }
+  .vela-page-head > .vela-button { min-width: 44px; padding: 0 13px; font-size: 11px; }
+
+  .vela-button { min-height: 48px; }
+  .vela-icon-button { width: 44px; height: 44px; }
+
+  .vela-today-layout,
+  .vela-today-grid,
+  .vela-nutrition-hero,
+  .vela-progress-grid,
+  .vela-settings-grid,
+  .vela-detail-hero,
+  .vela-detail-grid,
+  .vela-recipe-hero,
+  .vela-recipe-grid,
+  .vela-grocery-grid { grid-template-columns: minmax(0, 1fr); }
+
+  .vela-workout-hero { width: 100%; min-height: 380px; padding: 22px 20px; }
+  .vela-hero-body { align-items: flex-start; padding-top: 36px; }
+  .vela-hero-body h2 { font-size: clamp(34px, 11vw, 43px); max-width: 88%; }
+  .vela-orbit { width: 108px; height: 108px; position: absolute; right: -38px; top: 32px; opacity: .48; }
+  .vela-workout-meta { flex-direction: column; gap: 5px; }
+  .vela-hero-actions { gap: 9px; }
+  .vela-hero-actions .vela-button { flex: 1; min-width: 0; padding: 0 8px; font-size: 10px; }
+  .vela-today-side { grid-template-columns: 1fr; }
+  .vela-today-grid { display: block; }
+  .vela-today-grid > article { width: 100%; margin-top: 14px; }
+  .vela-nutrition-glance { padding: 20px; }
+
+  .vela-modal-layer { align-items: flex-end; padding: env(safe-area-inset-top) 0 0; }
+  .vela-modal { width: 100%; max-height: calc(100dvh - env(safe-area-inset-top)); border-radius: 22px 22px 0 0; padding: 22px 20px calc(22px + env(safe-area-inset-bottom)); overscroll-behavior: contain; }
+  .vela-modal h2 { font-size: clamp(23px, 7vw, 28px); }
+  .vela-adjust-grid { grid-template-columns: 1fr 1fr; }
+
+  .vela-program-hero { padding: 22px; display: block; }
+  .vela-program-score { text-align: left; padding: 18px 0 0; }
+  .vela-program-hero > div > div { flex-wrap: wrap; }
+  .vela-week-plan { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; gap: 7px; }
+  .vela-week-plan article { min-width: 0; }
+  .vela-train-grid { grid-template-columns: 1fr; gap: 28px; }
+  .vela-library-grid { grid-template-columns: 1fr; }
+  .vela-section > header { align-items: flex-start; gap: 14px; }
+  .vela-section > header input { width: min(100%, 190px); min-height: 48px; font-size: 16px; }
+  .vela-preview-list article > span { min-width: 0; }
+
+  .vela-workout-mode { min-height: 100dvh; padding-bottom: 210px; }
+  .vela-workout-mode > header { height: calc(64px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 14px 0; grid-template-columns: 1fr auto 1fr; }
+  .vela-workout-mode > header button { min-height: 44px; }
+  .vela-workout-progress { top: calc(64px + env(safe-area-inset-top)); }
+  .vela-workout-mode > main { padding: 20px var(--vela-page-gutter); }
+  .vela-exercise-visual { height: min(290px, 40dvh); min-height: 240px; }
+  .vela-exercise-title { align-items: flex-start; gap: 12px; }
+  .vela-exercise-title h1 { font-size: clamp(25px, 8vw, 32px); }
+  .vela-exercise-title a { min-height: 44px; flex: none; }
+  .vela-workout-tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vela-workout-tools button { min-width: 0; min-height: 44px; justify-content: center; padding: 0 5px; }
+  .vela-set-panel { padding: 20px; }
+  .vela-set-inputs button,
+  .vela-set-inputs input { min-height: 52px; font-size: 16px; }
+  .vela-set-inputs label > div { grid-template-columns: 44px minmax(0, 1fr) 44px; }
+  .vela-rest-dock { grid-template-columns: auto minmax(0, 1fr); padding: 12px; border-radius: 18px; }
+  .vela-rest-dock > div:last-child { grid-column: 1 / -1; }
+  .vela-rest-dock > div:last-child button { flex: 1; min-height: 46px; }
+  .vela-complete-page { min-height: 100dvh; padding: 8svh 20px calc(30px + env(safe-area-inset-bottom)); }
+  .vela-complete-stats { grid-template-columns: 1fr 1fr; gap: 18px 0; }
+  .vela-complete-stats div:nth-child(2) { border: 0; }
+
+  .vela-detail-hero { gap: 22px; }
+  .vela-detail-hero .vela-exercise-visual { height: 290px; }
+  .vela-detail-grid { margin-top: 25px; gap: 18px; }
+  .vela-cue-grid { grid-template-columns: 1fr; }
+
+  .vela-nutrition-hero { padding: 20px; gap: 22px; }
+  .vela-nutrition-hero > div:first-child { gap: 16px; }
+  .vela-nutrition-macros { gap: 7px; }
+  .vela-nutrition-macros > div { min-width: 0; padding: 11px 8px; }
+  .vela-meal-section > header { align-items: flex-start; gap: 12px; }
+  .vela-meal-section > header .vela-button { min-width: 44px; }
+  .vela-meal-list article { grid-template-columns: 62px minmax(0, 1fr) auto; gap: 10px; padding: 13px 0; }
+  .vela-meal-list .vela-food-visual { width: 62px; height: 58px; }
+  .vela-replace { grid-column: 2; min-height: 44px; justify-self: start; }
+  .vela-eaten { grid-column: 3; grid-row: 1 / 3; min-height: 44px; }
+  .vela-replace span { display: none; }
+  .vela-nutrition-lower { grid-template-columns: 1fr; }
+  .vela-nutrition-lower > article,
+  .vela-nutrition-lower > a { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .vela-recipe-hero > .vela-food-visual { height: 270px; }
+  .vela-recipe-hero > div > div { flex-wrap: wrap; }
+  .vela-ingredient { gap: 14px; }
+
+  .vela-progress-summary,
+  .vela-profile-metrics { grid-template-columns: 1fr 1fr; }
+  .vela-chart-card { padding: 18px; min-width: 0; }
+  .vela-chart-card > header { align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .vela-range { width: 100%; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .vela-range::-webkit-scrollbar { display: none; }
+  .vela-range button { min-width: 42px; min-height: 40px; }
+  .vela-line-chart { width: 100%; min-width: 0; height: 190px; }
+  .vela-line-chart svg { max-width: 100%; height: 155px; }
+  .vela-bar-chart { min-width: 0; gap: 7px; }
+  .vela-records article > div { min-width: 0; }
+
+  .vela-profile-head { align-items: flex-start; flex-wrap: wrap; }
+  .vela-profile-head > span { width: 58px; height: 58px; }
+  .vela-profile-head h1 { font-size: 30px; }
+  .vela-profile-head > a { margin-left: 0; }
+  .vela-account-block > div { gap: 18px; }
+  .vela-account-block > div strong { min-width: 0; overflow-wrap: anywhere; text-align: right; }
+
+  .vela-auth-story { padding: 24px var(--vela-page-gutter); }
+  .vela-auth-story > div { margin-top: 34px; }
+  .vela-auth-story h1 { font-size: clamp(32px, 10vw, 40px); }
+  .vela-auth-panel { padding: 30px var(--vela-page-gutter) 76px; }
+  .vela-auth-card h2 { font-size: clamp(31px, 9vw, 39px); }
+  .vela-auth-name-row { grid-template-columns: 1fr; gap: 14px; }
+  .vela-auth-links { flex-direction: column; font-size: 13px; }
+  .vela-auth-security { left: var(--vela-page-gutter); right: var(--vela-page-gutter); justify-content: center; }
+  .vela-welcome { min-height: 100dvh; padding: calc(24px + env(safe-area-inset-top)) var(--vela-page-gutter) calc(24px + env(safe-area-inset-bottom)); }
+  .vela-welcome h1 { font-size: clamp(43px, 14vw, 58px); }
+  .vela-welcome section > p:nth-child(3) { font-size: 16px; }
+  .vela-welcome section > div { flex-direction: column; align-items: stretch; }
+  .vela-welcome .vela-auth-primary { width: 100%; }
+  .vela-welcome-orbit { width: 360px; height: 360px; right: -245px; top: 25%; }
+
+  .vela-onboarding > header { min-height: calc(68px + env(safe-area-inset-top)); height: auto; padding: env(safe-area-inset-top) var(--vela-page-gutter) 0; }
+  .vela-onboarding > main { width: calc(100% - (2 * var(--vela-page-gutter))); margin: 28px auto 0; }
+  .vela-onboarding main h1 { font-size: clamp(34px, 10vw, 43px); }
+  .vela-onboarding main section > p:nth-child(3) { font-size: 16px; }
+  .vela-onboarding > footer { padding: 12px var(--vela-page-gutter) calc(12px + env(safe-area-inset-bottom)); }
+  .vela-onboard-options.goals { grid-template-columns: 1fr 1fr; }
+  .vela-onboard-options button { min-width: 0; }
+  .vela-location-options { grid-template-columns: 1fr 1fr; }
+  .vela-location-options button { min-height: 94px; height: auto; }
+  .vela-equipment-options button { min-height: 44px; max-width: 100%; overflow-wrap: anywhere; }
+  .vela-duration-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vela-duration-options button { min-width: 0; }
+  .vela-profile-fields { grid-template-columns: 1fr; }
+  .vela-plan-result { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 390px) {
+  :root { --vela-page-gutter: 18px; }
+  .vela-page-head { display: block; }
+  .vela-page-head > .vela-button { margin-top: 14px; }
+  .vela-nutrition-glance header { align-items: flex-start; }
+  .vela-ring-wrap.small .vela-ring { width: 64px; height: 64px; }
+  .vela-progress-summary,
+  .vela-profile-metrics { grid-template-columns: 1fr; }
+  .vela-nutrition-hero > div:first-child { display: block; }
+  .vela-nutrition-hero .vela-ring-wrap { margin-bottom: 16px; }
+  .vela-meal-list article { grid-template-columns: 54px minmax(0, 1fr) auto; }
+  .vela-meal-list .vela-food-visual { width: 54px; height: 54px; }
+  .vela-meal-copy > a { font-size: 13px; }
+  .vela-meal-copy small { line-height: 1.3; }
+  .vela-adjust-grid { grid-template-columns: 1fr; }
+  .vela-workout-mode > header > div { display: none; }
+  .vela-workout-mode > header { grid-template-columns: 1fr 1fr; }
+  .vela-set-inputs { gap: 7px; }
+  .vela-plan-result { grid-template-columns: 1fr; }
+  .vela-onboarding > footer .vela-button { padding: 0 12px; }
+}
+
+@media (max-width: 340px) {
+  :root { --vela-page-gutter: 16px; }
+  .vela-onboard-options.goals { grid-template-columns: 1fr; }
+  .vela-workout-tools { grid-template-columns: 1fr; }
+  .vela-workout-tools button { width: 100%; }
+  .vela-set-inputs { grid-template-columns: 1fr; }
+  .vela-nutrition-macros { grid-template-columns: 1fr; }
+  .vela-hero-actions { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vela-app *, .vela-onboarding *, .vela-auth * { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
+}

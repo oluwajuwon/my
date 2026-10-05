@@ -1,6 +1,7 @@
 import { Activity, NappyKind, NestData, QuickLogDraft } from "./types";
+import { createId } from "./id";
 
-const makeId = (): string => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+const makeId = createId;
 
 export const createActivity = (draft: QuickLogDraft, data: NestData, childId: string, userId: string, now = new Date()): Activity => {
   const base = { id: makeId(), householdId: data.household.id, childId, occurredAt: now.toISOString(), createdBy: userId, createdAt: now.toISOString(), updatedAt: now.toISOString() };

@@ -3,8 +3,8 @@ import { NestData } from "../domain/types";
 
 export interface NestRepository {
   load(): NestData;
-  save(data: NestData): void;
-  clear(): void;
+  save(data: NestData): void | Promise<void>;
+  clear(): void | Promise<void>;
 }
 
 const STORAGE_KEY = "nest-family-data-v1";
@@ -26,9 +26,12 @@ const migrate = (stored: StoredData): NestData => {
     return { id: supply.id, householdId: supply.householdId, childId: supply.childId, name: supply.name, category: supply.category === "formula" || supply.category === "wipes" ? categories[supply.category] : supply.category, quantity: supply.currentQuantity, unit: supply.unit, estimatedDailyUsage: supply.averageUsage, lowStockThreshold: supply.lowStockThreshold, active: supply.active, createdAt: now, updatedAt: now };
   });
   return {
-    version: 2,
+    version: 3,
     users: stored.users ?? fallback.users,
     household: stored.household ?? fallback.household,
+    households: stored.households ?? [stored.household ?? fallback.household],
+    invitations: stored.invitations ?? [],
+    userPreferences: stored.userPreferences ?? fallback.userPreferences,
     children: stored.children ?? fallback.children,
     activities: stored.activities ?? fallback.activities,
     supplies,
